@@ -1,88 +1,66 @@
 <template>
-    <div>
-
+    <div class="user-center">
+        <header>
+            <div class="user-photo">
+                <img class="avatar" src="https://avatars0.githubusercontent.com/u/34718241?s=40&v=4" alt="头像">
+            </div>
+            <div class="user-nick">
+                <span>张文才</span>
+            </div>
+        </header>
+        <group-title>常用功能：</group-title>
+        <grid>
+            <grid-item label="修改个人信息">
+                <img slot="icon" src="https://avatars0.githubusercontent.com/u/34718241?s=40&v=4" alt="头像">
+            </grid-item>
+            <grid-item label="密码重置">
+                <img slot="icon" src="https://avatars0.githubusercontent.com/u/34718241?s=40&v=4" alt="头像">
+            </grid-item>
+        </grid>
     </div>
 </template>
 
 <script>
 import Vue from "vue";
 import axios from "axios";
+import { Grid, GridItem, GroupTitle } from 'vux';
 
-// import { XButton } from "vux";
 export default {
   data() {
     return {
-      loading: false,
-      loginText: '登录',
-      username: '',
-      password: '',
     };
   },
   components: {
-    // XButton
+    Grid,
+    GridItem,
+    GroupTitle
   },
   methods: {
-      login() {
-        const vm = this;
-        const { username, password } = vm;
-        axios
-        .post("/login", {
-            username,
-            password
-            // userName: username,
-            // pwd: password
-        })
-        .then(function(response) {
-            console.log(response)
-        })
-        .catch(function(error) {
-            console.log(error);
-        });
-      },
   }
 };
 </script>
 
 <style lang="">
-.fl {
-    float: left;
+.user-center {
 }
-.fr {
-    float: right;
-}
-.login-container {
-    text-align: center;
+header {
+    height: 70px;
+    line-height: 70px;
     padding: 20px;
+    border-bottom: 1px solid #D9D9D9;
+    margin-bottom: 16px;
 }
-.login-container p {
-
+.user-photo, .user-nick {
+    display: inline-block;
+    vertical-align: top;
 }
-input[type="button"] {
-    background-color: #006F6B;
-    color: #fff;
+.user-photo {
+    width: 70px;
+    height: 70px;
 }
-input {
-  font-family: Monospaced Number, Chinese Quote, -apple-system,
-    BlinkMacSystemFont, Segoe UI, Roboto, PingFang SC, Hiragino Sans GB,
-    Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  margin-bottom: 20px;
-  padding: 0;
-  list-style: none;
-  position: relative;
-  display: inline-block;
-  padding: 4px 11px;
-  width: 100%;
-  height: 40px;
-  font-size: 14px;
-  line-height: 1.5;
-  color: #000;
-  background-color: #fff;
-  background-image: none;
-  border: 1px solid #d9d9d9;
-  border-radius: 4px;
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s;
+.grid-center {
+  display: block;
+  text-align: center;
+  color: #666;
 }
 </style>
