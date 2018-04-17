@@ -1,7 +1,7 @@
 import Home from "../components/Home"
 import Login from '../components/Login'
 import User from '../components/User'
-import Exam from '../pages/Exam/Exam'
+import Exam from '../pages/Exam/Container'
 
 export default [
     {

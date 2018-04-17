@@ -1,30 +1,59 @@
 <template>
     <div class="header">
-      <x-button class="return" mini type="primary" link="BACK">返回</x-button>
-      <span>{{ time }}</span>
-      <x-button class="pause" @click.native="handlerButtonClick" mini type="warn">{{ buttonText }}</x-button>
+      <flexbox>
+        <flexbox-item>
+          <x-button class="return" mini type="primary" link="BACK">返回</x-button>
+        </flexbox-item>
+        <flexbox-item class="text-align-center">
+          <span>{{ time }}</span>
+        </flexbox-item>
+        <flexbox-item class="text-align-right">
+          <x-button class="pause" 
+            @click.native="handlerButtonClick"
+            mini 
+            type="warn"
+          >
+            {{ buttonText }}
+          </x-button>
+        </flexbox-item>
+      </flexbox>
     </div>
 </template>
 
 <script>
-import Vue from "vue";
-import axios from "axios";
-
-import { XButton } from "vux";
+import { XButton, Flexbox, FlexboxItem } from "vux";
 export default {
   props: [],
   data() {
     return {
-      timer: null,
-      seconds: 10,
-      time: '',
+      seconds: 0,
       isPause: false,
     };
   },
   components: {
-    XButton
+    XButton,
+    Flexbox,
+    FlexboxItem
   },
   computed: {
+    time () {
+      var seconds = this.seconds;
+      var time = '';
+      var points = [
+        { value: 60 * 60, suffix: '小时', max: 1 },
+        { value: 60, suffix: '分钟', max: 1 },
+        { value: 1, suffix: '秒', max: 1 }
+      ];
+
+      for (var i = 0; i < points.length; i++) {
+        var mode = Math.floor(seconds / points[i].value);
+        if (mode >= 1) {
+          seconds -= points[i].value * mode
+          time += Math.max(mode, points[i].max) + points[i].suffix;
+        }
+      }
+      return time;
+    },
     buttonText () {
       return this.isPause ? '继续' : '暂停';
     }
@@ -42,8 +71,8 @@ export default {
       vm.timer = setInterval(() => {
         vm.seconds += 1;
       }, 1000);
-      vm.time = vm.seconds
-    }
+    },
+
   },
   mounted () {
     this.restart();

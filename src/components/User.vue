@@ -16,6 +16,9 @@
             <grid-item label="密码重置">
                 <img slot="icon" src="https://avatars0.githubusercontent.com/u/34718241?s=40&v=4" alt="头像">
             </grid-item>
+            <grid-item label="进入考试" link="/exam">
+                <img slot="icon" src="https://avatars0.githubusercontent.com/u/34718241?s=40&v=4" alt="头像">
+            </grid-item>
         </grid>
     </div>
 </template>
