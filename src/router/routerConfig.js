@@ -2,12 +2,16 @@ import Home from "../components/Home"
 import Login from '../components/Login'
 import User from '../components/User'
 import Exam from '../pages/Exam/Container'
+import Footer from "../components/Footer"
 
 export default [
     {
         path: '/home',
         name: 'home',
-        component: Home,
+        components: {
+					default: Home,
+					footer: Footer
+        },
         meta: {
             title: '首页'
         }
@@ -15,7 +19,10 @@ export default [
     {
         path: '/user',
         name: 'user',
-        component: User,
+        components: {
+					default: User,
+					footer: Footer
+        },
         meta: {
             title: '首页'
         }

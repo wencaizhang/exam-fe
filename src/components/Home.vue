@@ -7,7 +7,8 @@
             <XButton type="primary" text="xxx"></XButton>
         </div>
         <div class="ad-message">
-            <h3>活动信息</h3>
+            <h3 @click="click" >活动信息</h3>
+	<h1>{{ id }}</h1>
             <p>好消息好消息好消息好消息好消息好消息好消息好消息好消息好消息</p>
         </div>
     </div>
@@ -21,12 +22,16 @@ import { XButton } from "vux";
 export default {
   data() {
     return {
+
     };
   },
   components: {
     XButton
   },
   methods: {
+		click () {
+				console.log(this.$route.query);
+		},
       login() {
         const vm = this;
         const { username, password } = vm;
@@ -44,6 +49,11 @@ export default {
             console.log(error);
         });
       },
+  },
+  computed: {
+    id () {
+      return this.$route.params.id
+    }
   }
 };
 </script>
