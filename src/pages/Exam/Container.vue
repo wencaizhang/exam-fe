@@ -11,6 +11,7 @@
 
 <script>
 import Vue from "vue";
+import store from '../../store/index.js'
 import axios from "axios";
 import Header from "./Header";
 import Question from "./Question";
@@ -58,6 +59,10 @@ export default {
   },
   methods: {
     toggleQuestion (v) {
+      
+      console.log(store.state.exam_store.show);
+
+
       let newIndex = this.currIndex + v;
       console.log(newIndex)
       console.log(this.currIndex)

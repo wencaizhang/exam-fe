@@ -19,7 +19,7 @@
         </flexbox-item>
       </flexbox>
 
-      <flexbox>
+      <flexbox class="footer">
         <flexbox-item>
           <x-button @click.native="finish" mini plain type="primary">交卷</x-button>
         </flexbox-item>
@@ -85,5 +85,11 @@ export default {
 }
 .text-align-center {
   text-align: center;
+}
+.footer {
+  position: fixed;
+  bottom: 0;
+  padding: 10px;
+  box-sizing: border-box;
 }
 </style>

@@ -1,23 +1,23 @@
 <template>
-    <div class="header">
-      <flexbox>
-        <flexbox-item>
-          <x-button class="return" mini type="primary" link="BACK">返回</x-button>
-        </flexbox-item>
-        <flexbox-item class="text-align-center">
-          <span>{{ time }}</span>
-        </flexbox-item>
-        <flexbox-item class="text-align-right">
-          <x-button class="pause" 
-            @click.native="handlerButtonClick"
-            mini 
-            type="warn"
-          >
-            {{ buttonText }}
-          </x-button>
-        </flexbox-item>
-      </flexbox>
-    </div>
+  <div class="header">
+    <flexbox>
+      <flexbox-item>
+        <x-button class="return" mini type="primary" link="BACK">返回</x-button>
+      </flexbox-item>
+      <flexbox-item class="text-align-center">
+        <span>{{ time }}</span>
+      </flexbox-item>
+      <flexbox-item class="text-align-right">
+        <x-button class="pause" 
+          @click.native="handlerButtonClick"
+          mini 
+          type="warn"
+        >
+          {{ buttonText }}
+        </x-button>
+      </flexbox-item>
+    </flexbox>
+  </div>
 </template>
 
 <script>
