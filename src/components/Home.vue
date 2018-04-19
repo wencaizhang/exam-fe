@@ -21,56 +21,54 @@ import axios from "axios";
 import { XButton } from "vux";
 export default {
   data() {
-    return {
-
-    };
+    return {};
   },
   components: {
     XButton
   },
   methods: {
-		click () {
-				console.log(this.$route.query);
-		},
-      login() {
-        const vm = this;
-        const { username, password } = vm;
-        axios
+    click() {
+      console.log(this.$route.query);
+    },
+    login() {
+      const vm = this;
+      const { username, password } = vm;
+      axios
         .post("/login", {
-            username,
-            password
-            // userName: username,
-            // pwd: password
+          username,
+          password
+          // userName: username,
+          // pwd: password
         })
         .then(function(response) {
-            console.log(response)
+          console.log(response);
         })
         .catch(function(error) {
-            console.log(error);
+          console.log(error);
         });
-      },
+    }
   },
   computed: {
-    id () {
-      return this.$route.params.id
+    id() {
+      return this.$route.params.id;
     }
   }
 };
 </script>
 <style>
 h3 {
-    text-align: center;
-    margin-bottom: 10px;
+  text-align: center;
+  margin-bottom: 10px;
 }
 .home-container {
-    padding: 40px;
+  padding: 40px;
 }
 .ad-message,
 .fast-entry {
-    border: 1px solid #ccc;
-    padding: 10px;
+  border: 1px solid #ccc;
+  padding: 10px;
 }
 .fast-entry {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 </style>
