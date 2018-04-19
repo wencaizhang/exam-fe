@@ -1,8 +1,8 @@
 import Home from "../components/Home"
 import Login from '../components/Login'
+import Register from '../components/Register'
 
-export default [
-    {
+export default [{
         path: '/home',
         name: 'home',
         component: Home,
@@ -16,6 +16,14 @@ export default [
         component: Login,
         meta: {
             title: '登录'
+        }
+    },
+    {
+        path: '/user-register',
+        name: 'Register',
+        component: Register,
+        meta: {
+            title: '注册'
         }
     },
     {

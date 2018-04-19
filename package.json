@@ -31,7 +31,8 @@
     "vue-router": "^3.0.1",
     "vue-wechat-title": "^2.0.4",
     "vuejs-datepicker": "^0.9.25",
-    "vuejs-paginator": "^2.0.2"
+    "vuejs-paginator": "^2.0.2",
+    "vux-loader": "^1.2.8"
   },
   "browserslist": [
     "> 1%",
