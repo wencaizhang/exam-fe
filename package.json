@@ -36,7 +36,8 @@
     "vue-router": "^3.0.1",
     "vue-wechat-title": "^2.0.4",
     "vuejs-datepicker": "^0.9.25",
-    "vuejs-paginator": "^2.0.2"
+    "vuejs-paginator": "^2.0.2",
+    "vuex": "^3.0.1"
   },
   "browserslist": [
     "> 1%",
@@ -52,10 +53,11 @@
     "css-loader": "^0.28.7",
     "file-loader": "^1.1.4",
     "node-sass": "^4.5.3",
-    "vux": "2.8.1",
     "sass-loader": "^6.0.6",
     "vue-loader": "^13.0.5",
     "vue-template-compiler": "^2.4.4",
+    "vux": "2.8.1",
+    "vux-loader": "^1.2.8",
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.9.1",
     "webpack-merge": "^4.1.2"
