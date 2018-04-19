@@ -2,6 +2,8 @@ import Home from "../components/Home"
 import Login from '../components/Login'
 import User from '../components/User'
 import Exam from '../pages/Exam/Container'
+import Modal from "../pages/Exam/Modal"
+import Success from "../pages/Exam/Success"
 import Footer from "../components/Footer"
 
 export default [
@@ -14,6 +16,20 @@ export default [
         },
         meta: {
             title: '首页'
+        }
+    },
+    {
+        path: '/modal',
+        name: 'modal',
+        components: {
+            default: Modal,
+        }
+    },
+    {
+        path: '/success',
+        name: 'success',
+        components: {
+            default: Success,
         }
     },
     {
