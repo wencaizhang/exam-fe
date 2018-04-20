@@ -1,9 +1,9 @@
 <template>
-    <div class="container">
-      <flexbox justify="space-between">
+    <div class="footer footer-container">
+      <flexbox justify="space-between" class="btn-group btn-group-1">
         <flexbox-item>
           <x-button mini plain type="primary"
-            @click.native="toggleQuestion(-1)"
+            @click.native="toPrev"
             :disabled="isAblePrev"
           >
           上一题
@@ -11,7 +11,7 @@
         </flexbox-item>
         <flexbox-item class="text-align-right">
           <x-button mini plain type="primary"
-            @click.native="toggleQuestion(1)"
+            @click.native="toNext"
             :disabled="isAbleNext"
           >
           下一题
@@ -19,12 +19,12 @@
         </flexbox-item>
       </flexbox>
 
-      <flexbox class="footer">
+      <flexbox class="btn-group btn-group-2">
         <flexbox-item>
           <x-button @click.native="finish" mini plain type="primary">交卷</x-button>
         </flexbox-item>
         <flexbox-item class="text-align-center">
-          <span class="question-num">{{ currIndex + 1 }}/{{ length }}</span>
+          <span class="question-num">{{ index + 1 }}/{{ length }}</span>
         </flexbox-item>
         <flexbox-item class="text-align-right">
           <x-button @click.native="showAll" mini plain type="primary">所有题目</x-button>
@@ -38,18 +38,23 @@ import Vue from "vue";
 import { XButton, Flexbox, FlexboxItem } from "vux";
 
 export default {
-  props: ['currIndex', 'length'],
   data() {
     return {
       is: false
     };
   },
   computed: {
+    index () {
+			return this.$store.state.index
+		},
+    length () {
+			return this.$store.getters.length
+    },
     isAblePrev () {
-      return this.currIndex <= 0;
+      return this.index <= 0;
     },
     isAbleNext () {
-      return this.currIndex >= this.length;
+      return this.index + 1 >= this.length;
     }
   },
   components: {
@@ -58,24 +63,26 @@ export default {
     FlexboxItem
   },
   methods: {
-    toggleQuestion (value) {
-      this.$emit('toggleQuestion', value);
-      if (value === -1) {
+		toPrev () {
+				if (this.isAblePrev) return;
+				this.$store.commit('toPrev')
         console.log('上一题')
-      } else {
+        console.log(this.index, this.length)
+		},
+		toNext() {
+				if (this.isAbleNext) return;
+				this.$store.commit('toNext')
         console.log('下一题')
-      }
-      console.log(this.currIndex, this.length)
-    },
+        console.log(this.index, this.length)
+		},
     finish () {
-
+			console.log(this.$store.state.anwsers);
     },
     showAll() {
-      console.log(this.currIndex, this.length)
+      console.log(this.index, this.length)
     }
   },
   mounted () {
-    this.restart();
   }
 };
 </script>
@@ -86,10 +93,16 @@ export default {
 .text-align-center {
   text-align: center;
 }
+.btn-group {
+  padding: 10px;
+  box-sizing: border-box;
+}
+.btn-group-2 {
+  border-top: 1px solid #f2f2f2;
+}
 .footer {
   position: fixed;
   bottom: 0;
-  padding: 10px;
-  box-sizing: border-box;
+	width: 100%;
 }
 </style>

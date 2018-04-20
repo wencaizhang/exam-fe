@@ -22,8 +22,8 @@
 
 <script>
 import { XButton, Flexbox, FlexboxItem } from "vux";
+import store from "../../store/index"
 export default {
-  props: [],
   data() {
     return {
       seconds: 0,

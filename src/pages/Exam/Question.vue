@@ -2,8 +2,8 @@
     <div class="question-container">
       <p class="question-type">{{ questionType }}</p>
       <checklist
-        :title="currQuestion.title" 
-        :options="currQuestion.options" 
+        :title="question.title" 
+        :options="question.options" 
         :max="max"
         v-model="radioValue" 
         @on-change="change"
@@ -16,10 +16,9 @@
 import { Checklist } from 'vux'
 
 export default {
-  props: [ 'questions', 'currIndex' ],
   data() {
     return {
-      currQuestionIndex: 1,
+			radioValue: null,
       questionTypes: [
         { val: 1, type: '单选题：', max: 1   },
         { val: 2, type: '多选题：', max: 100 },
@@ -31,29 +30,36 @@ export default {
     Checklist
   },
   computed: {
-    currQuestion () {
-      return this.questions[this.currQuestionIndex];
+    index () {
+			return this.$store.state.index
+		},
+    question () {
+      return this.$store.getters.question
     },
+		value () {
+			const value = { ...this.$store.getters.value }
+			return value
+		},
     max () {
       const vm = this;
-      return vm.questionTypes.filter(item => item.val === vm.currQuestion.type)[0]['max'];
+      return vm.questionTypes.filter(item => item.val === vm.question.type)[0]['max'];
     },
     questionType () {
       const vm = this;
-      return vm.questionTypes.filter(item => item.val === vm.currQuestion.type)[0]['type'];
+      return vm.questionTypes.filter(item => item.val === vm.question.type)[0]['type'];
     }
   },
   methods: {
     change (value, label) {
       console.log('选中的 key 和 value 分别是:', value, label)
-      this.value = value;
+			this.$store.commit('setAnwser', value);
     }
   }
 };
 </script>
 <style>
 .question-container {
-  margin: 40px 0;
+  margin-top: 40px;
 }
 .question-type {
   padding-left: 15px;
