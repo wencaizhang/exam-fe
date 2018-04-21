@@ -4,12 +4,9 @@ import User from '../components/User'
 import Footer from "../components/Footer"
 import BackHeader from "../components/BackHeader"
 
-import Exam from '../pages/Exam/Container'
-import Modal from "../pages/Exam/Modal"
-import PopupChecker from "../pages/Exam/PopupChecker"
-import Success from "../pages/Exam/Success"
+import examRouters from './exam'
 
-export default [
+const routers = [
     {
         path: '/home',
         name: 'home',
@@ -20,14 +17,6 @@ export default [
         },
         meta: {
             title: '首页'
-        }
-    },
-    {
-        path: '/success',
-        name: 'success',
-        components: {
-            default: Success,
-            header: BackHeader,
         }
     },
     {
@@ -46,15 +35,7 @@ export default [
         name: 'Login',
         component: Login,
         meta: {
-            title: '已有账号，请登录'
-        }
-    },
-    {
-        path: '/exam',
-        name: 'Exam',
-        component: Exam,
-        meta: {
-            title: '考试中心'
+            title: '已有账号？请登录'
         }
     },
     {
@@ -62,3 +43,9 @@ export default [
         redirect: '/home'
     }
 ];
+
+
+export default [
+    ...examRouters,
+    ...routers
+]
