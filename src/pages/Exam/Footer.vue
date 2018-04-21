@@ -66,20 +66,17 @@ export default {
 		toPrev () {
 				if (this.isAblePrev) return;
 				this.$store.commit('toPrev')
-        console.log('上一题')
-        console.log(this.index, this.length)
 		},
 		toNext() {
 				if (this.isAbleNext) return;
 				this.$store.commit('toNext')
-        console.log('下一题')
-        console.log(this.index, this.length)
 		},
     finish () {
 			console.log(this.$store.state.anwsers);
     },
     showAll() {
-      console.log(this.index, this.length)
+				console.info('showAll');
+				this.$store.commit('showAll')
     }
   },
   mounted () {

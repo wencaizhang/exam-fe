@@ -3,6 +3,7 @@ import Login from '../components/Login'
 import User from '../components/User'
 import Exam from '../pages/Exam/Container'
 import Modal from "../pages/Exam/Modal"
+import PopupChecker from "../pages/Exam/PopupChecker"
 import Success from "../pages/Exam/Success"
 import Footer from "../components/Footer"
 
@@ -23,6 +24,13 @@ export default [
         name: 'modal',
         components: {
             default: Modal,
+        }
+    },
+		{
+        path: '/check',
+        name: 'check',
+        components: {
+            default: PopupChecker,
         }
     },
     {

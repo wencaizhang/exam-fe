@@ -3,6 +3,7 @@
       <Header></Header>
       <Question></Question>
       <Footer></Footer>
+      <PopupChecker></PopupChecker>
     </div>
 </template>
 
@@ -13,6 +14,7 @@ import axios from "axios";
 import Header from "./Header";
 import Question from "./Question";
 import Footer from "./Footer";
+import PopupChecker from "./PopupChecker";
 
 export default {
   data() {
@@ -22,6 +24,7 @@ export default {
   components: {
     Header,
     Question,
+		PopupChecker,
     Footer,
   },
   methods: {

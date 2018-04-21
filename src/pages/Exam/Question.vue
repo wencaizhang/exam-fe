@@ -1,15 +1,15 @@
 <template>
-    <div class="question-container">
-      <p class="question-type">{{ questionType }}</p>
-      <checklist
-        :title="question.title" 
-        :options="question.options" 
-        :max="max"
-        v-model="radioValue" 
-        @on-change="change"
-        label-position="right"
-      ></checklist>
-    </div>
+	<div class="question-container">
+		<p class="question-type">{{ questionType }}</p>
+		<checklist
+			:title="question.title" 
+			:options="question.options" 
+			:max="max"
+			:value="value"
+			@on-change="change"
+			label-position="right"
+		></checklist>
+	</div>
 </template>
 
 <script>
@@ -37,8 +37,9 @@ export default {
       return this.$store.getters.question
     },
 		value () {
+			console.log('value 是：', this.$store.getters.value);
 			const value = { ...this.$store.getters.value }
-			return value
+			//return value
 		},
     max () {
       const vm = this;
@@ -53,6 +54,7 @@ export default {
     change (value, label) {
       console.log('选中的 key 和 value 分别是:', value, label)
 			this.$store.commit('setAnwser', value);
+			console.log('value 是：', this.$store.getters.value);
     }
   }
 };

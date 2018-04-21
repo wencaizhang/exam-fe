@@ -9,6 +9,7 @@ const state = {
 	loading: false,
 	pause: false,
 	done: false,
+	showAll: false,
   anwsers: [],
 	questions: [
 		{
@@ -45,10 +46,14 @@ const state = {
 const getters = {
 	length: state => state.questions.length,
 	question: state => state.questions[state.index],
-	value: state => { console.log(state.index); state.anwsers[state.index]},
+	value: state => state.anwsers[state.index] || [],
 }
 const mutations = {
 	setAnwser: (state, value) => state.anwsers[state.index] = value,
+	showAll: (state) => {
+		state.showAll = true
+	},
+	changeIndex: (state, index) => state.index = index,
   toPrev: state => --state.index,
   toNext: state => ++state.index
 }
