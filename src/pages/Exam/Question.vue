@@ -1,11 +1,11 @@
 <template>
 	<div class="question-container">
-		<p class="question-type">{{ questionType }}</p>
+		<p class="question-type">{{ getType }}</p>
 		<checklist
 			:title="question.title" 
 			:options="question.options" 
 			:max="max"
-			:value="value"
+      :disabled="disabled"
 			@on-change="change"
 			label-position="right"
 		></checklist>
@@ -13,16 +13,15 @@
 </template>
 
 <script>
-import { Checklist } from 'vux'
+import { Checklist } from "vux";
 
 export default {
   data() {
     return {
-			radioValue: null,
       questionTypes: [
-        { val: 1, type: '单选题：', max: 1   },
-        { val: 2, type: '多选题：', max: 100 },
-        { val: 3, type: '判断题：', max: 1   },
+        { val: 1, type: "单选题：", max: 1 },
+        { val: 2, type: "多选题：", max: 100 },
+        { val: 3, type: "判断题：", max: 1 }
       ]
     };
   },
@@ -30,31 +29,37 @@ export default {
     Checklist
   },
   computed: {
-    index () {
-			return this.$store.state.index
-		},
-    question () {
-      return this.$store.getters.question
+    index() {
+      return this.$store.state.index;
     },
-		value () {
-			console.log('value 是：', this.$store.getters.value);
-			const value = { ...this.$store.getters.value }
-			//return value
-		},
-    max () {
-      const vm = this;
-      return vm.questionTypes.filter(item => item.val === vm.question.type)[0]['max'];
+    question() {
+      return this.$store.getters.question;
     },
-    questionType () {
+    disabled() {
+      return this.$store.state.isPaused;
+    },
+    max() {
       const vm = this;
-      return vm.questionTypes.filter(item => item.val === vm.question.type)[0]['type'];
+      return vm.questionTypes.filter(item => item.val === vm.question.type)[0][
+        "max"
+      ];
+    },
+    getType() {
+      const vm = this;
+      return vm.questionTypes.filter(item => item.val === vm.question.type)[0][
+        "type"
+      ];
     }
   },
   methods: {
-    change (value, label) {
-      console.log('选中的 key 和 value 分别是:', value, label)
-			this.$store.commit('setAnwser', value);
-			console.log('value 是：', this.$store.getters.value);
+    change(value, label) {
+      console.log("选中的 key 和 value 分别是:", value, label);
+      console.log("当前index:", this.index);
+      this.$store.commit({
+        type: "setAnwser",
+        index: this.index,
+        value
+      });
     }
   }
 };

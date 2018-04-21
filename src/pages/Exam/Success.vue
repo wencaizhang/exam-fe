@@ -14,7 +14,7 @@ export default {
   },
   data () {
     return {
-      title: "操作成功",
+      title: "已交卷",
       description: "内容详情，可根据实际需要安排，如果换行则不超过规定长度",
       icon: '',
       buttons: [{

@@ -1,20 +1,12 @@
 <template>
-  <div>
-    <group>
-      <x-switch title="交卷" v-model="show"></x-switch>
-    </group>
-    <div v-transfer-dom>
-      <confirm v-model="show"
-      :title="confirmTitle"
-      :confirm-text="confirmText"
-      :cancel-text="cancelText"
-      @on-cancel="onCancel"
-      @on-confirm="onConfirm"
-      @on-show="onShow"
-      @on-hide="onHide">
-        <p style="text-align:center;">{{ contentText }}</p>
-      </confirm>
-    </div>
+  <div v-transfer-dom>
+    <confirm v-model="showModal"
+    :title="confirmTitle"
+    :confirm-text="confirmText"
+    :cancel-text="cancelText"
+    @on-confirm="onConfirm">
+      <p style="text-align:center;">{{ contentText }}</p>
+    </confirm>
   </div>
 </template>
 
@@ -22,9 +14,6 @@
 import Vue from "vue";
 import {
   Confirm,
-  Group,
-  XSwitch,
-  XButton,
   TransferDomDirective as TransferDom
 } from "vux";
 export default {
@@ -32,35 +21,36 @@ export default {
     TransferDom
   },
   components: {
-    Confirm,
-    Group,
-    XSwitch,
-    XButton
+    Confirm
   },
   data() {
     return {
-      show: false,
-      confirmTitle: "成绩合格",
+      confirmTitle: "提示：",
       confirmText: "现在交卷",
-      cancelText: "继续答题",
-      contentText: "您还有 2 道题未做"
+      cancelText: "继续答题"
     };
   },
-  methods: {
-    onCancel() {
-      console.log("on cancel");
-    },
-    onConfirm(msg) {
-      console.log("on confirm");
-      if (msg) {
-        alert(msg);
+  computed: {
+    showModal: {
+      get() {
+        return this.$store.state.showModal;
+      },
+      set(value) {
+        this.$store.commit("showModal", value);
       }
     },
-    onHide() {
-      console.log("on hide");
+    duringTime () {
+
     },
-    onShow() {
-      console.log("on show");
+    contentText () {
+      let questionslength = this.$store.getters.length;
+      let anwsersLength = this.$store.state.anwsers.length;
+      return `您还有 ${questionslength - anwsersLength} 道题未做`
+    }
+  },
+  methods: {
+    onConfirm(msg) {
+      this.$router.push({ path: '/success'}) 
     }
   }
 };

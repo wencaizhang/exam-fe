@@ -1,36 +1,36 @@
 <template>
-    <div class="footer footer-container">
-      <flexbox justify="space-between" class="btn-group btn-group-1">
-        <flexbox-item>
-          <x-button mini plain type="primary"
-            @click.native="toPrev"
-            :disabled="isAblePrev"
-          >
-          上一题
-          </x-button>
-        </flexbox-item>
-        <flexbox-item class="text-align-right">
-          <x-button mini plain type="primary"
-            @click.native="toNext"
-            :disabled="isAbleNext"
-          >
-          下一题
-          </x-button>
-        </flexbox-item>
-      </flexbox>
+  <div class="footer footer-container">
+    <flexbox justify="space-between" class="btn-group btn-group-1">
+      <flexbox-item>
+        <x-button mini plain type="primary"
+          @click.native="toPrev"
+          :disabled="isAblePrev"
+        >
+        上一题
+        </x-button>
+      </flexbox-item>
+      <flexbox-item class="text-align-right">
+        <x-button mini plain type="primary"
+          @click.native="toNext"
+          :disabled="isAbleNext"
+        >
+        下一题
+        </x-button>
+      </flexbox-item>
+    </flexbox>
 
-      <flexbox class="btn-group btn-group-2">
-        <flexbox-item>
-          <x-button @click.native="finish" mini plain type="primary">交卷</x-button>
-        </flexbox-item>
-        <flexbox-item class="text-align-center">
-          <span class="question-num">{{ index + 1 }}/{{ length }}</span>
-        </flexbox-item>
-        <flexbox-item class="text-align-right">
-          <x-button @click.native="showAll" mini plain type="primary">所有题目</x-button>
-        </flexbox-item>
-      </flexbox>
-    </div>
+    <flexbox class="btn-group btn-group-2">
+      <flexbox-item>
+        <x-button @click.native="finish" mini plain type="primary">交卷</x-button>
+      </flexbox-item>
+      <flexbox-item class="text-align-center">
+        <span class="question-num">{{ index + 1 }}/{{ length }}</span>
+      </flexbox-item>
+      <flexbox-item class="text-align-right">
+        <x-button :disabled="isAbleShowAll" @click.native="showAll" mini plain type="primary">所有题目</x-button>
+      </flexbox-item>
+    </flexbox>
+  </div>
 </template>
 
 <script>
@@ -44,17 +44,20 @@ export default {
     };
   },
   computed: {
-    index () {
-			return this.$store.state.index
-		},
-    length () {
-			return this.$store.getters.length
+    index() {
+      return this.$store.state.index;
     },
-    isAblePrev () {
-      return this.index <= 0;
+    length() {
+      return this.$store.getters.length;
     },
-    isAbleNext () {
-      return this.index + 1 >= this.length;
+    isAblePrev() {
+      return this.index <= 0 || this.$store.state.isPaused;
+    },
+    isAbleNext() {
+      return this.index + 1 >= this.length || this.$store.state.isPaused;
+    },
+    isAbleShowAll () {
+      return this.$store.state.isPaused;
     }
   },
   components: {
@@ -63,24 +66,23 @@ export default {
     FlexboxItem
   },
   methods: {
-		toPrev () {
-				if (this.isAblePrev) return;
-				this.$store.commit('toPrev')
-		},
-		toNext() {
-				if (this.isAbleNext) return;
-				this.$store.commit('toNext')
-		},
-    finish () {
-			console.log(this.$store.state.anwsers);
+    toPrev() {
+      if (this.isAblePrev) return;
+      this.$store.commit("toPrev");
+    },
+    toNext() {
+      if (this.isAbleNext) return;
+      this.$store.commit("toNext");
+    },
+    finish() {
+      this.$store.commit("showModal", true);
     },
     showAll() {
-				console.info('showAll');
-				this.$store.commit('showAll')
+      console.info("showAll, footer");
+      this.$store.commit("showAll", true);
     }
   },
-  mounted () {
-  }
+  mounted() {}
 };
 </script>
 <style>
@@ -100,6 +102,6 @@ export default {
 .footer {
   position: fixed;
   bottom: 0;
-	width: 100%;
+  width: 100%;
 }
 </style>

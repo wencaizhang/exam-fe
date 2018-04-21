@@ -1,34 +1,34 @@
 <template>
-    <div class="">
-      <Header></Header>
-      <Question></Question>
-      <Footer></Footer>
-      <PopupChecker></PopupChecker>
-    </div>
+  <div class="">
+    <Header></Header>
+    <Question></Question>
+    <Footer></Footer>
+    <PopupChecker></PopupChecker>
+    <Modal></Modal>
+  </div>
 </template>
 
 <script>
 import Vue from "vue";
-import store from '../../store/index.js'
 import axios from "axios";
 import Header from "./Header";
 import Question from "./Question";
 import Footer from "./Footer";
 import PopupChecker from "./PopupChecker";
+import Modal from "./Modal";
 
 export default {
   data() {
-    return {
-   };
+    return {};
   },
   components: {
     Header,
     Question,
-		PopupChecker,
     Footer,
+    PopupChecker,
+    Modal
   },
-  methods: {
-  }
+  methods: {}
 };
 </script>
 <style>

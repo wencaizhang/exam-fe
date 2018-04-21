@@ -9,7 +9,7 @@
       </flexbox-item>
       <flexbox-item class="text-align-right">
         <x-button class="pause" 
-          @click.native="handlerButtonClick"
+          @click.native="togglePause"
           mini 
           type="warn"
         >
@@ -22,12 +22,10 @@
 
 <script>
 import { XButton, Flexbox, FlexboxItem } from "vux";
-import store from "../../store/index"
 export default {
   data() {
     return {
-      seconds: 0,
-      isPause: false,
+      seconds: 0
     };
   },
   components: {
@@ -55,19 +53,20 @@ export default {
       return time;
     },
     buttonText () {
-      return this.isPause ? '继续' : '暂停';
+      return this.$store.state.isPaused ? '继续' : '暂停';
     }
   },
   methods: {
-    handlerButtonClick () {
-      this.isPause = !this.isPause;
-      this.isPause ? this.pause() : this.restart();
+    togglePause () {
+      this.$store.state.isPaused ? this.restart() : this.pause();
     },
     pause () {
+      this.$store.commit('togglePause', true)
       clearInterval(this.timer);
     },
     restart () {
       const vm = this;
+      this.$store.commit('togglePause', false)
       vm.timer = setInterval(() => {
         vm.seconds += 1;
       }, 1000);

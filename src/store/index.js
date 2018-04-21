@@ -2,19 +2,20 @@ import Vue from 'vue'
 import vuex from 'vuex'
 Vue.use(vuex);
 
-import exam_store from '../pages/Exam/store.js'
+import exam from './exam'
 
 const state = {
   index: 0,
 	loading: false,
-	pause: false,
+	isPaused: false,
 	done: false,
 	showAll: false,
+	showModal: false,
   anwsers: [],
 	questions: [
 		{
 			type: 1,
-			title: '第一个题：你最爱的国家是：',
+			title: '你最爱的国家是：',
 			options: [
 				{key:'America', value:'A:',inlineDesc:'超级大国美国'},
 				{key:'Japan',   value:'B:',inlineDesc:'小日本儿'},
@@ -23,7 +24,7 @@ const state = {
 		},
 		{
 			type: 2,
-			title: '第二题：你最爱的游戏是：',
+			title: '你最爱的游戏是：',
 			options: [
 				{key:'LoL', value:'A:', inlineDesc:'英雄联盟'},
 				{key:'WOW', value:'B:', inlineDesc:'魔兽世界'},
@@ -33,7 +34,7 @@ const state = {
 		},
 		{
 			type: 3,
-			title: '第三题：我猜你是个超人：',
+			title: '我猜你是个超人：',
 			options: [
 				{key:'true', value:'A:', inlineDesc:'正确'},
 				{key:'false', value:'B:', inlineDesc:'错误'},
@@ -49,9 +50,17 @@ const getters = {
 	value: state => state.anwsers[state.index] || [],
 }
 const mutations = {
-	setAnwser: (state, value) => state.anwsers[state.index] = value,
-	showAll: (state) => {
-		state.showAll = true
+	setAnwser: (state, payload) => {
+		state.anwsers[payload.index] = payload.value
+	},
+	showAll: (state, bool) => {
+		state.showAll = bool
+	},
+	showModal: (state, bool) => {
+		state.showModal = bool
+	},
+	togglePause: (state, bool) => {
+		state.isPaused = bool
 	},
 	changeIndex: (state, index) => state.index = index,
   toPrev: state => --state.index,
@@ -60,7 +69,7 @@ const mutations = {
 
 export default new vuex.Store({
 //    modules: {
-//      exam_store
+//      exam
 //    }
 	state,
 	getters,
