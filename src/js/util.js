@@ -1,5 +1,3 @@
-import Cookies from "js-cookie";
-
 let util = {};
 
 util.getParameterByName = function(name, url) {
@@ -12,15 +10,6 @@ util.getParameterByName = function(name, url) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 };
 
-util.isLogined = function() {
-    var userName = Cookies.get('raas_userName');
-    var accessToken = Cookies.get('raas_accessToken');
-    if (typeof(userName) === 'undefined' ||
-        typeof(accessToken) === 'undefined') {
-        return false;
-    }
-    return true;
-};
 
 util.checkUserThenDoAction = function(func, redirectUrl) {
     if (util.isLogined()) {
@@ -32,11 +21,6 @@ util.checkUserThenDoAction = function(func, redirectUrl) {
     }
 };
 
-// 暂时没有用
-util.getToken = function() {
-    var accessToken = Cookies.get('raas_accessToken');
-    return accessToken;
-};
 
 util.trimToNull = function(str) {
     if (str == "" || str == null) {

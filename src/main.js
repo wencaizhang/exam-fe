@@ -1,9 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import jquery from 'jquery'
 import axios from 'axios'
-import './assets/css/base.css'
-import './js/js.cookie.js'
 import router from './router/index.js'
 import util from "./js/util.js"
 import store from './store'
