@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <Header></Header>
-    <Question></Question>
+    <Questions></Questions>
     <Footer></Footer>
     <PopupChecker></PopupChecker>
     <Modal></Modal>
@@ -13,6 +13,7 @@ import Vue from "vue";
 import axios from "axios";
 import Header from "./Header";
 import Question from "./Question";
+import Questions from "./Questions";
 import Footer from "./Footer";
 import PopupChecker from "./PopupChecker";
 import Modal from "./Modal";
@@ -24,6 +25,7 @@ export default {
   components: {
     Header,
     Question,
+    Questions,
     Footer,
     PopupChecker,
     Modal
