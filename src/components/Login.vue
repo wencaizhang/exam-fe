@@ -1,75 +1,80 @@
 <template>
-    <form class="login-container">
-        <img class="logo" src="../assets/images/logo.png" alt="logo">
-        <div class="tips-container">
-          <span class="tips">{{ tips }}</span>
-        </div>
-        <input type="text" placeholder="请输入用户名" v-model="username" autofocus>
-        <input type="password" placeholder="请输入密码" v-model="password">
-        <XButton 
-          :text="loginText" 
-          :show-loading="loading"  
-          :type="buttonType"
-          @click.native="login" 
-        >
-        </XButton>
-        <p class="other-handler clearfix">
-          <router-link :to="{path: '/register'}" class="fl">注册</router-link>
-          <router-link :to="{path: '/forget'}" class="fr">忘记密码</router-link>
-        </p>
-    </form>
+  <form class="login-container">
+    <img class="logo" src="../assets/images/logo.png" alt="logo">
+    <div class="tips-container">
+      <span class="tips">{{ tips }}</span>
+    </div>
+    <input type="text" placeholder="请输入用户名" v-model="username" autofocus>
+    <input type="password" placeholder="请输入密码" v-model="password">
+    <XButton 
+      :text="loginText" 
+      :type="buttonType"
+      @click.native="login" 
+    >
+    </XButton>
+    <p class="other-handler clearfix">
+      <router-link :to="{path: '/register'}" class="fl">注册</router-link>
+      <router-link :to="{path: '/forget'}" class="fr">忘记密码</router-link>
+    </p>
+    <div v-transfer-dom>
+      <loading :show="loading" :text="loadingText"></loading>
+    </div>
+  </form>
 </template>
 
 <script>
 import Vue from "vue";
 import axios from "axios";
-import { XButton, AlertModule  } from 'vux'
+import { XButton, Loading, TransferDomDirective as TransferDom } from "vux";
 
 export default {
-  name: 'Login',
+  name: "Login",
+  directives: {
+    TransferDom
+  },
   data() {
     return {
       loading: false,
-      loginText: '登录',
-      username: '',
-      password: '',
+      loginText: "登录",
+      loadingText: "登录中",
+      username: "",
+      password: "",
       clicked: false,
-      buttonType: 'primary',
-      tips: ''
+      buttonType: "primary",
+      tips: ""
     };
   },
   components: {
     XButton,
-    AlertModule
+    Loading
   },
   methods: {
-      login() {
-        const vm = this;
-        const { username, password } = vm;
-        if (!username || !password) {
-          vm.tips = '用户名或密码不能为空';
-          return;
-        }
-        vm.loginText = '登录中...'
-        vm.loading = true;
-        axios
+    login() {
+      const vm = this;
+      const { username, password } = vm;
+      if (!username || !password) {
+        vm.tips = "用户名或密码不能为空";
+        return;
+      }
+      vm.loading = true;
+      axios
         .post("/login", {
-            username,
-            password
+          username,
+          password
         })
         .then(resp => {
           vm.loading = false;
-          vm.loginText = '登录'
           if (resp.data.code == 0) {
             vm.$router.push({ path: "/home" });
           } else {
-            vm.tips = '用户名或密码错误';
+            vm.tips = "用户名或密码错误";
           }
         })
         .catch(error => {
-            console.log(error);
+          this.loading = false;
+          console.log(error);
         });
-      },
+    }
   }
 };
 </script>
