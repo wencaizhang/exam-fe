@@ -50,14 +50,6 @@ export default {
   },
   methods: {
     login() {
-      // console.log(this.$store.state.user.name);
-      // this.$store.commit('setUserInfo', {
-      //   name: '阿文'
-      // })
-      this.$store.dispatch('login', {
-        username: 'admin', 
-        password: '11111'
-      })
       const vm = this;
       const { username, password } = vm;
       if (!username || !password) {
@@ -65,20 +57,23 @@ export default {
         return;
       }
       vm.loading = true;
-      axios
-      .post("/login", {
+
+      this.$store.dispatch('login', {
         username,
-        password
+        password,
+        // email: 'hongzhong',
+        // password: 'actionview'
       })
       .then(resp => {
         vm.loading = false;
         if (resp.data.code == 0) {
           vm.loginOK = true;
+          vm.$store.commit('setUserInfo', resp.data.data.user)
           vm.$router.push({ path: "/home" });
         } else {
           vm.tips = "用户名或密码错误";
         }
-      })
+      }).bind(this)
       .catch(error => {
         this.loading = false;
         console.log(error);

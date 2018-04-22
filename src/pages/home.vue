@@ -1,17 +1,17 @@
 <template>
-    <div class="home-container">
-        <div class="fast-entry">
-            <h3>快速考试入口</h3>
-            <p>通过已有的准考证快速参加考试，具体的准考信息请咨询相关人事。</p>
-            <!-- <router-link :to="{path: '/resourceList'}">快速考试</router-link> -->
-            <XButton type="primary" text="xxx"></XButton>
-        </div>
-        <div class="ad-message">
-            <h3 @click="click" >活动信息</h3>
-            <h1>{{ id }}</h1>
-            <p>好消息好消息好消息好消息好消息好消息好消息好消息好消息好消息</p>
-        </div>
+  <div class="home-container">
+    <div class="fast-entry">
+      <h3>快速考试入口</h3>
+      <p>通过已有的准考证快速参加考试，具体的准考信息请咨询相关人事。</p>
+      <!-- <router-link :to="{path: '/resourceList'}">快速考试</router-link> -->
+      <XButton type="primary" text="xxx"></XButton>
     </div>
+    <div class="ad-message">
+      <h3 @click="click" >活动信息</h3>
+      <h1>{{ id }}</h1>
+      <p>好消息好消息好消息好消息好消息好消息好消息好消息好消息好消息</p>
+    </div>
+  </div>
 </template>
 
 <script>

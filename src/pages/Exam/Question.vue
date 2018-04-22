@@ -58,15 +58,11 @@ export default {
     },
     max() {
       const vm = this;
-      return vm.questionTypes.filter(item => item.val === vm.question.type)[0][
-        "max"
-      ];
+      return vm.questionTypes.filter(item => item.val === vm.question.type)[0]['max'];
     },
     getType() {
       const vm = this;
-      return vm.questionTypes.filter(item => item.val === vm.question.type)[0][
-        "type"
-      ];
+      return vm.questionTypes.filter(item => item.val === vm.question.type)[0]['type'];
     }
   },
   methods: {
