@@ -1,8 +1,8 @@
 <template>
-  <div class="header">
+  <div class="back-header">
     <flexbox>
       <flexbox-item>
-        <x-button class="return" mini type="primary" link="BACK">返回</x-button>
+        <x-button class="return" mini plain="true" type="primary" link="BACK">返回</x-button>
       </flexbox-item>
     </flexbox>
   </div>
@@ -19,7 +19,8 @@ export default {
 };
 </script>
 <style>
-.header {
+.back-header {
   padding: 10px;
+  background-color: #35495e;
 }
 </style>
