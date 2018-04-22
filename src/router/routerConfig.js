@@ -1,13 +1,44 @@
-import Home from "../components/Home"
+
+import Home from "../pages/Home"
 import Login from '../components/Login'
 import Register from '../components/Register'
+import User from '../components/User'
+import Footer from "../components/Footer"
+import BackHeader from "../components/BackHeader"
 
-export default [{
+import examRouters from './exam'
+const routers = [
+    {
         path: '/home',
         name: 'home',
-        component: Home,
+        components: {
+            default: Home,
+            header: BackHeader,
+            footer: Footer
+        },
         meta: {
             title: '首页'
+        }
+    },
+    {
+        path: '/user',
+        name: 'user',
+        components: {
+            default: User,
+            footer: Footer
+        },
+        meta: {
+            title: '个人中心'
+        }
+    },
+    {
+        path: '/register',
+        name: 'Register',
+        components: {
+            default: Register,
+        },
+        meta: {
+            title: '个人中心'
         }
     },
     {
@@ -15,15 +46,7 @@ export default [{
         name: 'Login',
         component: Login,
         meta: {
-            title: '登录'
-        }
-    },
-    {
-        path: '/user-register',
-        name: 'Register',
-        component: Register,
-        meta: {
-            title: '注册'
+            title: '已有账号？请登录'
         }
     },
     {
@@ -31,3 +54,9 @@ export default [{
         redirect: '/home'
     }
 ];
+
+
+export default [
+    ...examRouters,
+    ...routers
+]
