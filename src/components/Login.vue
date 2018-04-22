@@ -7,8 +7,8 @@
     <input type="text" placeholder="请输入用户名" v-model="username" autofocus>
     <input type="password" placeholder="请输入密码" v-model="password">
     <XButton 
-      :text="loginText" 
-      :type="buttonType"
+      text="登录" 
+      type="primary"
       @click.native="login" 
     >
     </XButton>
@@ -17,15 +17,16 @@
       <router-link :to="{path: '/forget'}" class="fr">忘记密码</router-link>
     </p>
     <div v-transfer-dom>
-      <loading :show="loading" :text="loadingText"></loading>
+      <loading :show="loading" text="登录中"></loading>
     </div>
+    <toast v-model="loginOK">登录成功</toast>
   </form>
 </template>
 
 <script>
 import Vue from "vue";
 import axios from "axios";
-import { XButton, Loading, TransferDomDirective as TransferDom } from "vux";
+import { Toast, XButton, Loading, TransferDomDirective as TransferDom } from "vux";
 
 export default {
   name: "Login",
@@ -35,18 +36,17 @@ export default {
   data() {
     return {
       loading: false,
-      loginText: "登录",
-      loadingText: "登录中",
+      loginOK: true,
+      clicked: false,
+      tips: "",
       username: "",
       password: "",
-      clicked: false,
-      buttonType: "primary",
-      tips: ""
     };
   },
   components: {
     XButton,
-    Loading
+    Loading,
+    Toast,
   },
   methods: {
     login() {
@@ -58,22 +58,25 @@ export default {
       }
       vm.loading = true;
       axios
-        .post("/login", {
-          username,
-          password
-        })
-        .then(resp => {
-          vm.loading = false;
-          if (resp.data.code == 0) {
-            vm.$router.push({ path: "/home" });
-          } else {
-            vm.tips = "用户名或密码错误";
-          }
-        })
-        .catch(error => {
-          this.loading = false;
-          console.log(error);
-        });
+      .post("/login", {
+        username,
+        password
+      })
+      .then(resp => {
+        vm.loading = false;
+        if (resp.data.code == 0) {
+          vm.loginOK = true;
+          vm.$router.push({ path: "/home" });
+          // this.$store.commit('setUserInfo', {
+          // })
+        } else {
+          vm.tips = "用户名或密码错误";
+        }
+      })
+      .catch(error => {
+        this.loading = false;
+        console.log(error);
+      });
     }
   }
 };
