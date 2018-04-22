@@ -5,13 +5,12 @@
     :confirm-text="confirmText"
     :cancel-text="cancelText"
     @on-confirm="onConfirm">
-      <p style="text-align:center;">{{ contentText }}</p>
+      <p style="text-align:center;">您还有 {{ num }} 道题未做</p>
     </confirm>
   </div>
 </template>
 
 <script>
-import Vue from "vue";
 import {
   Confirm,
   TransferDomDirective as TransferDom
@@ -33,19 +32,18 @@ export default {
   computed: {
     showModal: {
       get() {
-        return this.$store.state.showModal;
+        return this.$store.state.exam.showModal;
       },
       set(value) {
         this.$store.commit("showModal", value);
       }
     },
-    duringTime () {
-
-    },
-    contentText () {
-      let questionslength = this.$store.getters.length;
-      let anwsersLength = this.$store.state.anwsers.length;
-      return `您还有 ${questionslength - anwsersLength} 道题未做`
+    num () {
+      // let length = this.$store.getters.anwsersLength;
+      // let anwsers = this.$store.state.exam.anwsers;
+      // console.log(this.$store.getters.anwsersLength);
+      // return this.$store.getters.anwsersLength
+      return this.$store.state.exam.questions.length - this.$store.state.exam.anwsers.filter(item => item).length
     }
   },
   methods: {

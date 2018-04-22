@@ -1,5 +1,5 @@
 <template>
-  <div class="header">
+  <div class="exam-header">
     <flexbox>
       <flexbox-item>
         <x-button class="return" mini type="primary" link="BACK">返回</x-button>
@@ -53,12 +53,12 @@ export default {
       return time;
     },
     buttonText () {
-      return this.$store.state.isPaused ? '继续' : '暂停';
+      return this.$store.state.exam.isPaused ? '继续' : '暂停';
     }
   },
   methods: {
     togglePause () {
-      this.$store.state.isPaused ? this.restart() : this.pause();
+      this.$store.state.exam.isPaused ? this.restart() : this.pause();
     },
     pause () {
       this.$store.commit('togglePause', true)
@@ -79,8 +79,9 @@ export default {
 };
 </script>
 <style>
-.header {
+.exam-header {
   text-align: center;
+  padding: 10px;
 }
 .return {
   float: left;

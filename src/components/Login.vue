@@ -50,6 +50,14 @@ export default {
   },
   methods: {
     login() {
+      // console.log(this.$store.state.user.name);
+      // this.$store.commit('setUserInfo', {
+      //   name: '阿文'
+      // })
+      this.$store.dispatch('login', {
+        username: 'admin', 
+        password: '11111'
+      })
       const vm = this;
       const { username, password } = vm;
       if (!username || !password) {
@@ -67,8 +75,6 @@ export default {
         if (resp.data.code == 0) {
           vm.loginOK = true;
           vm.$router.push({ path: "/home" });
-          // this.$store.commit('setUserInfo', {
-          // })
         } else {
           vm.tips = "用户名或密码错误";
         }

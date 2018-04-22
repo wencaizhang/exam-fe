@@ -33,14 +33,14 @@ export default {
   computed: {
     showAll: {
       get() {
-        return this.$store.state.showAll;
+        return this.$store.state.exam.showAll;
       },
       set(value) {
         this.$store.commit("showAll", value);
       }
     },
     index() {
-      return this.$store.state.index;
+      return this.$store.state.exam.index;
     },
     list() {
       let length = this.$store.getters.length;

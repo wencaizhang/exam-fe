@@ -45,19 +45,19 @@ export default {
   },
   computed: {
     index() {
-      return this.$store.state.index;
+      return this.$store.state.exam.index;
     },
     length() {
       return this.$store.getters.length;
     },
     isAblePrev() {
-      return this.index <= 0 || this.$store.state.isPaused;
+      return this.index <= 0 || this.$store.state.exam.isPaused;
     },
     isAbleNext() {
-      return this.index + 1 >= this.length || this.$store.state.isPaused;
+      return this.index + 1 >= this.length || this.$store.state.exam.isPaused;
     },
     isAbleShowAll () {
-      return this.$store.state.isPaused;
+      return this.$store.state.exam.isPaused;
     }
   },
   components: {
@@ -68,15 +68,19 @@ export default {
   methods: {
     toPrev() {
       if (this.isAblePrev) return;
+      this.$store.commit('toggleShowQuestion', false);
+      this.$store.commit('toggleShowQuestion', true);
       this.$store.commit("toPrev");
     },
     toNext() {
       if (this.isAbleNext) return;
+      this.$store.commit('toggleShowQuestion', false);
+      this.$store.commit('toggleShowQuestion', true);
       this.$store.commit("toNext");
     },
     finish() {
       // console.log('=============')
-      // console.log(this.$store.state.anwsers)
+      // console.log(this.$store.state.exam.anwsers)
       // console.log('=============')
       this.$store.commit("showModal", true);
     },

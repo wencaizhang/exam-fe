@@ -32,29 +32,29 @@ export default {
   computed: {
     model: {
       get() {
-        console.log('get anwser:', this.$store.state.anwsers[this.$store.state.index])
-        return this.$store.state.anwsers[this.$store.state.index];
+        console.log('get anwser:', this.$store.state.exam.anwsers[this.$store.state.exam.index])
+        return this.$store.state.exam.anwsers[this.$store.state.exam.index];
       },
       set(value) {
         console.log('=============')
-        console.log('anwsers: ', this.$store.state.anwsers)
+        console.log('anwsers: ', this.$store.state.exam.anwsers)
         console.log(value)
         console.log('=============')
         this.$store.commit({
           type: "setAnwser",
-          index: this.$store.state.index,
+          index: this.$store.state.exam.index,
           value,
         });
       }
     },
     index() {
-      return this.$store.state.index;
+      return this.$store.state.exam.index;
     },
     question() {
       return this.$store.getters.question;
     },
     disabled() {
-      return this.$store.state.isPaused;
+      return this.$store.state.exam.isPaused;
     },
     max() {
       const vm = this;
@@ -73,7 +73,7 @@ export default {
     change(value, label) {
       console.log("选中的 key 和 value 分别是:", value, label);
       // console.log("当前index:", this.index);
-      // console.log(this.$store.state.anwsers);
+      // console.log(this.$store.state.exam.anwsers);
       // this.$store.commit({
       //   type: "setAnwser",
       //   index: this.index,
