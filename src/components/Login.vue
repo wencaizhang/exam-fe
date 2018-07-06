@@ -24,9 +24,12 @@
 </template>
 
 <script>
-import Vue from "vue";
-import axios from "axios";
-import { Toast, XButton, Loading, TransferDomDirective as TransferDom } from "vux";
+import {
+  Toast,
+  XButton,
+  Loading,
+  TransferDomDirective as TransferDom
+} from "vux";
 
 export default {
   name: "Login",
@@ -36,48 +39,68 @@ export default {
   data() {
     return {
       loading: false,
-      loginOK: true,
+      loginOK: false,
       clicked: false,
       tips: "",
       username: "",
-      password: "",
+      password: ""
     };
   },
   components: {
     XButton,
     Loading,
-    Toast,
+    Toast
   },
   methods: {
     login() {
       const vm = this;
       const { username, password } = vm;
+
       if (!username || !password) {
         vm.tips = "用户名或密码不能为空";
         return;
       }
       vm.loading = true;
 
-      this.$store.dispatch('login', {
-        username,
-        password,
-        // email: 'hongzhong',
-        // password: 'actionview'
-      })
-      .then(resp => {
-        vm.loading = false;
-        if (resp.data.code == 0) {
-          vm.loginOK = true;
-          vm.$store.commit('setUserInfo', resp.data.data.user)
-          vm.$router.push({ path: "/home" });
-        } else {
-          vm.tips = "用户名或密码错误";
-        }
-      }).bind(this)
-      .catch(error => {
-        this.loading = false;
-        console.log(error);
-      });
+      this.$http
+        .post("/login", {
+          username,
+          password
+        })
+        .then(function(resp) {
+          vm.loading = false;
+          if (resp.data.code == 0) {
+            vm.loginOK = true;
+            vm.$store.commit('setUserInfo', resp.data.data.user)
+            vm.$router.push({ path: "/home" });
+          } else {
+            vm.tips = "用户名或密码错误";
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+
+      // this.$store.dispatch('login', {
+      //   username,
+      //   password,
+      //   // email: 'hongzhong',
+      //   // password: 'actionview'
+      // })
+      // .then(resp => {
+      //   vm.loading = false;
+      //   if (resp.data.code == 0) {
+      //     vm.loginOK = true;
+      //     vm.$store.commit('setUserInfo', resp.data.data.user)
+      //     vm.$router.push({ path: "/home" });
+      //   } else {
+      //     vm.tips = "用户名或密码错误";
+      //   }
+      // }).bind(this)
+      // .catch(error => {
+      //   this.loading = false;
+      //   console.log(error);
+      // });
     }
   }
 };

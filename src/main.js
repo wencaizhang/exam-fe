@@ -5,6 +5,10 @@ import './assets/css/base.css'
 import router from './router/index.js'
 import util from "./js/util.js"
 import store from './store'
+import { AjaxPlugin } from 'vux'
+Vue.use(AjaxPlugin)
+
+require('./mock.js')
 
 axios.defaults.baseURL = '/api';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';

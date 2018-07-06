@@ -21,17 +21,17 @@ const webpackConfig = merge(common, {
         })
     ],
     devServer: {
-        proxy: {
-            "/api": {
-                target: "http://119.23.217.88:8080",
-                target: "http://www.actionview.cn:8080",
-                // target: "192.168.0.110:7777",
-                changeOrigin: true,
-                pathRewrite: {
-                    '^/api': ''
-                }
-            }
-        }
+        // proxy: {
+        //     "/api": {
+        //         target: "http://119.23.217.88:8080",
+        //         target: "http://www.actionview.cn:8080",
+        //         // target: "192.168.0.110:7777",
+        //         changeOrigin: true,
+        //         pathRewrite: {
+        //             '^/api': ''
+        //         }
+        //     }
+        // }
     }
 });
 
