@@ -3,7 +3,7 @@ import App from './App.vue'
 import axios from 'axios'
 import './assets/css/base.css'
 import router from './router/index.js'
-import util from "./js/util.js"
+import util from "./util/util.js"
 import store from './store'
 import { AjaxPlugin } from 'vux'
 Vue.use(AjaxPlugin)
@@ -33,17 +33,17 @@ new Vue({
 
 
 router.beforeEach((to, from, next) => {
-
+    const userInfo = util.getUserinfo();
     let isLogin = store.state.user.login;
     let notCheckLogin = to.matched.some( record => record.meta.notCheckLogin )
 
     // 未登录，且需要检测登录状态的路由
-    if (!isLogin && !notCheckLogin){
-        next({ path: '/user-login' })
+    if (!userInfo && !isLogin && !notCheckLogin){
+        next({ path: '/user-login' });
     } else {
-        next()
+        next();
     }
-    
+
 });
 
 // 引入外部js

@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import util from "../util/util.js"
 import {
   Toast,
   XButton,
@@ -71,7 +72,8 @@ export default {
           vm.loading = false;
           if (resp.data.code == 0) {
             vm.loginOK = true;
-            vm.$store.commit('setUserInfo', resp.data.data.user);
+            util.setUserinfo(resp.data.data);
+            vm.$store.commit('setUserInfo', resp.data.data);
             vm.$store.commit('login', true);
             
             vm.$router.push({ path: "/home" });

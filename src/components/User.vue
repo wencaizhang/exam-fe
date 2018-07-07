@@ -2,10 +2,10 @@
     <div class="user-center">
         <header>
             <div class="user-photo">
-                <img class="avatar" src="https://avatars0.githubusercontent.com/u/34718241?s=40&v=4" alt="头像">
+                <img class="avatar" v-bind:src="userInfo.avatar" alt="头像">
             </div>
             <div class="user-nick">
-                <span>张文才</span>
+                <span>{{ userInfo.user }}</span>
             </div>
         </header>
         <group-title>常用功能：</group-title>
@@ -26,11 +26,13 @@
 <script>
 import Vue from "vue";
 import axios from "axios";
+import util from "../util/util.js"
 import { Grid, GridItem, GroupTitle } from 'vux';
 
 export default {
   data() {
     return {
+        userInfo: null
     };
   },
   components: {
@@ -39,6 +41,10 @@ export default {
     GroupTitle
   },
   methods: {
+  },
+  created () {
+    this.userInfo = util.getUserinfo();
+    console.log(this.userInfo)
   }
 };
 </script>
@@ -65,5 +71,9 @@ header {
   display: block;
   text-align: center;
   color: #666;
+}
+.avatar {
+    width: 80px;
+    height: 80px;
 }
 </style>
