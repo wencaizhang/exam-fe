@@ -71,7 +71,9 @@ export default {
           vm.loading = false;
           if (resp.data.code == 0) {
             vm.loginOK = true;
-            vm.$store.commit('setUserInfo', resp.data.data.user)
+            vm.$store.commit('setUserInfo', resp.data.data.user);
+            vm.$store.commit('login', true);
+            
             vm.$router.push({ path: "/home" });
           } else {
             vm.tips = "用户名或密码错误";

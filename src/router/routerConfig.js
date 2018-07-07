@@ -1,12 +1,11 @@
 
 import Home from "../pages/Home"
-import Login from '../components/Login'
-import Register from '../components/Register'
 import User from '../components/User'
 import Footer from "../components/Footer"
 import BackHeader from "../components/BackHeader"
 
-import examRouters from './exam'
+import exam from './exam'
+import account from './account'
 const routers = [
     {
         path: '/home',
@@ -32,24 +31,6 @@ const routers = [
         }
     },
     {
-        path: '/register',
-        name: 'Register',
-        components: {
-            default: Register,
-        },
-        meta: {
-            title: '个人中心'
-        }
-    },
-    {
-        path: '/user-login',
-        name: 'Login',
-        component: Login,
-        meta: {
-            title: '已有账号？请登录'
-        }
-    },
-    {
         path: '*',
         redirect: '/home'
     }
@@ -57,6 +38,7 @@ const routers = [
 
 
 export default [
-    ...examRouters,
+    ...account,
+    ...exam,
     ...routers
 ]

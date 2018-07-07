@@ -24,12 +24,26 @@ axios.defaults['transformRequest'] = [function(data) {
 Vue.prototype.$getParameterByName = util.getParameterByName;
 Vue.config.productionTip = false;
 
-
 new Vue({
     el: '#app',
     router,
     store,
     render: h => h(App)
+});
+
+
+router.beforeEach((to, from, next) => {
+
+    let isLogin = store.state.user.login;
+    let notCheckLogin = to.matched.some( record => record.meta.notCheckLogin )
+
+    // 未登录，且需要检测登录状态的路由
+    if (!isLogin && !notCheckLogin){
+        next({ path: '/user-login' })
+    } else {
+        next()
+    }
+    
 });
 
 // 引入外部js

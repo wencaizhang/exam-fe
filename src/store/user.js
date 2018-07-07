@@ -1,6 +1,7 @@
 import axios from "axios";
 const state = {
-    name: '张文才'
+    name: '张文才',
+    login: false
 }
 
 const getters = {
@@ -10,6 +11,9 @@ const getters = {
 const mutations = {
     setUserInfo: (state, payload) => {
         Object.assign(state, payload);
+    },
+    login: (state, bool) => {
+        Object.assign(state, { login: bool } )
     }
 }
 
