@@ -1,0 +1,98 @@
+逻辑：
+
+1. 当用户访问站点时，在路由拦截器里判断 `cookie` 里面是否有username或者token或者sessionId之类的标识，有：表示“已登陆”，否则跳转到登陆页面；
+2. 如果已登陆，跳转到相应路由，对应页面调用api获取数据，如果提示"未登陆"，跳转到登陆页；
+3. 正常登陆，保持用户信息到 `cookie` 
+
+
+同时使用 `vuex` 和 `localStorage` 储存用户信息
+
+最简单的做法就是本地没数据就登录，有数据就刷新，后台判断数据过期了就清除数据再登录。
+
+本地储存用户信息是为了避免页面刷新导致数据丢失的问题，
+
+为统一管理 app 状态，使用 `vuex` 储存数据，另外，与在内存中的 `state` 相比，怕是其他方式都是慢的。
+
+使用 `vuex` 管理状态，但是页面刷新时，`state` 中的信息就会清空，因此需要同时在本地存储用户信息
+
+## 每次页面跳转之前检测权限
+
+利用 vue-router 提供的守卫 `beforeEach`，在每次页面跳转之前检测当前用户权限，并进行处理。
+
+
+`src/main.js` 中
+
+```js
+router.beforeEach((to, from, next) => {
+    const userInfo = util.getUserinfo();
+    let isLogin = store.state.user.login;
+    let notCheckLogin = to.matched.some( record => record.meta.notCheckLogin )
+
+    // 未登录，且需要检测登录状态的路由
+    if (!userInfo && !isLogin && !notCheckLogin){
+        next({ path: '/user-login' });
+    } else {
+        next();
+    }
+});
+```
+
+遇到这样一个问题，无限循环
+
+[beforeEach](./beforeEach.png)
+
+主要原因是判断条件不严谨，判断条件永远成立，导致死循环，这点需要注意。
+
+https://segmentfault.com/q/1010000014983955
+
+https://segmentfault.com/q/1010000012121359
+
+https://segmentfault.com/q/1010000012065855
+
+## 关于本地储存方案
+
+用户登录成功以后应该在本地保存一份用户数据，注意保存本地的方法有很多种，比如 `cookie` 、`localStorage`、`indexedDB` 等。
+
+这里使用的是 `localStorage`，但是，代码中不应该直接调用 `window.localStorage`，而是封装一个用户数据的读取类，解除代码耦合，将来要改成其他存储方式比较简单：
+
+```js
+function getUserinfo(){}
+function setUserinfo(){}
+```
+
+可以存到 `localStorage` 里面，只是不能直接用 `window.localStorage` 相关函数。
+
+假设一个情景，在前期我们要求把用户信息存储在 `localStorage` 中，但是后期，我们又不想存在这里，我们希望存在 `cookie` 甚至其他服务器。
+
+那么如果按照这种写法，需要替换项目中的所有 `localStorage` 调用，所以这里提取出一层，即model层，或者说是存储层。
+
+那么我们不需要切换修改所有项目中的 `localStorage` 调用，只需要修改model层中的 `localStorage` 调用为 `cookie` 或者网络连接。
+
+这样保持我们调用方式不变：getUserinfo，同时还减小工作量，降低误差。
+
+在团队的分工合作中，负责这一层的团队成员直接从 `localStorage` 切换成 `cookie` 也不会对上层的团队成员造成影响。
+
+也就是随意我切换存储引擎不和任何人打招呼我自己也能完成，还不影响他们。
+
+而且独立出来以后我可以针对这一部分直接做单元测试，对项目的维护也有很大帮助。
+
+
+
+
+## 其他
+
+理论上应该有一个接口用来更新用户状态，比如判断用户是否需要重新登录之类的，比如`api/refresh`， 所以逻辑应该是：
+
+用户进入app，判断本地是否有用户信息。
+
+1. 如果有，调用 `api/refresh`，判断是否需要重新登录。
+
+	1. 不需要（连续登录），将信息保存在 vuex 中，并进入首页，往后数据读取全部走 vuex。
+
+	2. 需要（长时间未登录），删除本地用户信息并跳转到登录流程。
+
+2. 如果没有， 跳转到登录流程（以下是登录流程）。
+
+	1. 调用 `api/login` 登录。
+
+	2. 将保存到本地，并保存到 vuex 中，往后数据读取全部走 vuex。
