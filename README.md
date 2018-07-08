@@ -4,6 +4,12 @@
 
 主要技术：vue + vux + vuex + axios
 
+## 依赖
+
++ [vue@2.5.11](https://cn.vuejs.org/v2/guide/)
++ [vue-router@3.0.1](https://router.vuejs.org/zh/)
++ [vuex@3.0.1](https://vuex.vuejs.org/zh/installation.html)
++ [axios@0.17.1](https://github.com/axios/axios)
 
 ## Build Setup
 
@@ -40,3 +46,7 @@ npm run build
 ├── README.md
 └── package.json
 ```
+
+实践的过程中会做一些记录：
+
++ [权限管理](./note/Auth.md)
