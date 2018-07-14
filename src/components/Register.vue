@@ -1,56 +1,71 @@
 <template>
+  <div>
     <form action="">
-        <div class="logoBox"><img class="logo" src="../assets/images/logo.png" alt="logo"></div>
-        <div class="tips-container">
-          <span class="tips">{{ tips }}</span>
-        </div>
-        <div class="clearfix infoBox">
-            <label for="" class="name">所属单位:</label>
-            <div  @click="showPic" class="infoInput companyInfo">
-                <group-title class="selectInput">{{companyName}}</group-title>
-            </div>
-        </div> 
-        <div class="clearfix infoBox">
-            <label for="" class="name user_name">用户名:</label>
-            <div class="infoInput"><input type="text"></div>
-        </div>
-        <div class="clearfix infoBox">
-            <label for="" class="name">真实姓名:</label>
-            <div class="infoInput"><input type="text"></div>
-        </div>
-        <div class="clearfix infoBox">
-            <label for="" class="name">手机号码:</label>
-            <div class="infoInput"><input type="text"></div>
-        </div>
-        <div class="clearfix infoBox">
-            <label for="" class="name">密&emsp;&emsp;码:</label>
-            <div class="infoInput"><input type="text"></div>
-        </div>
-        <div class="clearfix infoBox">
-            <label for="" class="name">确认密码:</label>
-            <div class="infoInput"><input type="text"></div>
-        </div>
+      <div class="logoBox"><img class="logo" src="../assets/images/logo.png" alt="logo"></div>
+      
+      <!-- <div class="tips-container">
+        <span class="tips">{{ tips }}</span>
+      </div> -->
 
-        <div v-transfer-dom>
-          <popup v-model="showPopup" @on-hide="setCompanyName">
-            <div class="popup0">
-              <picker :data='danwei' :columns=3 v-model='danweiValue'></picker>
-            </div>
-          </popup>
+      <div v-transfer-dom>
+        <popup v-model="showPopup">
+          <div class="popup-box">
+            <p class="popup-buttons">
+              <span class="cancel" @click="popupCancelHandle">取消</span>
+              <span class="select">请选择</span>
+              <span class="success" @click="popupSuccessHandle">确定</span>
+            </p>
+            <picker :data='deptList' :columns=3 v-model='danweiValue'></picker>
+          </div>
+        </popup>
+      </div>
+      <div v-for="input in textInputs" v-bind:key="input.name" class="infoBox">
+        <label v-bind:for="input.name" v-html="input.text"></label>
+        <div class="infoInput">
+          <input v-bind:readonly="input.name == 'dept'"
+            v-bind:id="input.name"
+            v-bind:type="input.type"
+            v-model="input.value"
+            v-on:input="inputHandler(input.name)"
+            v-on:click="showPic(input.name)"
+          >
+          <span class="icon-placeholder">
+            <icon v-bind:type="input.icon"></icon>
+          </span>
         </div>
+      </div>
     </form>
+    <div class="buttons">
+      <XButton
+        text="注册"
+        type="primary"
+        @click.native="register"
+      >
+      </XButton>
+      <p class="other-handler clearfix">
+        <router-link :to="{ name: 'login'}" class="fr">返回登录</router-link>
+      </p>
+    </div>
+    <!-- <div v-transfer-dom>
+      <loading :show="loading" text="注册中"></loading>
+    </div> -->
+    <!-- <toast v-model="loginOK">注册成功</toast> -->
+  </div>
 </template>
 
 <script>
 import Vue from "vue";
-import axios from "axios";
+import qs from "qs";
 import {
-  PopupPicker,
   Picker,
   Popup,
   Group,
   GroupTitle,
-  TransferDom
+  Toast,
+  XButton,
+  Loading,
+  Icon,
+  TransferDomDirective as TransferDom
 } from "vux";
 
 export default {
@@ -58,11 +73,19 @@ export default {
   directives: {
     TransferDom
   },
+  components: {
+    Picker,
+    Group,
+    GroupTitle,
+    Popup,
+    XButton,
+    Loading,
+    Icon,
+    Toast
+  },
   data() {
     return {
-      tips: "",
-      title: "所属单位：",
-      danwei: [
+      deptList: [
         {
           name: "中国",
           value: "china",
@@ -136,39 +159,302 @@ export default {
       ],
       danweiValue: [],
       showPopup: false,
-      showPicker: true,
-      companyName: ''
+      confirmPwdIconType: "",
+
+      tips: {
+        isEmpty: true,
+
+
+      },
+      deptNmuber: "", // 单位编号
+      deptId: "", // 部门
+      textInputs: [
+        {
+          value: "",
+          icon: "",
+          type: "text",
+          name: "dept",
+          text: "<span class='required'>*</span> 所属单位:"
+        },
+        {
+          value: "",
+          icon: "",
+          type: "number",
+          name: "id",
+          text: "<span class='required'>*</span> 身份证号:"
+        },
+        {
+          value: "",
+          icon: "",
+          type: "text",
+          name: "name",
+          text: "<span class='required'>*</span> 真实姓名:"
+        },
+        {
+          value: "",
+          icon: "",
+          type: "text",
+          name: "username",
+          text: "<span class='required'>*</span> 真实姓名:"
+        },
+        {
+          value: "",
+          icon: "",
+          type: "tel",
+          name: "phone",
+          text: "<span class='required'>*</span> 手机号码:"
+        },
+        {
+          value: "",
+          icon: "",
+          type: "password",
+          name: "userPwd",
+          text: "<span class='required'>*</span> 密&emsp;&emsp;码:"
+        },
+        {
+          value: "",
+          icon: "",
+          type: "password",
+          name: "confirmPwd",
+          text: "<span class='required'>*</span> 确认密码:"
+        }
+      ]
     };
   },
-  components: {
-    PopupPicker,
-    Picker,
-    Group,
-    Popup,
-    GroupTitle
-  },
   methods: {
-    setCompanyName () {
-      const arr = [];
-      const { danwei, danweiValue } = this;
-      let name = '';
-      danweiValue.forEach(function(item, index) {
-        danwei.forEach(function(item2) {
-          if (item2.value === item && index + 1 === danweiValue.length) {
-            name += item2.name
+    _getData() {
+      const { textInputs } = this;
+      const data = {};
+      textInputs.forEach(input => {
+        if (input.name === "confirmPwd") {
+          return false;
+        }
+        data[input.name] = input.value;
+      });
+      console.log("=======================");
+      console.log(data);
+      console.log("=======================");
+      return data;
+    },
+    _isEmpty4Item(name) {
+      const { textInputs } = this;
+      textInputs.forEach(input => {
+        if (input.name === name) {
+          input.icon = input.value.trim() === "" ? "warn" : "success";
+        }
+      });
+    },
+    _isEmpty4All() {
+      const { textInputs } = this;
+      
+      textInputs.forEach(input => {
+        input.icon = input.value.trim() === "" ? "warn" : "";
+      });
+
+      this.tips.isEmpty = textInputs.some(input => input.value.trim() === "");
+    },
+    _confirmPwd() {
+      const { textInputs } = this;
+      let userPwdInput, confirmPwdInput;
+      
+      textInputs.forEach(input => {
+        if (input.name === "userPwd") {
+          userPwdInput = input;
+        }
+        if (input.name === "confirmPwd") {
+          confirmPwdInput = input;
+        }
+      });
+      if (userPwdInput.value) {
+        confirmPwdInput.icon = userPwdInput.value === confirmPwdInput.value ? "success" : "warn";
+      }
+    },
+    inputHandler(name) {
+      const { textInputs } = this;
+
+      const input = textInputs.filter(input => input.name === name)[0];
+
+      // 判断是否为空
+      if (input.value.trim() === "") {
+        input.icon = "warn";
+        return;
+      } else if (input.value.trim() != "" && input.icon === "warn") {
+        input.icon = "";
+      }
+
+      // 判断手机号
+      if (name === "phone") {
+        let reg = /^\d{0,11}$/;
+        let isNum = reg.test(input.value);
+        if (!isNum) {
+          input.icon = "warn";
+          return;
+        } else if (isNum && input.icon === "warn") {
+          input.icon = "";
+        }
+      }
+
+      if (name === "confirmPwd") {
+        this._confirmPwd();
+      }
+    },
+    register() {
+      this._isEmpty4All();
+      this._confirmPwd();
+
+      if (this.tips.isEmpty) {
+        alert('请填写完整');
+        return;
+      }
+
+      const vm = this;
+      const data = vm._getData();
+      vm.loading = true;
+
+      console.log("=======================");
+      console.log(data);
+      console.log("=======================");
+      let url = "/api/register";
+      const options = {
+        url,
+        // data,
+        method: "POST",
+        headers: { "content-type": "application/x-www-form-urlencoded" },
+        data: qs.stringify(data),
+      };
+      vm
+        .$http(options)
+        .then(function(resp) {
+          vm.loading = false;
+          if (resp.data.code == 0) {
+            vm.loginOK = true;
+
+            const userinfo = resp.data.data || {};
+            util.setUserinfo(userinfo);
+            vm.$store.commit("setUserInfo", userinfo);
+            vm.$store.commit("login", true);
+
+            vm.$router.push({ path: "/home" });
+          } else {
+            // vm.tips = "用户名或密码错误";
           }
         })
-      })
-      this.companyName = name.trim();
+        .catch(function(error) {
+          console.log(error);
+        });
     },
-    showPic() {
-      this.showPopup = true;
-    }
+    setCompanyName() {
+      const arr = [];
+      const { deptList, danweiValue, textInputs } = this;
+      console.log("danweiValue", danweiValue);
+      let name = "";
+      danweiValue.forEach(function(item, index) {
+        deptList.forEach(function(item2) {
+          if (item2.value === item && index + 1 === danweiValue.length) {
+            name += item2.name;
+          }
+        });
+      });
+      console.log("danweiValue", danweiValue);
+      console.log("name", name);
+      textInputs.forEach(item => {
+        if (item.name === "dept") {
+          item.value = name.trim();
+          this._isEmpty4Item("dept");
+        }
+      });
+    },
+    showPic(name) {
+      this.showPopup = name === "dept";
+    },
+    popupCancelHandle() {
+      this.showPopup = false;
+    },
+    popupSuccessHandle() {
+      this.showPopup = false;
+      this.setCompanyName();
+    },
   }
 };
 </script>
 
 <style lang="">
 @import "../assets/css/base.css";
-@import "../assets/css/register.css";
+.logoBox {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.infoBox {
+  margin-bottom: 20px;
+}
+
+.user_name {
+  letter-spacing: 5px;
+}
+
+.companyInfo {
+  height: 40px;
+  line-height: 1.5;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+}
+form {
+  padding: 0;
+  text-align: center;
+}
+
+label {
+  display: inline-block;
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
+}
+
+.infoInput {
+  display: inline-block;
+}
+form input {
+  text-indent: 10px;
+  width: auto;
+}
+
+.icon-placeholder {
+  display: inline-block;
+  height: 40px;
+  width: 34px;
+  /* display: none; */
+}
+.required {
+  color: red;
+}
+.buttons {
+  margin: 0 auto;
+  width: 60%;
+}
+.buttons p {
+  margin-top: 5px;
+}
+
+
+.popup-buttons {
+  text-align: center;
+  height: 44px;
+  line-height: 44px;
+  font-size: 16px;
+  padding: 0 10px;
+  background-color: #fbf9fe;
+}
+.popup-buttons .cancel {
+  float: left;
+  color: #ccc;
+}
+.popup-buttons .select {
+  color: #000;
+}
+.popup-buttons .success {
+  float: right;
+  color: #f90;
+}
+
 </style>
