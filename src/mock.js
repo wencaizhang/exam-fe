@@ -12,5 +12,5 @@ const login = function (data) {
     }
 }
 
-Mock.setup({ timeout: '1000' });
-Mock.mock('/login', 'post', login); 
+// Mock.setup({ timeout: '1000' });
+// Mock.mock('/login', 'post', login); 

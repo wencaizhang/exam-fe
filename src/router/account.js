@@ -24,7 +24,7 @@ export default [
     },
     {
         path: '/register',
-        name: 'registers',
+        name: 'register',
         components: {
             default: Register,
         },

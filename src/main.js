@@ -8,7 +8,7 @@ import store from './store'
 import { AjaxPlugin } from 'vux'
 Vue.use(AjaxPlugin)
 
-require('./mock.js')
+// require('./mock.js')
 
 axios.defaults.baseURL = '/api';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
