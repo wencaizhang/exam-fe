@@ -20,6 +20,16 @@
                 <img slot="icon" src="https://avatars0.githubusercontent.com/u/34718241?s=40&v=4" alt="头像">
             </grid-item>
         </grid>
+        <grid>
+            <grid-item label="登录" link="/user-login">
+                <img slot="icon" src="https://avatars0.githubusercontent.com/u/34718241?s=40&v=4" alt="头像">
+            </grid-item>
+            <grid-item label="退出">
+                <div class="logout-box" @click="logout">
+                    <img slot="icon" src="https://avatars0.githubusercontent.com/u/34718241?s=40&v=4" alt="头像">
+                </div>
+            </grid-item>
+        </grid>
     </div>
 </template>
 
@@ -41,6 +51,9 @@ export default {
     GroupTitle
   },
   methods: {
+    logout() {
+        console.log('退出')
+    }
   },
   created () {
     this.userInfo = util.getUserinfo();
@@ -50,8 +63,6 @@ export default {
 </script>
 
 <style lang="">
-.user-center {
-}
 header {
     height: 70px;
     line-height: 70px;
@@ -75,5 +86,15 @@ header {
 .avatar {
     width: 80px;
     height: 80px;
+}
+
+.logout-box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+     text-align: center;
+    vertical-align: middle;
 }
 </style>

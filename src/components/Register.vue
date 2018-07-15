@@ -195,7 +195,7 @@ export default {
           icon: "",
           type: "text",
           name: "username",
-          text: "<span class='required'>*</span> 真实姓名:"
+          text: "<span class='required'>*</span> 姓&emsp;&emsp;名:"
         },
         {
           value: "",

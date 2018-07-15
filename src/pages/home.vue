@@ -4,7 +4,7 @@
       <h3>快速考试入口</h3>
       <p>通过已有的准考证快速参加考试，具体的准考信息请咨询相关人事。</p>
       <!-- <router-link :to="{path: '/resourceList'}">快速考试</router-link> -->
-      <XButton type="primary" text="xxx"></XButton>
+      <XButton type="primary" text="快速进入考试"></XButton>
     </div>
     <div class="ad-message">
       <h3 @click="click" >活动信息</h3>
