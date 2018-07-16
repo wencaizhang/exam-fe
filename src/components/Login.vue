@@ -1,5 +1,5 @@
 <template>
-  <form class="login-container">
+  <div class="login-container">
     <img class="logo" src="../assets/images/logo.png" alt="logo">
     <div class="tips-container">
       <span class="tips">{{ tips }}</span>
@@ -24,7 +24,7 @@
       <loading :show="loading" text="登录中"></loading>
     </div>
     <toast v-model="loginOK">登录成功</toast>
-  </form>
+  </div>
 </template>
 
 <script>

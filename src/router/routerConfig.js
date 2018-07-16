@@ -1,5 +1,6 @@
 
 import Home from "../pages/Home"
+import Rank from "../pages/Rank"
 import User from '../components/User'
 import Footer from "../components/Footer"
 import BackHeader from "../components/BackHeader"
@@ -12,7 +13,6 @@ const routers = [
         name: 'home',
         components: {
             default: Home,
-            header: BackHeader,
             footer: Footer
         },
         meta: {
@@ -24,6 +24,17 @@ const routers = [
         name: 'user',
         components: {
             default: User,
+            footer: Footer
+        },
+        meta: {
+            title: '个人中心'
+        }
+    },
+    {
+        path: '/rank',
+        name: 'rank',
+        components: {
+            default: Rank,
             footer: Footer
         },
         meta: {

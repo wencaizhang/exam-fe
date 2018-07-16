@@ -4,7 +4,7 @@
       <tabbar-item link="/home">
         <span slot="label">首页</span>
       </tabbar-item>
-      <tabbar-item selected link="/component/demo">
+      <tabbar-item selected link="/rank">
         <span slot="label">排行榜</span>
       </tabbar-item>
       <!-- <tabbar-item show-dot link="">

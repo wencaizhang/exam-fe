@@ -1,6 +1,7 @@
 import BackHeader from "../components/BackHeader"
 import Exam from '../pages/Exam/Container'
 import Success from "../pages/Exam/Success"
+import WaitForExam from "../pages/WaitForExam"
 
 export default [
     {
@@ -20,6 +21,17 @@ export default [
         component: Exam,
         meta: {
             title: '考试中心'
+        }
+    },
+    {
+        path: '/waitforexam',
+        name: 'waitforexam',
+        components: {
+            default: WaitForExam,
+            header: BackHeader,
+        },
+        meta: {
+            title: '候考页面'
         }
     }
 ];
