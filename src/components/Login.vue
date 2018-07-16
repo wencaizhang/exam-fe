@@ -5,10 +5,10 @@
       <span class="tips">{{ tips }}</span>
     </div>
     <input type="text" placeholder="请输入用户名" v-model="username" autofocus>
-    <input type="password" placeholder="请输入密码" v-model="password">
+    <input type="password" placeholder="请输入密码" v-model="password" v-on:keyup.enter="login">
 
     <div class="buttons">
-      <XButton 
+      <XButton
         text="登录" 
         type="primary"
         @click.native="login" 
