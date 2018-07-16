@@ -1,19 +1,22 @@
 <template>
-  <div class="home-container">
-    <div class="fast-entry">
-      <h3>注意事项</h3>
-      <p>1. xxxxx</p>
-      <p>2. xxxxx</p>
-      <p>3. xxxxx</p>
-    </div>
-    <div class="ad-message">
-      <h3>活动信息</h3>
-      <p>姓名</p>
-      <p>单位</p>
-      <p>考试次数</p>
-      <p>活动名称</p>
-      <p>时间</p>
-      <XButton type="primary" text="开始考试" link="/exam"></XButton>
+  <div>
+    <x-header :left-options="{backText: ''}">准备考试</x-header>
+    <div class="home-container">
+      <div class="fast-entry">
+        <h3>注意事项</h3>
+        <p>1. xxxxx</p>
+        <p>2. xxxxx</p>
+        <p>3. xxxxx</p>
+      </div>
+      <div class="ad-message">
+        <h3>活动信息</h3>
+        <p>姓名</p>
+        <p>单位</p>
+        <p>考试次数</p>
+        <p>活动名称</p>
+        <p>时间</p>
+        <XButton type="primary" text="开始考试" link="/exam"></XButton>
+      </div>
     </div>
   </div>
 </template>
@@ -23,13 +26,14 @@ import Vue from "vue";
 import axios from "axios";
 import qs from 'qs';
 
-import { XButton } from "vux";
+import { XButton, XHeader } from "vux";
 export default {
   data() {
     return {};
   },
   components: {
-    XButton
+    XButton,
+    XHeader
   },
   methods: {
     getInfo () {

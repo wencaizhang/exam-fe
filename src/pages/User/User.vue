@@ -15,7 +15,7 @@
             <cell-box is-link :link="{ path: '/reset' }">
                 密码重置
             </cell-box>
-            <cell-box is-link link="/exam">
+            <cell-box is-link :link="{ path: '/waitforexam' }">
                 进入考试
             </cell-box>
             <cell-box>

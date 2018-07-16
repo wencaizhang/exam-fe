@@ -1,5 +1,4 @@
 import Footer from "../components/Footer"
-import BackHeader from "../components/BackHeader"
 
 import Exam from '../pages/Exam/Container'
 import Success from "../pages/Exam/Success"
@@ -102,7 +101,6 @@ export default [
         name: 'success',
         components: {
             default: Success,
-            header: BackHeader,
         },
         meta: {
             title: '试卷已成功提交'
@@ -121,10 +119,9 @@ export default [
         name: 'waitforexam',
         components: {
             default: WaitForExam,
-            header: BackHeader,
         },
         meta: {
-            title: '候考页面'
+            title: '准备考试'
         }
     },
     {

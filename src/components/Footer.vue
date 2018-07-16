@@ -1,10 +1,10 @@
 <template>
-    <footer class="footer">
+  <footer class="footer">
     <tabbar>
-      <tabbar-item link="/home">
+      <tabbar-item selected link="/home">
         <span slot="label">首页</span>
       </tabbar-item>
-      <tabbar-item selected link="/rank">
+      <tabbar-item link="/rank">
         <span slot="label">排行榜</span>
       </tabbar-item>
       <!-- <tabbar-item show-dot link="">
@@ -14,7 +14,7 @@
         <span slot="label">我</span>
       </tabbar-item>
     </tabbar>
-</footer>
+  </footer>
 </template>
 
 <script>
