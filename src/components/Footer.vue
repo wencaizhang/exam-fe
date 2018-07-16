@@ -11,7 +11,7 @@
         <span slot="label">练习</span>
       </tabbar-item> -->
       <tabbar-item badge="2" link="/user">
-        <span slot="label">个人中心</span>
+        <span slot="label">我</span>
       </tabbar-item>
     </tabbar>
 </footer>

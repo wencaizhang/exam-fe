@@ -8,28 +8,20 @@
                 <span>{{ userInfo.user }}</span>
             </div>
         </header>
-        <group-title>常用功能：</group-title>
-        <grid>
-            <grid-item label="修改个人信息">
-                <img slot="icon" src="https://avatars0.githubusercontent.com/u/34718241?s=40&v=4" alt="头像">
-            </grid-item>
-            <grid-item label="密码重置">
-                <img slot="icon" src="https://avatars0.githubusercontent.com/u/34718241?s=40&v=4" alt="头像">
-            </grid-item>
-            <grid-item label="进入考试" link="/exam">
-                <img slot="icon" src="https://avatars0.githubusercontent.com/u/34718241?s=40&v=4" alt="头像">
-            </grid-item>
-        </grid>
-        <grid>
-            <grid-item label="登录" link="/user-login">
-                <img slot="icon" src="https://avatars0.githubusercontent.com/u/34718241?s=40&v=4" alt="头像">
-            </grid-item>
-            <grid-item label="退出">
-                <div class="logout-box" @click="logout">
-                    <img slot="icon" src="https://avatars0.githubusercontent.com/u/34718241?s=40&v=4" alt="头像">
-                </div>
-            </grid-item>
-        </grid>
+        <group>
+            <cell-box is-link link="/user-login">
+                修改个人信息
+            </cell-box>
+            <cell-box is-link :link="{ path: '/user-login' }">
+                密码重置
+            </cell-box>
+            <cell-box is-link link="/exam">
+                进入考试
+            </cell-box>
+            <cell-box>
+                <div class="logout-box" @click="logout"> 退出 </div>
+            </cell-box>
+        </group>
     </div>
 </template>
 
@@ -37,7 +29,7 @@
 import Vue from "vue";
 import axios from "axios";
 import util from "../../util/util.js"
-import { Grid, GridItem, GroupTitle } from 'vux';
+import { Group, CellBox  } from 'vux';
 
 export default {
   data() {
@@ -46,9 +38,8 @@ export default {
     };
   },
   components: {
-    Grid,
-    GridItem,
-    GroupTitle
+    Group,
+    CellBox
   },
   methods: {
     logout() {
@@ -89,12 +80,7 @@ header {
 }
 
 .logout-box {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
-     text-align: center;
-    vertical-align: middle;
 }
 </style>
