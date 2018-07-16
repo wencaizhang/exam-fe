@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import vueRouter from "vue-router"
-import routes from "./routerConfig.js"
+import routes from "./routes.js"
 import VueWechatTitle from 'vue-wechat-title'
 
 Vue.use(VueWechatTitle)
