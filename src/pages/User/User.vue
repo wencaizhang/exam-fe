@@ -36,7 +36,7 @@
 <script>
 import Vue from "vue";
 import axios from "axios";
-import util from "../util/util.js"
+import util from "../../util/util.js"
 import { Grid, GridItem, GroupTitle } from 'vux';
 
 export default {

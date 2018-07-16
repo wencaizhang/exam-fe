@@ -1,7 +1,7 @@
 <template>
   <div>
     <form action="">
-      <div class="logoBox"><img class="logo" src="../assets/images/logo.png" alt="logo"></div>
+      <div class="logoBox"><img class="logo" src="../../assets/images/logo.png" alt="logo"></div>
       
       <!-- <div class="tips-container">
         <span class="tips">{{ tips }}</span>
@@ -379,7 +379,7 @@ export default {
 </script>
 
 <style lang="">
-@import "../assets/css/base.css";
+@import "../../assets/css/base.css";
 .logoBox {
   text-align: center;
   margin: 20px 0;

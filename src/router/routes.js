@@ -1,7 +1,3 @@
-
-import Home from "../pages/Home"
-import Rank from "../pages/Rank"
-import User from '../components/User'
 import Footer from "../components/Footer"
 import BackHeader from "../components/BackHeader"
 
@@ -9,9 +5,13 @@ import Exam from '../pages/Exam/Container'
 import Success from "../pages/Exam/Success"
 import WaitForExam from "../pages/WaitForExam"
 
-import Register from '../components/Register'
-import Login from '../components/Login'
-import Forget from '../components/Forget'
+import Home from "../pages/Home/Home"
+import Rank from "../pages/Rank/Rank"
+import User from '../pages/User/User'
+
+import Register from '../pages/User/Register'
+import Login from '../pages/User/Login'
+import Forget from '../pages/User/Forget'
 
 
 export default [

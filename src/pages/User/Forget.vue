@@ -1,36 +1,25 @@
 <template>
-  <div class="login-container">
-    <img class="logo" src="../assets/images/logo.png" alt="logo">
+  <form class="login-container">
+    <img class="logo" src="../../assets/images/logo.png" alt="logo">
     <div class="tips-container">
       <span class="tips">{{ tips }}</span>
     </div>
     <input type="text" placeholder="请输入用户名" v-model="username" autofocus>
-    <input type="password" placeholder="请输入密码" v-model="password" v-on:keyup.enter="login">
-
-    <div class="buttons">
-      <XButton
-        text="登录" 
-        type="primary"
-        @click.native="login" 
-      >
-      </XButton>
-      <p class="other-handler clearfix">
-        <router-link :to="{ name: 'register'}" class="fl">注册</router-link>
-        <router-link :to="{ name: 'forget'}" class="fr">忘记密码</router-link>
-      </p>
-    </div>
-
+    <input type="password" placeholder="请输入验证码" v-model="password">
+    <XButton 
+      text="确定" 
+      type="primary"
+      @click.native="login" 
+    >
+    </XButton>
     <div v-transfer-dom>
       <loading :show="loading" text="登录中"></loading>
     </div>
     <toast v-model="loginOK">登录成功</toast>
-  </div>
+  </form>
 </template>
 
 <script>
-import util from "../util/util.js"
-import qs from 'qs';
-
 import {
   Toast,
   XButton,
@@ -39,7 +28,7 @@ import {
 } from "vux";
 
 export default {
-  name: "Login",
+  name: "Forget",
   directives: {
     TransferDom
   },
@@ -69,24 +58,16 @@ export default {
       }
       vm.loading = true;
 
-      let url = '/sys/login';
-      const data = { username, password };
-      const options = {
-        url,
-        method: 'POST',
-        headers: { 'content-type': 'application/x-www-form-urlencoded' },
-        data: qs.stringify(data),
-      };
-      
-      this.$http((options))
+      this.$http
+        .post("/login", {
+          username,
+          password
+        })
         .then(function(resp) {
           vm.loading = false;
           if (resp.data.code == 0) {
             vm.loginOK = true;
-
-            const userinfo = resp.data.data || {};
-            util.setUserinfo(userinfo);
-            vm.$store.commit('setUserInfo', userinfo);
+            vm.$store.commit('setUserInfo', resp.data.data.user);
             vm.$store.commit('login', true);
             
             vm.$router.push({ path: "/home" });
@@ -97,34 +78,13 @@ export default {
         .catch(function(error) {
           console.log(error);
         });
-
-      // this.$store.dispatch('login', {
-      //   username,
-      //   password,
-      //   // email: 'hongzhong',
-      //   // password: 'actionview'
-      // })
-      // .then(resp => {
-      //   vm.loading = false;
-      //   if (resp.data.code == 0) {
-      //     vm.loginOK = true;
-      //     vm.$store.commit('setUserInfo', resp.data.data.user)
-      //     vm.$router.push({ path: "/home" });
-      //   } else {
-      //     vm.tips = "用户名或密码错误";
-      //   }
-      // }).bind(this)
-      // .catch(error => {
-      //   this.loading = false;
-      //   console.log(error);
-      // });
     }
   }
 };
 </script>
 
 <style lang="">
-@import "../assets/css/base.css";
+@import "../../assets/css/base.css";
 .logo {
   margin-top: 10px;
   margin-bottom: 20px;
