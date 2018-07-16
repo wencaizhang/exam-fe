@@ -12,6 +12,8 @@ import User from '../pages/User/User'
 import Register from '../pages/User/Register'
 import Login from '../pages/User/Login'
 import Forget from '../pages/User/Forget'
+import ResetPwd from '../pages/User/ResetPwd'
+import ChangeUserInfo from '../pages/User/ChangeUserInfo'
 
 
 export default [
@@ -49,7 +51,7 @@ export default [
         }
     },
     {
-        path: '/user-login',
+        path: '/login',
         name: 'login',
         component: Login,
         meta: {
@@ -63,6 +65,24 @@ export default [
         component: Forget,
         meta: {
             title: '找回密码',
+            notCheckLogin: true,
+        }
+    },
+    {
+        path: '/reset',
+        name: 'reset',
+        component: ResetPwd,
+        meta: {
+            title: '重置密码',
+            notCheckLogin: true,
+        }
+    },
+    {
+        path: '/changeuserinfo',
+        name: 'changeuserinfo',
+        component: ChangeUserInfo,
+        meta: {
+            title: '重置密码',
             notCheckLogin: true,
         }
     },

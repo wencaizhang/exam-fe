@@ -39,7 +39,7 @@ router.beforeEach((to, from, next) => {
 
     // 未登录，且需要检测登录状态的路由
     if (!userInfo && !isLogin && !notCheckLogin){
-        next({ path: '/user-login' });
+        next({ path: '/login' });
     } else {
         next();
     }
