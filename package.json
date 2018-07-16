@@ -6,8 +6,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --host 0.0.0.0 --content-base ./ --open --inline --hot --compress --config webpack.dev.js",
-    "build": "webpack --progress --hide-modules --config webpack.prod.js"
+    "dev": "webpack-dev-server --host 0.0.0.0 --content-base ./src/ --open --inline --hot --compress --config ./webpack/webpack.dev.js",
+    "build": "webpack --progress --hide-modules --config ./webpack/webpack.prod.js"
   },
   "dependencies": {
     "axios": "^0.17.1",

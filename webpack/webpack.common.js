@@ -3,10 +3,7 @@ const CleanWebpackPlugin = require("clean-webpack-plugin");
 
 module.exports = {
   entry: {
-    main: "./src/main"
-  },
-  externals: {
-    BMap: "BMap"
+    main: "./src/index"
   },
   output: {
     path: path.resolve(__dirname, './dist')

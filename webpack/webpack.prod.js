@@ -10,8 +10,8 @@ const common = require("./webpack.common.js");
 module.exports = merge(common, {
   devtool: "source-map",
   output: {
-    path: path.resolve(__dirname, './dist/dist'),
-    publicPath: "./dist/",
+    path: path.resolve(__dirname, '../dist/dist'),
+    publicPath: "../dist/",
     filename: "[name].[hash].js",
     chunkFilename: "[name].[hash].chunk.js"
   },
@@ -27,9 +27,9 @@ module.exports = merge(common, {
       sourceMap: true
     }),
     new HtmlWebpackPlugin({
-      title: "中电友普云",
-      favicon: "./src/favicon.ico",
-      filename: "../index.html",
+      title: "河北电网考试系统",
+      favicon: "./public/favicon.ico",
+      filename: "./src/index.html",
       template: "./src/template/index.html",
       inject: false
     })
