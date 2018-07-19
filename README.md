@@ -14,13 +14,19 @@
 ## Build Setup
 
 ``` bash
-# install dependencies
+# 获取代码
+git clone https://github.com/Awesome-FE/exam-system-fe.git
+
+# 切换到代码根目录
+cd exam-system-fe
+
+# 安装依赖，可以使用 cnpm
 npm install
 
-# serve with hot reload at localhost:8080
+# 启动开发环境服务器，在 localhost:8080 查看
 npm run dev
 
-# build for production with minification
+# 打包出部署文件
 npm run build
 ```
 
@@ -28,6 +34,10 @@ npm run build
 ```
 ├── public
 │   └── favicon.ico          # Favicon
+├── webpack
+|   ├── webpack.common.js        # webpack 公共配置
+|   ├── webpack.dev.js           # webpack 开发配置
+│   └── webpack.prod.js          # webpack 打包配置
 ├── src
 │   ├── assets               # 本地静态资源
 │   ├── components           # 业务通用组件
@@ -40,9 +50,7 @@ npm run build
 │   ├── main.js              # 应用入口
 │   └── mock.js              # 本地模拟数据
 │
-├── webpack.common.js        # webpack 公共配置
-├── webpack.dev.js           # webpack 开发配置
-├── webpack.prod.js          # webpack 打包配置
+├── note                     # 开发笔记
 ├── README.md
 └── package.json
 ```
