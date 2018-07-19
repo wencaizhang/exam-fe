@@ -5,7 +5,7 @@
                 <img class="avatar" v-bind:src="userInfo.avatar" alt="头像">
             </div>
             <div class="user-nick">
-                <span>{{ userInfo.user }}</span>
+                <span>{{ userInfo.userName }}</span>
             </div>
         </header>
         <group>
@@ -28,13 +28,15 @@
 <script>
 import Vue from "vue";
 import axios from "axios";
-import util from "../../util/util.js"
-import { Group, CellBox  } from 'vux';
+import util from "../../util/util.js";
+import { Group, CellBox } from "vux";
 
 export default {
   data() {
     return {
-        userInfo: null
+      userInfo: {
+        avatar: ""
+      }
     };
   },
   components: {
@@ -43,31 +45,72 @@ export default {
   },
   methods: {
     logout() {
-        console.log('退出')
+      const vm = this;
+      let url = "/logout";
+      const options = {
+        url,
+        method: "GET",
+        headers: { "content-type": "application/x-www-form-urlencoded" }
+      };
+      vm
+        .$http(options)
+        .then(function(resp) {
+          vm.loading = false;
+
+          if (resp.data.code == 0) {
+            util.setUserinfo(null);
+          } else {
+            // vm.tips = "用户名或密码错误";
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     }
   },
-  created () {
-    this.userInfo = util.getUserinfo();
-    console.log(this.userInfo)
+  created() {
+    const vm = this;
+    let url = "/student/student/getStudentByUserId";
+    const options = {
+      url,
+      method: "GET",
+      headers: { "content-type": "application/x-www-form-urlencoded" }
+    };
+    vm
+      .$http(options)
+      .then(function(resp) {
+        vm.loading = false;
+
+        if (resp.data.code == 0) {
+          vm.loginOK = true;
+          vm.userInfo = Object.assign({}, vm.userInfo, resp.data.student);
+        } else {
+          // vm.tips = "用户名或密码错误";
+        }
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   }
 };
 </script>
 
 <style lang="">
 header {
-    height: 70px;
-    line-height: 70px;
-    padding: 20px;
-    border-bottom: 1px solid #D9D9D9;
-    margin-bottom: 16px;
+  height: 70px;
+  line-height: 70px;
+  padding: 20px;
+  border-bottom: 1px solid #d9d9d9;
+  margin-bottom: 16px;
 }
-.user-photo, .user-nick {
-    display: inline-block;
-    vertical-align: top;
+.user-photo,
+.user-nick {
+  display: inline-block;
+  vertical-align: top;
 }
 .user-photo {
-    width: 70px;
-    height: 70px;
+  width: 70px;
+  height: 70px;
 }
 .grid-center {
   display: block;
@@ -75,12 +118,12 @@ header {
   color: #666;
 }
 .avatar {
-    width: 80px;
-    height: 80px;
+  width: 80px;
+  height: 80px;
 }
 
 .logout-box {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }
 </style>

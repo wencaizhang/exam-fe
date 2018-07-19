@@ -97,27 +97,6 @@ export default {
         .catch(function(error) {
           console.log(error);
         });
-
-      // this.$store.dispatch('login', {
-      //   username,
-      //   password,
-      //   // email: 'hongzhong',
-      //   // password: 'actionview'
-      // })
-      // .then(resp => {
-      //   vm.loading = false;
-      //   if (resp.data.code == 0) {
-      //     vm.loginOK = true;
-      //     vm.$store.commit('setUserInfo', resp.data.data.user)
-      //     vm.$router.push({ path: "/home" });
-      //   } else {
-      //     vm.tips = "用户名或密码错误";
-      //   }
-      // }).bind(this)
-      // .catch(error => {
-      //   this.loading = false;
-      //   console.log(error);
-      // });
     }
   }
 };
@@ -150,7 +129,10 @@ export default {
   background-color: rgba(24, 144, 255);
   color: #000;
 }
-
+.buttons {
+  margin: 0 auto;
+  /* width: 80%; */
+}
 .login-container input {
   margin-bottom: 30px;
   padding: 4px 11px;

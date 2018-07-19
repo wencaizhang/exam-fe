@@ -1,12 +1,7 @@
 <template>
   <div>
-    <form action="">
+    <form class="form-box" autocomplete="off" @submit.prevent="register">
       <div class="logoBox"><img class="logo" src="../../assets/images/logo.png" alt="logo"></div>
-      
-      <!-- <div class="tips-container">
-        <span class="tips">{{ tips }}</span>
-      </div> -->
-
       <div v-transfer-dom>
         <popup v-model="showPopup">
           <div class="popup-box">
@@ -15,7 +10,7 @@
               <span class="select">请选择</span>
               <span class="success" @click="popupSuccessHandle">确定</span>
             </p>
-            <picker :data='deptList' :columns=3 v-model='danweiValue'></picker>
+            <picker :data='deptList' :columns=4 v-model='danweiValue'></picker>
           </div>
         </popup>
       </div>
@@ -23,10 +18,12 @@
         <label v-bind:for="input.name" v-html="input.text"></label>
         <div class="infoInput">
           <input v-bind:readonly="input.name == 'dept'"
+            v-bind:placeholder="input.placeholder"
             v-bind:id="input.name"
             v-bind:type="input.type"
             v-model="input.value"
             v-on:input="inputHandler(input.name)"
+            v-on:blur="blurHandler(input.name)"
             v-on:click="showPic(input.name)"
           >
           <span class="icon-placeholder">
@@ -43,13 +40,11 @@
       >
       </XButton>
       <p class="other-handler clearfix">
-        <router-link :to="{ name: 'login'}" class="fr">返回登录</router-link>
+        <router-link :to="{ name: 'login'}" class="fl">返回登录</router-link>
+        <router-link :to="{ name: 'login'}" class="fr">忘记密码</router-link>
       </p>
     </div>
-    <!-- <div v-transfer-dom>
-      <loading :show="loading" text="注册中"></loading>
-    </div> -->
-    <!-- <toast v-model="loginOK">注册成功</toast> -->
+    <toast v-model="showToast" type="warn">请正确填写</toast>
   </div>
 </template>
 
@@ -85,88 +80,12 @@ export default {
   },
   data() {
     return {
-      deptList: [
-        {
-          name: "中国",
-          value: "china",
-          parent: "0" // 为一级时可以不写 parent，但是此时允许为数字 0、空字符串或者字符串 '0'
-        },
-        {
-          name: "美国",
-          value: "USA",
-          parent: "0"
-        },
-        {
-          name: "广东",
-          value: "china001",
-          parent: "china"
-        },
-        {
-          name: "广西",
-          value: "china002",
-          parent: "china"
-        },
-        {
-          name: "美国001",
-          value: "usa001",
-          parent: "USA"
-        },
-        {
-          name: "美国002",
-          value: "usa002",
-          parent: "USA"
-        },
-        {
-          name: "广州",
-          value: "gz",
-          parent: "china001"
-        },
-        {
-          name: "深圳",
-          value: "sz",
-          parent: "china001"
-        },
-        {
-          name: "广西001",
-          value: "gx001",
-          parent: "china002"
-        },
-        {
-          name: "广西002",
-          value: "gx002",
-          parent: "china002"
-        },
-        {
-          name: "美国001_001",
-          value: "0003",
-          parent: "usa001"
-        },
-        {
-          name: "美国001_002",
-          value: "0004",
-          parent: "usa001"
-        },
-        {
-          name: "美国002_001",
-          value: "0005",
-          parent: "usa002"
-        },
-        {
-          name: "美国002_002",
-          value: "0006",
-          parent: "usa002"
-        }
-      ],
+      deptList: [],
       danweiValue: [],
       showPopup: false,
-      confirmPwdIconType: "",
+      showToast: false,
+      formPass: false,
 
-      tips: {
-        isEmpty: true,
-
-
-      },
-      deptNmuber: "", // 单位编号
       deptId: "", // 部门
       textInputs: [
         {
@@ -174,55 +93,92 @@ export default {
           icon: "",
           type: "text",
           name: "dept",
-          text: "<span class='required'>*</span> 所属单位:"
-        },
-        {
-          value: "",
-          icon: "",
-          type: "number",
-          name: "id",
-          text: "<span class='required'>*</span> 身份证号:"
+          text: "<span class='required'>*</span> 所属单位:",
+          placeholder: '请选择'
         },
         {
           value: "",
           icon: "",
           type: "text",
           name: "name",
-          text: "<span class='required'>*</span> 真实姓名:"
+          text: "<span class='required'>*</span> 真实姓名:",
+          placeholder: '真实姓名'
         },
         {
           value: "",
           icon: "",
           type: "text",
-          name: "username",
-          text: "<span class='required'>*</span> 姓&emsp;&emsp;名:"
+          name: "userName",
+          text: "<span class='required'>*</span> 姓&emsp;&emsp;名:",
+          placeholder: '用户名'
         },
         {
           value: "",
           icon: "",
           type: "tel",
           name: "phone",
-          text: "<span class='required'>*</span> 手机号码:"
+          text: "<span class='required'>*</span> 手机号码:",
+          placeholder: '手机号码'
         },
         {
           value: "",
           icon: "",
           type: "password",
           name: "userPwd",
-          text: "<span class='required'>*</span> 密&emsp;&emsp;码:"
+          text: "<span class='required'>*</span> 密&emsp;&emsp;码:",
+          placeholder: '密码最少 6 位'
         },
         {
           value: "",
           icon: "",
           type: "password",
           name: "confirmPwd",
-          text: "<span class='required'>*</span> 确认密码:"
+          text: "<span class='required'>*</span> 确认密码:",
+          placeholder: '请再输入密码'
         }
       ]
     };
   },
+  created () {
+    this._getDeptList();
+  },
   methods: {
+    _getDeptList () {
+      // 获取所属单位列表数据
+      const vm = this;
+      let url = '/sys/dept/list';
+      const options = {
+        url,
+        method: "GET",
+        headers: { "content-type": "application/x-www-form-urlencoded" },
+      };
+      vm
+        .$http(options)
+        .then(function(resp) {
+          vm.loading = false;
+
+          if (resp.data.code == 0) {
+            vm.loginOK = true;
+            vm.deptList = resp.data.deptList.map(item => {
+              return Object.assign({}, { 
+                value: item.deptId,
+                name: item.name,
+                parent: item.parentId,
+              })
+            });
+
+            console.log('deptList', JSON.parse(JSON.stringify(Object.assign({}, vm.deptList))))
+            // vm.$router.push({ path: "/home" });
+          } else {
+            // vm.tips = "用户名或密码错误";
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
     _getData() {
+      // 获取页面表单数据
       const { textInputs } = this;
       const data = {};
       textInputs.forEach(input => {
@@ -231,29 +187,42 @@ export default {
         }
         data[input.name] = input.value;
       });
-      console.log("=======================");
-      console.log(data);
-      console.log("=======================");
+      delete data.dept;
+      data.deptId = this.deptId;
       return data;
     },
     _isEmpty4Item(name) {
-      const { textInputs } = this;
+      // 判断指定表单是否为空
+      const vm = this;
+      const { textInputs } = vm;
       textInputs.forEach(input => {
         if (input.name === name) {
-          input.icon = input.value.trim() === "" ? "warn" : "success";
+          if (input.value.trim() === "") {
+            input.icon = "warn";
+            vm.formPass = false;
+          } else {
+            input.icon = "";
+          }
         }
       });
     },
     _isEmpty4All() {
+      // 判断所有表单是否存在空
+      const vm = this;
       const { textInputs } = this;
       
       textInputs.forEach(input => {
-        input.icon = input.value.trim() === "" ? "warn" : "";
+        if (input.value.trim() === "") {
+          input.icon = "warn";
+          vm.formPass = false;
+        }
       });
 
-      this.tips.isEmpty = textInputs.some(input => input.value.trim() === "");
+      this.formPass = !textInputs.some(input => input.value.trim() === "");
     },
     _confirmPwd() {
+      // 确认两次密码输入是否相同
+      const vm = this;
       const { textInputs } = this;
       let userPwdInput, confirmPwdInput;
       
@@ -266,60 +235,91 @@ export default {
         }
       });
       if (userPwdInput.value) {
-        confirmPwdInput.icon = userPwdInput.value === confirmPwdInput.value ? "success" : "warn";
+        if (userPwdInput.value === confirmPwdInput.value) {
+          confirmPwdInput.icon = "success";
+        } else {
+          confirmPwdInput.icon = "warn";
+          vm.formPass = false;
+        }
       }
     },
-    inputHandler(name) {
+    blurHandler(name) {
+      // 失去焦点时进行校验
+      const vm = this;
       const { textInputs } = this;
-
       const input = textInputs.filter(input => input.name === name)[0];
 
-      // 判断是否为空
-      if (input.value.trim() === "") {
-        input.icon = "warn";
-        return;
-      } else if (input.value.trim() != "" && input.icon === "warn") {
-        input.icon = "";
-      }
-
-      // 判断手机号
+      // 判断手机号正好 11 位数字
       if (name === "phone") {
-        let reg = /^\d{0,11}$/;
+        let reg = /^\d{11}$/;
         let isNum = reg.test(input.value);
         if (!isNum) {
           input.icon = "warn";
+          vm.formPass = false;
           return;
         } else if (isNum && input.icon === "warn") {
           input.icon = "";
         }
       }
 
-      if (name === "confirmPwd") {
-        this._confirmPwd();
+      // 判断手机号正好 11 位数字
+      if (name === "userPwd") {
+        if (input.value.trim().length < 6) {
+          input.icon = "warn";
+          vm.formPass = false;
+          return;
+        }
       }
     },
-    register() {
+    inputHandler(name) {
+      // 用户输入时进行校验
+      const vm = this;
+      const { textInputs } = this;
+      const input = textInputs.filter(input => input.name === name)[0];
+
+      // 判断是否为空
+      if (input.value.trim() === "") {
+        input.icon = "warn";
+        vm.formPass = false;
+        return;
+      } else if (input.value.trim() != "" && input.icon === "warn") {
+        input.icon = "";
+      }
+
+      // 判断手机号 0 - 11 位数字
+      if (name === "phone") {
+        let reg = /^\d{0,11}$/;
+        let isNum = reg.test(input.value);
+        if (!isNum) {
+          input.icon = "warn";
+          vm.formPass = false;
+          return;
+        } else if (isNum && input.icon === "warn") {
+          input.icon = "";
+        }
+      }
+    },
+    register() {      
+      const vm = this;
+      vm.formPass = true;
+      // 点击注册按钮时触发
       this._isEmpty4All();
       this._confirmPwd();
-
-      if (this.tips.isEmpty) {
-        alert('请填写完整');
+      if (!this.formPass) {
+        this.showToast = !this.formPass;
+        console.log(this.showToast)
         return;
       }
 
-      const vm = this;
       const data = vm._getData();
       vm.loading = true;
 
-      console.log("=======================");
-      console.log(data);
-      console.log("=======================");
       let url = "/api/register";
       const options = {
         url,
         // data,
         method: "POST",
-        headers: { "content-type": "application/x-www-form-urlencoded" },
+        headers: { "content-type": 'application/x-www-form-urlencoded' },
         data: qs.stringify(data),
       };
       vm
@@ -328,15 +328,9 @@ export default {
           vm.loading = false;
           if (resp.data.code == 0) {
             vm.loginOK = true;
-
-            const userinfo = resp.data.data || {};
-            util.setUserinfo(userinfo);
-            vm.$store.commit("setUserInfo", userinfo);
-            vm.$store.commit("login", true);
-
             vm.$router.push({ path: "/home" });
           } else {
-            // vm.tips = "用户名或密码错误";
+            // vm.tips = resp.data.message;
           }
         })
         .catch(function(error) {
@@ -344,25 +338,23 @@ export default {
         });
     },
     setCompanyName() {
-      const arr = [];
       const { deptList, danweiValue, textInputs } = this;
-      console.log("danweiValue", danweiValue);
       let name = "";
-      danweiValue.forEach(function(item, index) {
-        deptList.forEach(function(item2) {
-          if (item2.value === item && index + 1 === danweiValue.length) {
-            name += item2.name;
-          }
-        });
+      let id = this.deptId = danweiValue.reverse()[0];
+
+      deptList.forEach(function(item) {
+        if (item.value === id) {
+          name += item.name;
+        }
       });
-      console.log("danweiValue", danweiValue);
-      console.log("name", name);
+
       textInputs.forEach(item => {
         if (item.name === "dept") {
           item.value = name.trim();
-          this._isEmpty4Item("dept");
         }
       });
+      this._isEmpty4Item("dept");
+
     },
     showPic(name) {
       this.showPopup = name === "dept";
@@ -380,13 +372,21 @@ export default {
 
 <style lang="">
 @import "../../assets/css/base.css";
+
+body {
+  background-color: #fff;
+}
+
+
+
 .logoBox {
   text-align: center;
-  margin: 20px 0;
+  margin-top: 20px;
 }
 
 .infoBox {
-  margin-bottom: 20px;
+  margin-bottom: 6px;
+  padding-left: 20px;
 }
 
 .user_name {
@@ -399,7 +399,7 @@ export default {
   border: 1px solid #d9d9d9;
   border-radius: 4px;
 }
-form {
+.form-box {
   padding: 0;
   text-align: center;
 }
@@ -414,7 +414,7 @@ label {
 .infoInput {
   display: inline-block;
 }
-form input {
+.form-box input {
   text-indent: 10px;
   width: auto;
 }
@@ -430,7 +430,7 @@ form input {
 }
 .buttons {
   margin: 0 auto;
-  width: 60%;
+  width: 80%;
 }
 .buttons p {
   margin-top: 5px;

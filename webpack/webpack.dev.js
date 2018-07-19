@@ -30,11 +30,24 @@ const webpackConfig = merge(common, {
                 target: "http://112.29.173.230:9997",
                 changeOrigin: true,
             },
+            "/student": {
+                target: "http://112.29.173.230:9997",
+                changeOrigin: true,
+            },
+            "/layout": {
+                target: "http://112.29.173.230:9997",
+                changeOrigin: true,
+            },
             "/api": {
                 // target: "http://119.23.217.88:8080",
                 target: "http://112.29.173.230:9997",
                 // target: "192.168.0.110:7777",
-            }
+            },
+            // "/api/register": {
+            //     // target: "http://119.23.217.88:8080",
+            //     // target: "http://112.29.173.230:9997",
+            //     target: "192.168.0.113:9997",
+            // }
         }
     }
 });
