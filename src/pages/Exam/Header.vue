@@ -1,27 +1,9 @@
 <template>
-  <div class="exam-header">
-    <flexbox>
-      <flexbox-item>
-        <x-button class="return" mini type="primary" link="BACK">返回</x-button>
-      </flexbox-item>
-      <flexbox-item class="text-align-center">
-        <span>{{ time }}</span>
-      </flexbox-item>
-      <flexbox-item class="text-align-right">
-        <x-button class="pause" 
-          @click.native="togglePause"
-          mini 
-          type="warn"
-        >
-          {{ buttonText }}
-        </x-button>
-      </flexbox-item>
-    </flexbox>
-  </div>
+  <x-header>{{ time }}<a slot="right" @click="togglePause">{{ buttonText }}</a></x-header>
 </template>
 
 <script>
-import { XButton, Flexbox, FlexboxItem } from "vux";
+import { XHeader  } from "vux";
 export default {
   data() {
     return {
@@ -29,9 +11,7 @@ export default {
     };
   },
   components: {
-    XButton,
-    Flexbox,
-    FlexboxItem
+    XHeader,
   },
   computed: {
     time () {
@@ -50,7 +30,7 @@ export default {
           time += Math.max(mode, points[i].max) + points[i].suffix;
         }
       }
-      return time;
+      return time || '0秒';
     },
     buttonText () {
       return this.$store.state.exam.isPaused ? '继续' : '暂停';
@@ -79,14 +59,5 @@ export default {
 };
 </script>
 <style>
-.exam-header {
-  text-align: center;
-  padding: 10px;
-}
-.return {
-  float: left;
-}
-.pause {
-  float: right;
-}
+
 </style>
