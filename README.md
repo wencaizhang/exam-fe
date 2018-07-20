@@ -13,7 +13,8 @@
 
 ## Build Setup
 
-``` bash
+获取代码并安装依赖（需安装 node，版本 8.0 以上）
+```sh
 # 获取代码
 git clone https://github.com/Awesome-FE/exam-system-fe.git
 
@@ -22,12 +23,23 @@ cd exam-system-fe
 
 # 安装依赖，可以使用 cnpm
 npm install
+```
 
+开发：
+```sh
 # 启动开发环境服务器，在 localhost:8080 查看
 npm run dev
+```
 
+打包部署
+```sh
 # 打包出部署文件
 npm run build
+```
+
+更新代码
+```sh
+git pull
 ```
 
 ## 目录结构
