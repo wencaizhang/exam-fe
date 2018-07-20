@@ -28,8 +28,8 @@
 </template>
 
 <script>
-import util from "../../util/util.js"
-import qs from 'qs';
+import util from "../../util/util.js";
+import qs from "qs";
 
 import {
   Toast,
@@ -69,16 +69,16 @@ export default {
       }
       vm.loading = true;
 
-      let url = '/sys/login';
+      let url = "/sys/login";
       const data = { username, password };
       const options = {
         url,
-        method: 'POST',
-        headers: { 'content-type': 'application/x-www-form-urlencoded' },
-        data: qs.stringify(data),
+        method: "POST",
+        headers: { "content-type": "application/x-www-form-urlencoded" },
+        data: qs.stringify(data)
       };
-      
-      this.$http((options))
+
+      this.$http(options)
         .then(function(resp) {
           vm.loading = false;
           if (resp.data.code == 0) {
@@ -86,9 +86,9 @@ export default {
 
             const userinfo = resp.data.data || {};
             util.setUserinfo(userinfo);
-            vm.$store.commit('setUserInfo', userinfo);
-            vm.$store.commit('login', true);
-            
+            vm.$store.commit("setUserInfo", userinfo);
+            vm.$store.commit("login", true);
+
             vm.$router.push({ path: "/home" });
           } else {
             vm.tips = "用户名或密码错误";
@@ -136,5 +136,18 @@ export default {
 .login-container input {
   margin-bottom: 30px;
   padding: 4px 11px;
+}
+
+input {
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  border-radius: 0;
+  box-shadow:none;
+}
+input:focus {
+  box-shadow:none;
+  -webkit-tap-highlight-color:transparent;
+   -webkit-appearance: none;
 }
 </style>

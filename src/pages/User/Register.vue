@@ -15,7 +15,6 @@
         </popup>
       </div>
       <div v-for="input in textInputs" v-bind:key="input.name" class="infoBox">
-        <label v-bind:for="input.name" v-html="input.text"></label>
         <div class="infoInput">
           <input v-bind:readonly="input.name == 'dept'"
             v-bind:placeholder="input.placeholder"
@@ -44,7 +43,7 @@
         <router-link :to="{ name: 'login'}" class="fr">忘记密码</router-link>
       </p>
     </div>
-    <toast v-model="showToast" type="warn">请正确填写</toast>
+    <toast v-model="showToast" type="warn">请正确填写注册信息</toast>
   </div>
 </template>
 
@@ -93,64 +92,58 @@ export default {
           icon: "",
           type: "text",
           name: "dept",
-          text: "<span class='required'>*</span> 所属单位:",
-          placeholder: '请选择'
+          placeholder: "请选择所属单位"
         },
         {
           value: "",
           icon: "",
           type: "text",
           name: "name",
-          text: "<span class='required'>*</span> 真实姓名:",
-          placeholder: '真实姓名'
+          placeholder: "真实姓名"
         },
         {
           value: "",
           icon: "",
           type: "text",
           name: "userName",
-          text: "<span class='required'>*</span> 姓&emsp;&emsp;名:",
-          placeholder: '用户名'
+          placeholder: "用户名"
         },
         {
           value: "",
           icon: "",
           type: "tel",
           name: "phone",
-          text: "<span class='required'>*</span> 手机号码:",
-          placeholder: '手机号码'
+          placeholder: "手机号码"
         },
         {
           value: "",
           icon: "",
           type: "password",
           name: "userPwd",
-          text: "<span class='required'>*</span> 密&emsp;&emsp;码:",
-          placeholder: '密码最少 6 位'
+          placeholder: "密码最少 6 位"
         },
         {
           value: "",
           icon: "",
           type: "password",
           name: "confirmPwd",
-          text: "<span class='required'>*</span> 确认密码:",
-          placeholder: '请再输入密码'
+          placeholder: "请确认密码"
         }
       ]
     };
   },
-  created () {
+  created() {
     this._getDeptList();
   },
   methods: {
-    _getDeptList () {
+    _getDeptList() {
       // 获取所属单位列表数据
       const vm = this;
-      let url = '/sys/dept/list';
+      let url = "/sys/dept/list";
       const options = {
         url,
         method: "GET",
-        headers: { "content-type": "application/x-www-form-urlencoded" },
+        headers: { "content-type": "application/x-www-form-urlencoded" }
       };
       vm
         .$http(options)
@@ -160,14 +153,20 @@ export default {
           if (resp.data.code == 0) {
             vm.loginOK = true;
             vm.deptList = resp.data.deptList.map(item => {
-              return Object.assign({}, { 
-                value: item.deptId,
-                name: item.name,
-                parent: item.parentId,
-              })
+              return Object.assign(
+                {},
+                {
+                  value: item.deptId,
+                  name: item.name,
+                  parent: item.parentId
+                }
+              );
             });
 
-            console.log('deptList', JSON.parse(JSON.stringify(Object.assign({}, vm.deptList))))
+            console.log(
+              "deptList",
+              JSON.parse(JSON.stringify(Object.assign({}, vm.deptList)))
+            );
             // vm.$router.push({ path: "/home" });
           } else {
             // vm.tips = "用户名或密码错误";
@@ -210,7 +209,7 @@ export default {
       // 判断所有表单是否存在空
       const vm = this;
       const { textInputs } = this;
-      
+
       textInputs.forEach(input => {
         if (input.value.trim() === "") {
           input.icon = "warn";
@@ -225,7 +224,7 @@ export default {
       const vm = this;
       const { textInputs } = this;
       let userPwdInput, confirmPwdInput;
-      
+
       textInputs.forEach(input => {
         if (input.name === "userPwd") {
           userPwdInput = input;
@@ -299,7 +298,7 @@ export default {
         }
       }
     },
-    register() {      
+    register() {
       const vm = this;
       vm.formPass = true;
       // 点击注册按钮时触发
@@ -307,7 +306,7 @@ export default {
       this._confirmPwd();
       if (!this.formPass) {
         this.showToast = !this.formPass;
-        console.log(this.showToast)
+        console.log(this.showToast);
         return;
       }
 
@@ -319,8 +318,8 @@ export default {
         url,
         // data,
         method: "POST",
-        headers: { "content-type": 'application/x-www-form-urlencoded' },
-        data: qs.stringify(data),
+        headers: { "content-type": "application/x-www-form-urlencoded" },
+        data: qs.stringify(data)
       };
       vm
         .$http(options)
@@ -340,7 +339,7 @@ export default {
     setCompanyName() {
       const { deptList, danweiValue, textInputs } = this;
       let name = "";
-      let id = this.deptId = danweiValue.reverse()[0];
+      let id = (this.deptId = danweiValue.reverse()[0]);
 
       deptList.forEach(function(item) {
         if (item.value === id) {
@@ -354,7 +353,6 @@ export default {
         }
       });
       this._isEmpty4Item("dept");
-
     },
     showPic(name) {
       this.showPopup = name === "dept";
@@ -365,7 +363,7 @@ export default {
     popupSuccessHandle() {
       this.showPopup = false;
       this.setCompanyName();
-    },
+    }
   }
 };
 </script>
@@ -377,16 +375,14 @@ body {
   background-color: #fff;
 }
 
-
-
 .logoBox {
   text-align: center;
   margin-top: 20px;
 }
 
 .infoBox {
-  margin-bottom: 6px;
-  padding-left: 20px;
+  margin-bottom: 20px;
+  padding: 0 20px;
 }
 
 .user_name {
@@ -412,19 +408,22 @@ label {
 }
 
 .infoInput {
+  position: relative;
   display: inline-block;
+  width: 100%;
+}
+.infoInput .icon-placeholder {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  height: 30px;
+  width: 34px;
 }
 .form-box input {
   text-indent: 10px;
-  width: auto;
+  width: 100%;
 }
 
-.icon-placeholder {
-  display: inline-block;
-  height: 40px;
-  width: 34px;
-  /* display: none; */
-}
 .required {
   color: red;
 }
@@ -435,7 +434,6 @@ label {
 .buttons p {
   margin-top: 5px;
 }
-
 
 .popup-buttons {
   text-align: center;
@@ -457,4 +455,18 @@ label {
   color: #f90;
 }
 
+
+
+input {
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  border-radius: 0;
+  box-shadow:none;
+}
+input:focus {
+  box-shadow:none;
+  -webkit-tap-highlight-color:transparent;
+   -webkit-appearance: none;
+}
 </style>
