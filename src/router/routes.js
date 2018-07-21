@@ -46,7 +46,7 @@ export default [
             footer: Footer
         },
         meta: {
-            title: '个人中心'
+            title: '排行榜'
         }
     },
     {
@@ -81,7 +81,7 @@ export default [
         name: 'changeuserinfo',
         component: ChangeUserInfo,
         meta: {
-            title: '重置密码',
+            title: '修改个人信息',
             notCheckLogin: true,
         }
     },
@@ -92,7 +92,7 @@ export default [
             default: Register,
         },
         meta: {
-            title: '个人中心',
+            title: '注册',
             notCheckLogin: true,
         }
     },

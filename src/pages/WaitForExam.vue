@@ -1,9 +1,9 @@
 <template>
   <div>
     <x-header :left-options="{backText: ''}">准备考试</x-header>
-    <div class="home-container">
+    <div :class="$style['home-container']">
       <div class="fast-entry">
-        <h3>注意事项</h3>
+        <h3 :class="{ [$style.red] : isRed}">注意事项</h3>
         <p>1. xxxxx</p>
         <p>2. xxxxx</p>
         <p>3. xxxxx</p>
@@ -29,7 +29,9 @@ import qs from 'qs';
 import { XButton, XHeader } from "vux";
 export default {
   data() {
-    return {};
+    return {
+      isRed: true
+    };
   },
   components: {
     XButton,
@@ -66,7 +68,7 @@ export default {
   }
 };
 </script>
-<style>
+<style module>
 h3 {
   text-align: center;
   margin-bottom: 10px;
@@ -81,5 +83,8 @@ h3 {
 }
 .fast-entry {
   margin-bottom: 20px;
+}
+.red {
+  color: red;
 }
 </style>
