@@ -2,13 +2,13 @@
   <div>
     <x-header :left-options="{backText: ''}">准备考试</x-header>
     <div :class="$style['home-container']">
-      <div class="fast-entry">
-        <h3 :class="{ [$style.red] : isRed}">注意事项</h3>
+      <div :class="$style['fast-entry']">
+        <h3 :class="[$style.h3]">注意事项</h3>
         <p>1. xxxxx</p>
         <p>2. xxxxx</p>
         <p>3. xxxxx</p>
       </div>
-      <div class="ad-message">
+      <div :class="$style.message">
         <h3>活动信息</h3>
         <p>姓名</p>
         <p>单位</p>
@@ -69,14 +69,14 @@ export default {
 };
 </script>
 <style module>
-h3 {
+.h3 {
   text-align: center;
   margin-bottom: 10px;
 }
 .home-container {
   padding: 40px;
 }
-.ad-message,
+.message,
 .fast-entry {
   border: 1px solid #ccc;
   padding: 10px;

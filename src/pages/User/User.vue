@@ -1,10 +1,10 @@
 <template>
-    <div class="user-center">
-        <header>
-            <div class="user-photo">
-                <img class="avatar" v-bind:src="userInfo.avatar" alt="头像">
+    <div class="">
+        <header :class="$style.header">
+            <div :class="$style.photo">
+                <img :class="$style.avatar" v-bind:src="userInfo.avatar" alt="头像">
             </div>
-            <div class="user-nick">
+            <div :class="$style.nick">
                 <span>{{ userInfo.userName }}</span>
             </div>
         </header>
@@ -35,7 +35,7 @@ export default {
   data() {
     return {
       userInfo: {
-        avatar: ""
+        avatar: "http://5b0988e595225.cdn.sohucs.com/images/20171216/a72351d45dee4e6fa270985fb5394f1e.jpeg"
       }
     };
   },
@@ -95,35 +95,23 @@ export default {
 };
 </script>
 
-<style lang="">
-header {
+<style module>
+.header {
   height: 70px;
   line-height: 70px;
   padding: 20px;
-  border-bottom: 1px solid #d9d9d9;
-  margin-bottom: 16px;
 }
-.user-photo,
-.user-nick {
+.photo,
+.nick {
   display: inline-block;
   vertical-align: top;
 }
-.user-photo {
+.photo {
   width: 70px;
   height: 70px;
-}
-.grid-center {
-  display: block;
-  text-align: center;
-  color: #666;
 }
 .avatar {
   width: 80px;
   height: 80px;
-}
-
-.logout-box {
-  width: 100%;
-  height: 100%;
 }
 </style>
