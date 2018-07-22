@@ -14,6 +14,9 @@ html {
     letter-spacing: 1px;
 }
 
+body {
+    background-color: #fff;
+}
 *::selection {
     background-color: limegreen;
     color: #fff;

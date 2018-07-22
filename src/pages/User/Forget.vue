@@ -1,12 +1,12 @@
 <template>
-  <form class="login-container">
-    <img class="logo" src="../../assets/images/logo.png" alt="logo">
-    <div class="tips-container">
-      <span class="tips">{{ tips }}</span>
+  <form :class="$style.container">
+    <img :class="$style.logo" src="../../assets/images/logo.png" alt="logo">
+    <div :class="$style['tips-container']">
+      <span :class="$style.tips">{{ tips }}</span>
     </div>
-    <input type="text" placeholder="请输入用户名" v-model="username" autofocus>
-    <input type="password" placeholder="请输入验证码" v-model="password">
-    <XButton 
+    <input :class="$style.input" type="text" placeholder="请输入用户名" v-model="username" autofocus>
+    <input :class="$style.input" type="password" placeholder="请输入验证码" v-model="password">
+    <XButton
       text="确定" 
       type="primary"
       @click.native="login" 
@@ -83,36 +83,38 @@ export default {
 };
 </script>
 
-<style lang="">
+<style module>
 @import "../../assets/css/base.css";
 .logo {
   margin-top: 10px;
   margin-bottom: 20px;
 }
-.login-container {
+.container {
   text-align: center;
   padding: 40px;
   letter-spacing: 1px;
 }
-.login-container .other-handler {
-  margin: 10px 0;
-  color: #555;
-  padding: 0 2px;
-}
-.login-container .tips-container {
+
+.tips-container {
   height: 20px;
   line-height: 20px;
   text-align: left;
   color: red;
   margin-bottom: 5px;
 }
-.login-container input[type="button"] {
-  background-color: rgba(24, 144, 255);
-  color: #000;
-}
 
-.login-container input {
+.input {
   margin-bottom: 30px;
   padding: 4px 11px;
+}
+.input {
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  border-radius: 0;
+  box-shadow:none;
+}
+.input:focus {
+  box-shadow:none;
 }
 </style>

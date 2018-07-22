@@ -1,21 +1,21 @@
 <template>
   <div>
-    <form class="form-box" autocomplete="off" @submit.prevent="register">
-      <div class="logoBox"><img class="logo" src="../../assets/images/logo.png" alt="logo"></div>
+    <form :class="$style['form-box']" autocomplete="off" @submit.prevent="register">
+      <div :class="$style.logoBox"><img :class="$style.logo" src="../../assets/images/logo.png" alt="logo"></div>
       <div v-transfer-dom>
         <popup v-model="showPopup">
-          <div class="popup-box">
-            <p class="popup-buttons">
-              <span class="cancel" @click="popupCancelHandle">取消</span>
-              <span class="select">请选择</span>
-              <span class="success" @click="popupSuccessHandle">确定</span>
+          <div :class="$style['popup-box']">
+            <p :class="$style['popup-buttons']">
+              <span :class="$style.cancel" @click="popupCancelHandle">取消</span>
+              <span :class="$style.select">请选择</span>
+              <span :class="$style.success" @click="popupSuccessHandle">确定</span>
             </p>
             <picker :data='deptList' :columns=4 v-model='danweiValue'></picker>
           </div>
         </popup>
       </div>
-      <div v-for="input in textInputs" v-bind:key="input.name" class="infoBox">
-        <div class="infoInput">
+      <div v-for="input in textInputs" v-bind:key="input.name" :class="$style.infoBox">
+        <div :class="$style.infoInput">
           <input v-bind:readonly="input.name == 'dept'"
             v-bind:placeholder="input.placeholder"
             v-bind:id="input.name"
@@ -25,20 +25,20 @@
             v-on:blur="blurHandler(input.name)"
             v-on:click="showPic(input.name)"
           >
-          <span class="icon-placeholder">
+          <span :class="$style['icon-placeholder']">
             <icon v-bind:type="input.icon"></icon>
           </span>
         </div>
       </div>
     </form>
-    <div class="buttons">
+    <div :class="$style.buttons">
       <XButton
         text="注册"
         type="primary"
         @click.native="register"
       >
       </XButton>
-      <p class="other-handler clearfix">
+      <p :class="$style['other-handler']">
         <router-link :to="{ name: 'login'}" class="fl">返回登录</router-link>
         <router-link :to="{ name: 'login'}" class="fr">忘记密码</router-link>
       </p>
@@ -368,7 +368,7 @@ export default {
 };
 </script>
 
-<style lang="">
+<style module>
 @import "../../assets/css/base.css";
 
 body {
@@ -412,14 +412,14 @@ label {
   display: inline-block;
   width: 100%;
 }
-.infoInput .icon-placeholder {
+.icon-placeholder {
   position: absolute;
   right: 0;
   bottom: 0;
   height: 30px;
   width: 34px;
 }
-.form-box input {
+input {
   text-indent: 10px;
   width: 100%;
 }
@@ -443,14 +443,14 @@ label {
   padding: 0 10px;
   background-color: #fbf9fe;
 }
-.popup-buttons .cancel {
+.cancel {
   float: left;
   color: #ccc;
 }
-.popup-buttons .select {
+.select {
   color: #000;
 }
-.popup-buttons .success {
+.success {
   float: right;
   color: #f90;
 }
@@ -466,7 +466,5 @@ input {
 }
 input:focus {
   box-shadow:none;
-  -webkit-tap-highlight-color:transparent;
-   -webkit-appearance: none;
 }
 </style>
