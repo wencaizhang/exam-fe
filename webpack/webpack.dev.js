@@ -6,6 +6,10 @@ const common = require("./webpack.common.js");
 const vuxLoader = require('vux-loader')
 
 
+let localip = "http://192.168.0.113:9997";
+let remoteip = "http://112.29.173.230:9997";
+
+let proxyip = remoteip;
 
 const webpackConfig = merge(common, {
     devtool: "inline-source-map",
@@ -23,25 +27,23 @@ const webpackConfig = merge(common, {
     devServer: {
         proxy: {
             "/sys": {
-                target: "http://112.29.173.230:9997",
+                target: proxyip,
                 changeOrigin: true,
             },
             "/exam": {
-                target: "http://112.29.173.230:9997",
+                target: proxyip,
                 changeOrigin: true,
             },
             "/student": {
-                target: "http://112.29.173.230:9997",
+                target: proxyip,
                 changeOrigin: true,
             },
             "/layout": {
-                target: "http://112.29.173.230:9997",
+                target: proxyip,
                 changeOrigin: true,
             },
             "/api": {
-                // target: "http://119.23.217.88:8080",
-                target: "http://112.29.173.230:9997",
-                // target: "192.168.0.110:7777",
+                target: proxyip,
             },
             // "/api/register": {
             //     // target: "http://119.23.217.88:8080",

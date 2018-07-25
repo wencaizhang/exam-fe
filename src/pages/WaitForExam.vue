@@ -4,20 +4,27 @@
     <div :class="$style['home-container']">
       <div :class="$style['fast-entry']">
         <h3 :class="[$style.h3]">注意事项</h3>
-        <p>1. xxxxx</p>
-        <p>2. xxxxx</p>
-        <p>3. xxxxx</p>
+        <div v-if="examination">
+          {{ examination.examinationAttention }}
+        </div>
       </div>
       <div :class="$style.message">
-        <h3>活动信息</h3>
-        <p>姓名</p>
-        <p>单位</p>
-        <p>考试次数</p>
-        <p>活动名称</p>
-        <p>时间</p>
-        <XButton type="primary" text="开始考试" link="/exam"></XButton>
+        <h3 :class="[$style.h3]">活动信息</h3>
+        <div v-if="examination" :class="$style.examination">
+          <!-- <p>姓名：{{ examination }}</p> -->
+          <p><span :class="$style.text">考试单位：</span>{{ examination.deptName }}</p>
+          <p><span :class="$style.text">剩余次数：</span>{{ countExamNumber }}</p>
+          <p><span :class="$style.text">活动名称：</span>{{ examination.examinationName }}</p>
+          <p><span :class="$style.text">考试时长：</span>{{ examination.examinationTimeLong }} 分钟</p>
+          <p><span :class="$style.text">开始时间：</span></p>
+          <p>{{ examination.examinationStartTime }}</p>
+          <p><span :class="$style.text">截止时间：</span></p>
+          <p>{{ examination.examinationEndTime }}</p>
+        </div>
       </div>
+      <XButton type="primary" :disabled="loading" text="开始考试" link="/exam"></XButton>
     </div>
+    <toast v-model="showToast" type="warn">{{ errMsg }}</toast>
   </div>
 </template>
 
@@ -26,22 +33,34 @@ import Vue from "vue";
 import axios from "axios";
 import qs from 'qs';
 
-import { XButton, XHeader } from "vux";
+import { XButton, XHeader, Toast, } from "vux";
+import util from "../util/util.js";
 export default {
   data() {
     return {
-      isRed: true
+      loading: true,
+      showToast: false,
+      errMsg: '',
+      isRed: true,
+      countExamNumber: 0,
+      examination: null
     };
   },
   components: {
+    Toast,
     XButton,
     XHeader
   },
   methods: {
+    dateToMs (date) {
+      let result = new Date(date).getTime();
+      return result;
+    },
     getInfo () {
+      const vm = this;
       let url = '/exam/examination/info';
       const data = { 
-        data: '7D30FE5031B7A85DCD222D69D0DD29938625350D7D2A79247B160A34623B700E1CBE6B388EA84AB706C401034FDB5E3C31B0BCA5BDA1F94E8999FC531992C40EED83D584FBD4A5074AA78E94891D045B1D53E3B7D132AF7'
+        data: '7D30FE5031B7A85DCD222D69D0DD29938625350D7D2A79247B160A34623B700E1CBE6B388EA84AB706C401034FDB5E3C31B0BCA5BDA1F94E8999FC531992C40EED83D584FBD4A5074AA78E94891D045B3D62C67D3E267F63'
       };
       const options = {
         url,
@@ -52,10 +71,27 @@ export default {
       
       this.$http((options))
         .then(function(resp) {
-          vm.loading = false;
           if (resp.data.code == 0) {
+            vm.loading = false;
+            vm.countExamNumber = resp.data.countExamNumber;
+            vm.examination = resp.data.examination;
 
+            const data = {
+              paperDesignId: resp.data.examination.paperId,
+              examinationNumber: resp.data.countExamNumber,
+              examinationStarTime: vm.dateToMs(resp.data.examination.examinationStartTime),
+              examinationEndTime: vm.dateToMs(resp.data.examination.examinationEndTime),
+              // deptNo: 'xxxxxxxx'
+            }
+
+            console.log('-0------------')
+            console.log(data);
+            console.log('-0------------')
+
+            util.setPaperData(data)
           } else {
+            vm.showToast = true;
+            vm.errMsg = resp.data.msg;
           }
         })
         .catch(function(error) {
@@ -81,10 +117,19 @@ export default {
   border: 1px solid #ccc;
   padding: 10px;
 }
+.message {
+  margin-bottom: 20px;
+}
 .fast-entry {
   margin-bottom: 20px;
 }
 .red {
+  color: red;
+}
+.examination p {
+  margin: 6px 0;
+}
+.text {
   color: red;
 }
 </style>
