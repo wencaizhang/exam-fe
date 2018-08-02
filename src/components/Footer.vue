@@ -1,16 +1,13 @@
 <template>
   <footer class="footer">
     <tabbar>
-      <tabbar-item selected link="/home">
+      <tabbar-item :selected="$route.name === 'home'" link="/home">
         <span slot="label">首页</span>
       </tabbar-item>
-      <tabbar-item link="/rank">
+      <tabbar-item :selected="$route.name === 'rank'" link="/rank">
         <span slot="label">排行榜</span>
       </tabbar-item>
-      <!-- <tabbar-item show-dot link="">
-        <span slot="label">练习</span>
-      </tabbar-item> -->
-      <tabbar-item badge="2" link="/user">
+      <tabbar-item :selected="$route.name === 'user'" link="/user">
         <span slot="label">我</span>
       </tabbar-item>
     </tabbar>
@@ -29,7 +26,13 @@ export default {
     Tabbar,
     TabbarItem
   },
-  methods: {}
+  methods: {},
+  // watch: {
+  //   '$route': function (newV) {
+  //     console.log(newV)
+      
+  //   }
+  // },
 };
 </script>
 <style>
