@@ -8,6 +8,7 @@ util.setUserinfo = (userInfo) => {
     window.sessionStorage.setItem('userInfo', JSON.stringify(userInfo));
 }
 
+// 获取考试题目 ids 所需要的数据
 util.setPaperData = (data) => {
     window.sessionStorage.setItem('paper', JSON.stringify(data));
 }

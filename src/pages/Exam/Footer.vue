@@ -4,7 +4,7 @@
       <flexbox-item>
         <x-button mini plain type="primary"
           @click.native="toPrev"
-          :disabled="isAblePrev"
+          :disabled="isFirst"
         >
         上一题
         </x-button>
@@ -12,7 +12,7 @@
       <flexbox-item class="text-align-right">
         <x-button mini plain type="primary"
           @click.native="toNext"
-          :disabled="isAbleNext"
+          :disabled="isLast"
         >
         下一题
         </x-button>
@@ -50,10 +50,10 @@ export default {
     length() {
       return this.$store.getters.length;
     },
-    isAblePrev() {
+    isFirst() {
       return this.index <= 0 || this.$store.state.exam.isPaused;
     },
-    isAbleNext() {
+    isLast() {
       return this.index + 1 >= this.length || this.$store.state.exam.isPaused;
     },
     isAbleShowAll () {
@@ -67,13 +67,13 @@ export default {
   },
   methods: {
     toPrev() {
-      if (this.isAblePrev) return;
+      if (this.isFirst) return;
       this.$store.commit('toggleShowQuestion', false);
       this.$store.commit('toggleShowQuestion', true);
       this.$store.commit("toPrev");
     },
     toNext() {
-      if (this.isAbleNext) return;
+      if (this.isLast) return;
       this.$store.commit('toggleShowQuestion', false);
       this.$store.commit('toggleShowQuestion', true);
       this.$store.commit("toNext");

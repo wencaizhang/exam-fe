@@ -108,7 +108,15 @@ export default [
     },
     {
         path: '/exam',
-        name: 'Exam',
+        name: 'exam',
+        component: Exam,
+        meta: {
+            title: '考试中心'
+        }
+    },
+    {
+        path: '/exam/:id',
+        name: 'exam',
         component: Exam,
         meta: {
             title: '考试中心'

@@ -72,7 +72,7 @@ export default {
     change(value, label) {
       console.log("选中的 key 和 value 分别是:", value, label);
       // console.log("当前index:", this.index);
-      // console.log(this.$store.state.exam.anwsers);
+      console.log(this.$store.state.exam.anwsers);
       // this.$store.commit({
       //   type: "setAnwser",
       //   index: this.index,

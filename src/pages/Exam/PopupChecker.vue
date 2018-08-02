@@ -8,7 +8,8 @@
 					@on-change="change"
 					default-item-class="checker-item"
 					selected-item-class="checker-item-selected"
-					disabled-item-class="checker-item-disabled">
+					disabled-item-class="checker-item-disabled"
+        >
 					<checker-item v-for="item in list" :value="item" :key="item">{{ item + 1 }}</checker-item>
 				</checker>
 			</div>
@@ -51,6 +52,7 @@ export default {
     change(value) {
       this.$store.commit("showAll", false);
       this.$store.commit("changeIndex", value);
+      this.$router.push({ path: '/exam', params: { id: value }});
     }
   }
 };
