@@ -28,7 +28,7 @@ module.exports = merge(common, {
     }),
     new HtmlWebpackPlugin({
       title: "河北电网考试系统",
-      favicon: "./public/favicon.ico",
+      favicon: "./src/favicon.ico",
       filename: "./src/index.html",
       template: "./src/template/index.html",
       inject: false

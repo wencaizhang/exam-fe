@@ -3,8 +3,8 @@
     <p class="question-type">{{ getType }}</p>
     <checklist
       v-model="model"
-      :title="question.title" 
-      :options="question.options" 
+      :title="question.content" 
+      :options="question.optionList" 
       :max="max"
       :disabled="disabled"
       @on-change="change"
@@ -21,9 +21,9 @@ export default {
     return {
       // model: null,
       questionTypes: [
-        { val: 1, type: "单选题：", max: 1 },
-        { val: 2, type: "多选题：", max: 100 },
-        { val: 3, type: "判断题：", max: 1 }
+        { val: '001', type: "单选题：", max: 1 },
+        { val: '002', type: "多选题：", max: 100 },
+        { val: '003', type: "判断题：", max: 1 }
       ]
     };
   },
@@ -50,6 +50,7 @@ export default {
       return this.$store.state.exam.index;
     },
     question() {
+      console.log('xxxxxxxxxxxxxx', this.$store.getters.question)
       return this.$store.getters.question;
     },
     disabled() {
@@ -57,13 +58,13 @@ export default {
     },
     max() {
       const vm = this;
-      return vm.questionTypes.filter(item => item.val === vm.question.type)[0][
+      return vm.questionTypes.filter(item => item.val === vm.question.typeId)[0][
         "max"
       ];
     },
     getType() {
       const vm = this;
-      return vm.questionTypes.filter(item => item.val === vm.question.type)[0][
+      return vm.questionTypes.filter(item => item.val === vm.question.typeId)[0][
         "type"
       ];
     }
@@ -81,7 +82,7 @@ export default {
     }
   },
   mounted () {
-    this.$store.commit('toggleShowQuestion', true);
+    // this.$store.commit('toggleShowQuestion', true);
   }
 };
 </script>
