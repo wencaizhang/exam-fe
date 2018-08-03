@@ -33,53 +33,10 @@ export default {
     Modal
   },
   methods: {
-    getIds () {
+    getQuestionById (index) {
       const vm = this;
-      const data = util.getPaperData()
-      let url = '/exam/paperProduce/produce';
-      const options = {
-        url,
-        method: 'POST',
-        headers: { 'content-type': 'application/x-www-form-urlencoded' },
-        data: qs.stringify(data),
-      };
-      
-      this.$http((options))
-        .then(function(resp) {
-          if (resp.data.code == 0) {
-            const data = JSON.parse(resp.data.paperDuce.details);
-            util.setQuestionIds(data);
-
-            console.log(util.getQuestionIds())
-
-            const idList = []
-            data.forEach(item => {
-              const list = JSON.parse(item.ids);
-              list.forEach((id) => {
-                idList.push( { id, score: item.score } );
-              })
-            });
-
-            vm.$store.commit('setIdList', idList);
-            
-
-            vm.getQuestionById(idList[0]['id']);
-          }
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-    },
-    getQuestionById (id) {
-      // const ids = util.getQuestionIds()
-      // let id = JSON.parse(ids[0]['ids'])[0];  
-      // let id = 175618
-      // console.log('ids', ids);
-
-      const vm = this;
+      let id = vm.$store.state.exam.idList[index]['id']
       const data = { id: id };
-
-      console.log('data', data);
 
       let url = '/exam/equestionmanagement/selectOne';
       const options = {
@@ -92,16 +49,9 @@ export default {
       this.$http((options))
         .then(function(resp) {
           if (resp.data.code == 0) {
-            console.log(resp.data)
             const data = {}
-            Object.assign(data, { optionList: resp.data.optionList }, resp.data.questionManagementEntity);
-
-            const list = [
-              {flag: "D", managementId: 175618, id: "0326bbad-2082-4688-b35e-a8f8dfc5297b", content: "发发发冠福股份"},
-              {flag: "A", managementId: 175618, id: "0745ed36-3327-4558-b86b-0482fdfa6ebc", content: "1"},
-              {flag: "B", managementId: 175618, id: "1679052d0d65408881077609592a9e72", content: " 电压三角形 "},
-              {flag: "C", managementId: 175618, id: "231db938-b40e-42ad-aa53-4830f3b7ccbd", content: "玉桃园"},
-            ];
+            const list = resp.data.optionList;
+            Object.assign(data, resp.data.questionManagementEntity);
 
             list.sort( (a, b) => {
               var s = a.flag.toLowerCase();
@@ -119,10 +69,8 @@ export default {
             })
 
             vm.$store.commit('pushQuestion', data);
-            vm.$store.commit('changeId', data.id);
+            vm.$store.commit('changeIndex', data.id);
             vm.$store.commit('toggleShowQuestion', true);
-
-            console.log(vm.$store.state.exam.idList)
           }
         })
         .catch(function(error) {
@@ -130,18 +78,17 @@ export default {
         });
     },
     getCurrentIdByRoute () {
-      let id = this.$route.params.id;
-      
-      if (id) {
-        // this.getQuestionById(id);
-      } else {
-        // 
-      }
+      let index = this.$route.params.index || 0;
+      this.getQuestionById(index);
+    }
+  },
+  watch: {
+    '$route': function (newV) {
+      this.getQuestionById(newV.params.index);
     }
   },
   created() {
-    this.getIds();
-    // this.getCurrentIdByRoute();
+    this.getCurrentIdByRoute();
   }
 };
 </script>

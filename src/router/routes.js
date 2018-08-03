@@ -2,7 +2,7 @@ import Footer from "../components/Footer"
 
 import Exam from '../pages/Exam/Container'
 import Success from "../pages/Exam/Success"
-import WaitForExam from "../pages/WaitForExam"
+import WaitForExam from "../pages/Exam/WaitForExam"
 
 import Home from "../pages/Home/Home"
 import Rank from "../pages/Rank/Rank"
@@ -107,15 +107,7 @@ export default [
         }
     },
     {
-        path: '/exam',
-        name: 'exam',
-        component: Exam,
-        meta: {
-            title: '考试中心'
-        }
-    },
-    {
-        path: '/exam/:id',
+        path: '/exam/:index',
         name: 'exam',
         component: Exam,
         meta: {

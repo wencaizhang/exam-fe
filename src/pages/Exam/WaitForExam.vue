@@ -22,7 +22,7 @@
           <p>{{ examination.examinationEndTime }}</p>
         </div>
       </div>
-      <XButton type="primary" :disabled="loading" text="开始考试" link="/exam"></XButton>
+      <XButton type="primary" :disabled="loading" text="开始考试" @click.native="startHandler"></XButton>
     </div>
     <toast v-model="showToast" type="warn">{{ errMsg }}</toast>
   </div>
@@ -34,7 +34,7 @@ import axios from "axios";
 import qs from 'qs';
 
 import { XButton, XHeader, Toast, } from "vux";
-import util from "../util/util.js";
+import util from "../../util/util.js";
 export default {
   data() {
     return {
@@ -52,6 +52,9 @@ export default {
     XHeader
   },
   methods: {
+    startHandler () {
+      this.getIds()
+    },
     dateToMs (date) {
       let result = new Date(date).getTime();
       return result;
@@ -60,7 +63,7 @@ export default {
       const vm = this;
       let url = '/exam/examination/info';
       const data = { 
-        data: '7D30FE5031B7A85DCD222D69D0DD29938625350D7D2A79247B160A34623B700E1CBE6B388EA84AB706C401034FDB5E3C31B0BCA5BDA1F94E8999FC531992C40EED83D584FBD4A5074AA78E94891D045B428569CF776BFF53'
+        data: '7D30FE5031B7A85DCD222D69D0DD29938625350D7D2A79247B160A34623B700E1CBE6B388EA84AB706C401034FDB5E3C31B0BCA5BDA1F94E8999FC531992C40EED83D584FBD4A50791CEFE8B6380D31BBACB6C8354FC9715'
       };
       const options = {
         url,
@@ -84,9 +87,9 @@ export default {
               // deptNo: 'xxxxxxxx'
             }
 
-            console.log('-0------------')
-            console.log(data);
-            console.log('-0------------')
+            // console.log('-0------------')
+            // console.log(data);
+            // console.log('-0------------')
 
             util.setPaperData(data)
           } else {
@@ -97,7 +100,41 @@ export default {
         .catch(function(error) {
           console.log(error);
         });
-    }
+    },
+    getIds () {
+      const vm = this;
+      const data = util.getPaperData()
+      let url = '/exam/paperProduce/produce';
+      const options = {
+        url,
+        method: 'POST',
+        headers: { 'content-type': 'application/x-www-form-urlencoded' },
+        data: qs.stringify(data),
+      };
+      
+      this.$http((options))
+        .then(function(resp) {
+          if (resp.data.code == 0) {
+            const data = JSON.parse(resp.data.paperDuce.details);
+            util.setQuestionIds(data);
+
+            const idList = []
+            data.forEach(item => {
+              const list = JSON.parse(item.ids);
+              list.forEach((id) => {
+                idList.push( { id, score: item.score } );
+              })
+            });
+
+            vm.$store.commit('setIdList', idList);
+
+            vm.$router.push( { name: 'exam', params: { index: 0 } } )
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
   },
   created() {
     this.getInfo();

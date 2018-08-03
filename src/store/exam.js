@@ -8,48 +8,19 @@ const state = {
     showModal: false,  // 交卷提示框
 
     // ---------以上为状态类 state
-
-    idList: [],  // 所有题目的 id 
+    index: 0,  // 当前题目的索引
     currId: 0,  // 当前题目的索引
+    idList: [],  // 所有题目的 id 
     anwsers: [],  // 答案
-    questions: [  // 问题
-        // {
-        //     typeId: '001',
-        //     content: '你最爱的国家是：',
-        //     optionList: [
-        //         { key: 'America', value: 'A:', inlineDesc: '超级大国美国' },
-        //         { key: 'Japan', value: 'B:', inlineDesc: '小日本儿' },
-        //         { key: 'China', value: 'C:', inlineDesc: '大中国' }
-        //     ],
-        // },
-        // {
-        //     typeId: '002',
-        //     content: '你最爱的游戏是：',
-        //     optionList: [
-        //         { key: 'LoL', value: 'A:', inlineDesc: '英雄联盟' },
-        //         { key: 'WOW', value: 'B:', inlineDesc: '魔兽世界' },
-        //         { key: 'tank', value: 'C:', inlineDesc: '坦克大战' },
-        //         { key: 'xyz', value: 'D:', inlineDesc: '其他' }
-        //     ],
-        // },
-        // {
-        //     typeId: '003',
-        //     content: '我猜你是个超人：',
-        //     optionList: [
-        //         { key: 'true', value: 'A:', inlineDesc: '正确' },
-        //         { key: 'false', value: 'B:', inlineDesc: '错误' },
-        //     ],
-        // }
-    ],
 
 }
 
 const getters = {
     // 题目总数量
-    length: state => state.questions.length,  
+    length: state => state.idList.length,  
 
     // 已经完成的题目数量
-    anwsersLength: state => state.questions.length -state.anwsers.filter(item => item).length,
+    anwsersLength: state => state.idList.length -state.anwsers.filter(item => item).length,
 
     // 当前题目
     question: state => {
@@ -70,7 +41,7 @@ const mutations = {
 
     // 保存用户的答案
     setAnwser: (state, payload) => {
-        state.anwsers[payload.index] = payload.value
+        state.idList[state.index].myAnswer = value;
     },
     
     // 展示所有题目
@@ -89,7 +60,7 @@ const mutations = {
     },
 
     // 从所有题目中随机挑一个题目回答时，获取该题目的 index
-    changeId: (state, id) => {
+    changeIndex: (state, id) => {
         state.currId = id;
     },
 
@@ -105,7 +76,8 @@ const mutations = {
     pushQuestion: (state, payload) => {
         state.idList.forEach(item => {
             if (item.id == payload.id) {
-                item.question = payload
+                payload.score = item.score;
+                item.question = payload;
             }
         })
     }

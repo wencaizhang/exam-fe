@@ -33,12 +33,11 @@ export default {
   computed: {
     model: {
       get() {
-        return this.$store.state.exam.anwsers[this.$store.state.exam.index];
+        return this.$store.state.exam.idList[this.$store.state.exam.index]['myAnswer'];
       },
       set(value) {
         this.$store.commit({
           type: "setAnwser",
-          index: this.$store.state.exam.index,
           value,
         });
       }
@@ -50,7 +49,6 @@ export default {
       return this.$store.state.exam.index;
     },
     question() {
-      console.log('xxxxxxxxxxxxxx', this.$store.getters.question)
       return this.$store.getters.question;
     },
     disabled() {
@@ -64,16 +62,18 @@ export default {
     },
     getType() {
       const vm = this;
-      return vm.questionTypes.filter(item => item.val === vm.question.typeId)[0][
-        "type"
-      ];
+      console.log('>>>>>>>>>>>>')
+      console.log(vm.question)
+      console.log('>>>>>>>>>>>>')
+      return vm.questionTypes.filter(
+        item => item.val === vm.question.typeId)[0]["type"] + vm.question.score + '分';
     }
   },
   methods: {
     change(value, label) {
       console.log("选中的 key 和 value 分别是:", value, label);
       // console.log("当前index:", this.index);
-      console.log(this.$store.state.exam.anwsers);
+      // console.log(this.$store.state.exam.anwsers);
       // this.$store.commit({
       //   type: "setAnwser",
       //   index: this.index,

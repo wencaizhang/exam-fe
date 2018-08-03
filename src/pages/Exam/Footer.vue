@@ -45,7 +45,7 @@ export default {
   },
   computed: {
     index() {
-      return this.$store.state.exam.index;
+      return this.$store.state.exam.index || 0;
     },
     length() {
       return this.$store.getters.length;
