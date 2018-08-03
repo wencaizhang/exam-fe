@@ -1,5 +1,5 @@
 <template>
-  <x-header>{{ time }}<a slot="right" @click="togglePause">{{ buttonText }}</a></x-header>
+  <x-header  :left-options="{preventGoBack: true}" @on-click-back="backHandler">{{ time }}<a slot="right" @click="togglePause">{{ buttonText }}</a></x-header>
 </template>
 
 <script>
@@ -51,7 +51,9 @@ export default {
         vm.seconds += 1;
       }, 1000);
     },
-
+    backHandler () {
+      this.$router.push( { name: 'waitforexam' })
+    }
   },
   mounted () {
     this.restart();
