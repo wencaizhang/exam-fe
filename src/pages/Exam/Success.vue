@@ -1,51 +1,85 @@
 <template>
   <div>
-    <msg :title="title" :description="description" :buttons="buttons" :icon="icon"></msg>
+    
+    <p :class="$style.msg">得分：{{ score }}</p>
+    <p :class="$style.msg">用时：{{ score }}</p>
+
+    <div :class="$style.btns">
+      <XButton :class="$style.btn" type="primary" text="查看答案及解析" link="/answer"></XButton>
+      <XButton :class="$style.btn" type="" text="重新开始考试" link="/waitforexam"></XButton>
+    </div>
   </div>
 </template>
 
 <script>
-import { Msg, Divider, XButton } from 'vux'
+import { XButton } from "vux";
+import qs from 'qs';
 export default {
   components: {
-    Msg,
-    Divider,
     XButton
   },
   data () {
     return {
-      title: "已交卷",
-      description: "内容详情，可根据实际需要安排，如果换行则不超过规定长度",
-      icon: '',
-      buttons: [{
-        type: 'primary',
-        text: 'Primary button',
-        onClick: this.changeIcon.bind(this)
-      }, {
-        type: 'default',
-        text: 'Secondary button',
-        link: '/demo'
-      }]
     }
   },
-  methods: {
-    changeIcon () {
-      if (!this.icon || this.icon === 'success') {
-        this.icon = 'warn'
-        return
-      }
-      if (this.icon === 'warn') {
-        this.icon = 'info'
-        return
-      }
-      if (this.icon === 'info') {
-        this.icon = 'waiting'
-        return
-      }
-      if (this.icon === 'waiting') {
-        this.icon = 'success'
-      }
-    }
+  computed: {
+    score () {
+      return this.$store.state.exam.totalScore;
+    },
   },
+  methods: {},
+  created () {
+    const examInfo = this.$store.state.exam.examInfo;
+
+    const data = {
+      examinationId:  examInfo.examination.id,
+      paperId:        examInfo.examination.paperId,
+      paperName:      examInfo.examination.examinationName,
+      paperProduceId: examInfo.examination.examinationNumber,
+
+      score:         this.$store.state.exam.totalScore,
+      singleScore:   this.$store.getters.getScoreByType('001'),
+      doubleScore:   this.$store.getters.getScoreByType('002'),
+      judgmentScore: this.$store.getters.getScoreByType('003'),
+      trueAnswer:    this.$store.getters.getTrueAnswer,
+      myAnswer:      this.$store.getters.getMyAnswer,
+
+      examStart:     this.$store.state.exam.startTime,
+      examEnd:       this.$store.state.exam.endTime,
+    }
+
+    let url = '/exam/score/insertScore';
+    const options = {
+      url,
+      method: 'POST',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      data: qs.stringify(data),
+    };
+    
+    this.$http((options))
+      .then(function(resp) {
+        if (resp.data.code == 0) {
+          debugger;
+        }
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  }
 }
 </script>
+
+<style module>
+.msg {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 26px;
+}
+
+.btns {
+  margin-top: 20px;
+}
+.btn {
+  width: 80%!important;
+}
+</style>

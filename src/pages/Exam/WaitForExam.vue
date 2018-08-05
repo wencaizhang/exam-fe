@@ -1,6 +1,6 @@
 <template>
   <div>
-    <x-header :left-options="{backText: ''}">准备考试</x-header>
+    <x-header  :left-options="{preventGoBack: true,backText: ''}" @on-click-back="backHandler">准备考试</x-header>
     <div :class="$style['home-container']">
       <div :class="$style['fast-entry']">
         <h3 :class="[$style.h3]">注意事项</h3>
@@ -25,17 +25,21 @@
       <XButton type="primary" :disabled="loading" text="开始考试" @click.native="startHandler"></XButton>
     </div>
     <toast v-model="showToast" type="warn">{{ errMsg }}</toast>
+    <div v-transfer-dom>
+      <loading :show="loading" text="loading..."></loading>
+    </div>
   </div>
 </template>
 
 <script>
-import Vue from "vue";
-import axios from "axios";
 import qs from 'qs';
 
-import { XButton, XHeader, Toast, } from "vux";
+import { XButton, XHeader, Toast, Loading, TransferDomDirective as TransferDom } from "vux";
 import util from "../../util/util.js";
 export default {
+  directives: {
+    TransferDom
+  },
   data() {
     return {
       loading: true,
@@ -49,11 +53,15 @@ export default {
   components: {
     Toast,
     XButton,
-    XHeader
+    XHeader,
+    Loading
   },
   methods: {
     startHandler () {
-      this.getIds()
+      this.getIds();
+    },
+    backHandler () {
+      this.$router.push( { name: 'home' })
     },
     dateToMs (date) {
       let result = new Date(date).getTime();
@@ -79,6 +87,8 @@ export default {
             vm.countExamNumber = resp.data.countExamNumber;
             vm.examination = resp.data.examination;
 
+            vm.$store.commit('saveExamInfo', resp.data);
+
             const data = {
               paperDesignId: resp.data.examination.paperId,
               examinationNumber: resp.data.countExamNumber,
@@ -103,7 +113,8 @@ export default {
     },
     getIds () {
       const vm = this;
-      const data = util.getPaperData()
+      vm.loading = true;
+      const data = util.getPaperData();
       let url = '/exam/paperProduce/produce';
       const options = {
         url,
@@ -115,6 +126,7 @@ export default {
       this.$http((options))
         .then(function(resp) {
           if (resp.data.code == 0) {
+            vm.loading = false;
             const data = JSON.parse(resp.data.paperDuce.details);
             util.setQuestionIds(data);
 
@@ -128,7 +140,7 @@ export default {
 
             vm.$store.commit('setIdList', idList);
 
-            vm.$router.push( { name: 'exam', params: { index: 0 } } )
+            vm.$router.push( { name: 'exam', params: { index: 0 } } );
           }
         })
         .catch(function(error) {

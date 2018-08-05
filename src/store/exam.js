@@ -7,12 +7,15 @@ const state = {
     showAll: false,  // 显示所有题目编号
     showModal: false,  // 交卷提示框
 
+    startTime: 0,
+    endTime: 0,
+
     // ---------以上为状态类 state
     index: 0,  // 当前题目的索引
-    currId: 0,  // 当前题目的索引
+    id: 0,
     idList: [],  // 所有题目的 id 
-    anwsers: [],  // 答案
-
+    answerNum: 0,  // 已经完成的题目数量
+    totalScore: 0,  // 总分
 }
 
 const getters = {
@@ -20,19 +23,76 @@ const getters = {
     length: state => state.idList.length,  
 
     // 已经完成的题目数量
-    anwsersLength: state => state.idList.length -state.anwsers.filter(item => item).length,
+    anwsersLength: state => {
+        return 0;
+        // return state.idList.length -state.anwsers.filter(item => item).length
+    },
 
     // 当前题目
     question: state => {
-        const list = state.idList.filter(item => item.id == state.currId);
-        return list.length ? list[0]['question'] : null;
+        // 不能使用 index 获取题目
+        // return state.idList[state.index]['question'] || {};
+
+        const list = state.idList.filter(item => item.id == state.id);
+        return list.length ? list[0]['question'] : {};
     },
 
-    // 如果用户完成当前题目，返回当前题目的答案，否则返回空数组
-    value: state => state.anwsers[state.index] || [],
+
+    getScoreByType: state => (typeId='all') => {
+        let score = 0;
+
+        const filterList = state.idList.filter(item => {
+            if (typeId == 'all') {
+                return true;
+            }
+            return item.question && item.question.typeId === typeId;
+        });
+
+        filterList.forEach(item => {
+            if (!item.question) {
+                return;
+            }
+
+            var answer = item.question.answerId.split(',')
+            var myAnswer = item.myAnswer || [];
+
+            let isRight = JSON.stringify(answer.sort()) === JSON.stringify(myAnswer.sort())
+            item.isRight = isRight;
+
+            score += isRight ? item.score : 0;
+        });
+
+        return score;
+    },
+
+    getTrueAnswer: state => {
+        return state.idList.map(item => {
+            return {
+                id: item.id,
+                answer: item.question && item.question.answerId || ''
+            } 
+        })
+    },
+    getMyAnswer: state => {
+        return state.idList.map(item => {
+            return {
+                id: item.id,
+                answer: (item.myAnswer || []).join(',')
+            } 
+        })
+    },
+
+
 }
 
 const mutations = {
+
+    setStartTime: (state, timestamp) => {
+        state.startTime = timestamp;
+    },
+    setEndTime: (state, timestamp) => {
+        state.endTime = timestamp;
+    },
 
     // 在切换题目时，有一个先隐藏，后展示题目模块的步骤，暂时不完善
     toggleShowQuestion: (state, bool) => {
@@ -41,7 +101,7 @@ const mutations = {
 
     // 保存用户的答案
     setAnwser: (state, payload) => {
-        state.idList[state.index].myAnswer = value;
+        state.idList[state.index].myAnswer = payload.value;
     },
     
     // 展示所有题目
@@ -60,8 +120,13 @@ const mutations = {
     },
 
     // 从所有题目中随机挑一个题目回答时，获取该题目的 index
-    changeIndex: (state, id) => {
-        state.currId = id;
+    changeIndex: (state, value) => {
+        state.index = value;
+    },
+
+    // 从所有题目中随机挑一个题目回答时，获取该题目的 index
+    changeId: (state, value) => {
+        state.id = value;
     },
 
     // 切换上一题下一题
@@ -73,13 +138,71 @@ const mutations = {
         state.idList = list;
     },
 
+    // 保存题目信息
     pushQuestion: (state, payload) => {
+        
+        payload.forEach(item => {
+            
+            // 排序
+            item.optionList.sort( (a, b) => {
+                var s = a.flag.toLowerCase();
+                var t = b.flag.toLowerCase();
+                if(s < t) return -1;
+                if(s > t) return 1;
+            });
+
+            // 映射
+            item.optionList = item.optionList.map(item => {
+                return {
+                    key: item.flag,
+                    value: item.flag,
+                    inlineDesc: item.flag + '：' + item.content
+                }
+            });
+
+            // 保存
+            state.idList.forEach((item2, index) => {
+                if (item2.id == item.id) {
+                    item.score = item2.score;
+                    item.content = `第${index + 1}题: ` + item.content;  // 测试用
+                    item2.question = item;
+                }
+            })
+
+        });
+
+    },
+
+    // 完成的题目数量
+    setAnswerNum: state => {
+        const filter = state.idList.filter(item => {
+            return item.myAnswer && item.myAnswer.length;
+        });
+        state.answerNum = filter.length;
+    },
+
+    // 评分
+    marking: state => {
+        // 需要重置为 0 ，否则会叠加上次执行此函数的结果
+        state.totalScore = 0;
+
         state.idList.forEach(item => {
-            if (item.id == payload.id) {
-                payload.score = item.score;
-                item.question = payload;
+
+            if (!item.question) {
+                return;
             }
-        })
+
+            var answer = item.question.answerId.split(',')
+            var myAnswer = item.myAnswer || [];
+
+            let isRight = JSON.stringify(answer.sort()) === JSON.stringify(myAnswer.sort())
+            item.isRight = isRight;
+            
+            state.totalScore += isRight ? item.score : 0;
+        });
+    },
+    saveExamInfo: (state, payload) => {
+        state.examInfo = payload;
     }
 }
 

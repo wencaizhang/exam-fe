@@ -79,9 +79,7 @@ export default {
       this.$store.commit("toNext");
     },
     finish() {
-      // console.log('=============')
-      // console.log(this.$store.state.exam.anwsers)
-      // console.log('=============')
+      this.$store.commit('setAnswerNum');
       this.$store.commit("showModal", true);
     },
     showAll() {

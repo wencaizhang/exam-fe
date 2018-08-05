@@ -39,16 +39,18 @@ export default {
       }
     },
     num () {
-      // let length = this.$store.getters.anwsersLength;
-      // let anwsers = this.$store.state.exam.anwsers;
-      // console.log(this.$store.getters.anwsersLength);
-      // return this.$store.getters.anwsersLength
-      return this.$store.state.exam.questions.length - this.$store.state.exam.anwsers.filter(item => item).length
+      return this.$store.getters.length - this.$store.state.exam.answerNum;
     }
   },
   methods: {
     onConfirm(msg) {
-      this.$router.push({ path: '/success'}) 
+      this.showModal = false;
+
+      let timestamp = Date.parse( new Date());
+      this.$store.commit('setEndTime', timestamp);
+
+      this.$store.commit('marking');
+      this.$router.push({ path: '/success'});
     }
   }
 };

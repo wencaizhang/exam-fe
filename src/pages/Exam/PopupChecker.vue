@@ -50,7 +50,6 @@ export default {
   },
   methods: {
     change(value) {
-      console.log('value', value)
       this.$store.commit("showAll", false);
       this.$store.commit("changeIndex", value);
       this.$router.push({ name: 'exam', params: { index: value }});

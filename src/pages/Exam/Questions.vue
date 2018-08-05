@@ -4,7 +4,7 @@
     <checklist
       v-model="model"
       :title="question.content" 
-      :options="question.optionList" 
+      :options="question.optionList || []" 
       :max="max"
       :disabled="disabled"
       @on-change="change"
@@ -33,9 +33,10 @@ export default {
   computed: {
     model: {
       get() {
-        return this.$store.state.exam.idList[this.$store.state.exam.index]['myAnswer'];
+        return this.$store.state.exam.idList[this.$store.state.exam.index]['myAnswer'] || [];
       },
       set(value) {
+        console.log("选中的 value 分别是:", value);
         this.$store.commit({
           type: "setAnwser",
           value,
@@ -45,40 +46,30 @@ export default {
     showQuestion () {
       return this.$store.state.exam.showQuestion;
     },
-    index() {
-      return this.$store.state.exam.index;
-    },
     question() {
-      return this.$store.getters.question;
+      return this.$store.getters.question || {};
     },
     disabled() {
       return this.$store.state.exam.isPaused;
     },
     max() {
       const vm = this;
-      return vm.questionTypes.filter(item => item.val === vm.question.typeId)[0][
-        "max"
-      ];
+      let { typeId='001' } = vm.question || {};
+      const filter = vm.questionTypes.filter(item => item.val === typeId)
+      return filter.length ? filter[0]["max"] : 10;
     },
     getType() {
       const vm = this;
-      console.log('>>>>>>>>>>>>')
-      console.log(vm.question)
-      console.log('>>>>>>>>>>>>')
-      return vm.questionTypes.filter(
-        item => item.val === vm.question.typeId)[0]["type"] + vm.question.score + '分';
+
+      let { typeId='001', score=0 } = vm.question || {};
+
+      const filter = vm.questionTypes.filter( item => item.val === typeId );
+      return filter.length ? filter[0]["type"] + score + '分' : '没有题目';
     }
   },
   methods: {
     change(value, label) {
-      console.log("选中的 key 和 value 分别是:", value, label);
-      // console.log("当前index:", this.index);
-      // console.log(this.$store.state.exam.anwsers);
-      // this.$store.commit({
-      //   type: "setAnwser",
-      //   index: this.index,
-      //   value
-      // });
+      // console.log("选中的 key 和 value 分别是:", value, label);
     }
   },
   mounted () {
@@ -93,5 +84,12 @@ export default {
 .question-type {
   padding-left: 15px;
   padding-right: 15px;
+}
+.question-container .weui-cell__bd p {
+  display: none;
+}
+.question-container .weui-cells__title {
+  margin-bottom: 20px;
+  color: #000;
 }
 </style>

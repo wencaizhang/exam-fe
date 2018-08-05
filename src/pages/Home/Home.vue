@@ -7,7 +7,7 @@
       <XButton :class="$style.btn" type="primary" text="快速进入考试" link="/waitforexam"></XButton>
     </div>
     <div :class="$style.message">
-      <h3 :class="$style.h3" @click="click" >活动信息</h3>
+      <h3 :class="$style.h3">活动信息</h3>
       <h1>{{ id }}</h1>
       <p>好消息好消息好消息好消息好消息好消息好消息好消息好消息好消息</p>
     </div>
@@ -27,9 +27,6 @@ export default {
     XButton
   },
   methods: {
-    click() {
-      console.log(this.$route.query);
-    },
     login() {
       const vm = this;
       const { username, password } = vm;

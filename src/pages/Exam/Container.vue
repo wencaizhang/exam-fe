@@ -1,18 +1,24 @@
 <template>
   <div class="">
-    <Header></Header>
-    <Questions></Questions>
-    <Footer></Footer>
-    <PopupChecker></PopupChecker>
-    <Modal></Modal>
+    <template v-if="loading">
+      <spinner :class="$style.spinner" type="bubbles" size="100px"></spinner>
+    </template>
+    <template v-else>
+      <Header></Header>
+      <Questions></Questions>
+      <Footer></Footer>
+      <PopupChecker></PopupChecker>
+      <Modal></Modal>
+    </template>
   </div>
 </template>
 
 <script>
 import Vue from "vue";
 import axios from "axios";
+import { Spinner } from "vux";
+
 import Header from "./Header";
-import Question from "./Question";
 import Questions from "./Questions";
 import Footer from "./Footer";
 import PopupChecker from "./PopupChecker";
@@ -20,13 +26,16 @@ import Modal from "./Modal";
 
 import util from "../../util/util.js";
 import qs from "qs";
+import { debug } from 'util';
 export default {
   data() {
-    return {};
+    return {
+      loading: true,
+    };
   },
   components: {
+    Spinner,
     Header,
-    Question,
     Questions,
     Footer,
     PopupChecker,
@@ -35,41 +44,49 @@ export default {
   methods: {
     getQuestionById (index) {
       const vm = this;
-      let id = vm.$store.state.exam.idList[index]['id']
-      const data = { id: id };
 
-      let url = '/exam/equestionmanagement/selectOne';
+      const idList = vm.$store.state.exam.idList;
+      if (!idList.length) {
+        vm.$router.push({ name: 'waitforexam' })
+        return;
+      };
+
+      const question = idList[index]['question'];
+
+      if (question) {
+        // 如果题目已经被缓存，就不需要重新请求
+        vm.$store.commit('changeIndex', index);
+        vm.$store.commit('changeId', question.id);
+        vm.$store.commit('toggleShowQuestion', true);
+
+        return;
+      };
+
+      const data = {
+        ids: [ idList[index]['id'] ]
+      }
+
+
+      let url = '/exam/equestionmanagement/getByIds';
       const options = {
         url,
         method: 'POST',
-        headers: { 'content-type': 'application/x-www-form-urlencoded' },
-        data: qs.stringify(data),
+        headers: { 'content-type': 'application/json' },
+        data: data,
+        // headers: { 'content-type': 'application/x-www-form-urlencoded' },
+        // data: qs.stringify(data),
       };
       
       this.$http((options))
         .then(function(resp) {
           if (resp.data.code == 0) {
+            vm.loading = false;
             const data = {}
-            const list = resp.data.optionList;
-            Object.assign(data, resp.data.questionManagementEntity);
+            const list = resp.data.list;
 
-            list.sort( (a, b) => {
-              var s = a.flag.toLowerCase();
-              var t = b.flag.toLowerCase();
-              if(s < t) return -1;
-              if(s > t) return 1;
-            });
-
-            data.optionList = list.map(item => {
-              return {
-                key: item.flag,
-                value: item.flag,
-                inlineDesc: item.content
-              }
-            })
-
-            vm.$store.commit('pushQuestion', data);
-            vm.$store.commit('changeIndex', data.id);
+            vm.$store.commit('pushQuestion', list);
+            vm.$store.commit('changeIndex', index);
+            vm.$store.commit('changeId', list[0].id);
             vm.$store.commit('toggleShowQuestion', true);
           }
         })
@@ -77,7 +94,7 @@ export default {
           console.log(error);
         });
     },
-    getCurrentIdByRoute () {
+    getIndexByRoute () {
       let index = this.$route.params.index || 0;
       this.getQuestionById(index);
     }
@@ -88,10 +105,17 @@ export default {
     }
   },
   created() {
-    this.getCurrentIdByRoute();
+    this.getIndexByRoute();
+
+    let timestamp = Date.parse( new Date());
+    this.$store.commit('setStartTime', timestamp);
   }
 };
 </script>
-<style>
+<style module>
+.spinner {
+  display: block!important;
+  margin: 100px auto;
+}
 
 </style>
