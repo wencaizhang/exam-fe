@@ -79,6 +79,7 @@ export default {
       this.$store.commit("toNext");
     },
     finish() {
+      this.$store.commit('togglePause', true);
       this.$store.commit('setAnswerNum');
       this.$store.commit("showModal", true);
     },

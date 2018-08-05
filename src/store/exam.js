@@ -7,6 +7,7 @@ const state = {
     showAll: false,  // 显示所有题目编号
     showModal: false,  // 交卷提示框
 
+    duringSeconds: 0,
     startTime: 0,
     endTime: 0,
 
@@ -82,11 +83,34 @@ const getters = {
         })
     },
 
+    getDuringTime: (state) => {      
+        let seconds = state.duringSeconds;
+        let time = '';
+        const points = [
+          { value: 60 * 60, suffix: '小时', max: 1 },
+          { value: 60, suffix: '分钟', max: 1 },
+          { value: 1, suffix: '秒', max: 1 }
+        ];
+  
+        for (let i = 0; i < points.length; i++) {
+          let mode = Math.floor(seconds / points[i].value);
+          if (mode >= 1) {
+            seconds -= points[i].value * mode
+            time += Math.max(mode, points[i].max) + points[i].suffix;
+          }
+        }
+        return time || '0秒';
+
+    },
 
 }
 
 const mutations = {
 
+    addDuringSeconds: (state, value) => {
+
+        state.duringSeconds += value;
+    },
     setStartTime: (state, timestamp) => {
         state.startTime = timestamp;
     },

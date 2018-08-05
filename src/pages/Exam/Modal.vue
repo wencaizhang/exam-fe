@@ -45,6 +45,7 @@ export default {
   methods: {
     onConfirm(msg) {
       this.showModal = false;
+      this.$store.commit('togglePause', true);  // 暂停
 
       let timestamp = Date.parse( new Date());
       this.$store.commit('setEndTime', timestamp);

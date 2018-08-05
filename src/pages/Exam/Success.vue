@@ -2,7 +2,7 @@
   <div>
     
     <p :class="$style.msg">得分：{{ score }}</p>
-    <p :class="$style.msg">用时：{{ score }}</p>
+    <p :class="$style.msg">用时：{{ time }}</p>
 
     <div :class="$style.btns">
       <XButton :class="$style.btn" type="primary" text="查看答案及解析" link="/answer"></XButton>
@@ -12,10 +12,11 @@
 </template>
 
 <script>
-import { XButton } from "vux";
+import { XButton, dateFormat } from "vux";
 import qs from 'qs';
 export default {
   components: {
+    dateFormat,
     XButton
   },
   data () {
@@ -26,6 +27,9 @@ export default {
     score () {
       return this.$store.state.exam.totalScore;
     },
+    time () {
+      return this.$store.getters.getDuringTime;
+    }
   },
   methods: {},
   created () {
@@ -44,9 +48,12 @@ export default {
       trueAnswer:    this.$store.getters.getTrueAnswer,
       myAnswer:      this.$store.getters.getMyAnswer,
 
-      examStart:     this.$store.state.exam.startTime,
-      examEnd:       this.$store.state.exam.endTime,
+      examStart:     dateFormat(this.$store.state.exam.startTime, 'YYYY-MM-DD HH:mm:ss'),
+      examEnd:       dateFormat(this.$store.state.exam.endTime, 'YYYY-MM-DD HH:mm:ss')
     }
+
+    data.myAnswer = JSON.stringify(data.myAnswer);
+    data.trueAnswer = JSON.stringify(data.trueAnswer);
 
     let url = '/exam/score/insertScore';
     const options = {
@@ -59,7 +66,7 @@ export default {
     this.$http((options))
       .then(function(resp) {
         if (resp.data.code == 0) {
-          debugger;
+          // debugger;
         }
       })
       .catch(function(error) {

@@ -15,22 +15,7 @@ export default {
   },
   computed: {
     time () {
-      var seconds = this.seconds;
-      var time = '';
-      var points = [
-        { value: 60 * 60, suffix: '小时', max: 1 },
-        { value: 60, suffix: '分钟', max: 1 },
-        { value: 1, suffix: '秒', max: 1 }
-      ];
-
-      for (var i = 0; i < points.length; i++) {
-        var mode = Math.floor(seconds / points[i].value);
-        if (mode >= 1) {
-          seconds -= points[i].value * mode
-          time += Math.max(mode, points[i].max) + points[i].suffix;
-        }
-      }
-      return time || '0秒';
+      return this.$store.getters.getDuringTime;
     },
     buttonText () {
       return this.$store.state.exam.isPaused ? '继续' : '暂停';
@@ -41,15 +26,18 @@ export default {
       this.$store.state.exam.isPaused ? this.restart() : this.pause();
     },
     pause () {
-      this.$store.commit('togglePause', true)
+      this.$store.commit('togglePause', true); // 暂停
       clearInterval(this.timer);
     },
     restart () {
       const vm = this;
-      this.$store.commit('togglePause', false)
+      this.$store.commit('togglePause', false);  // 开始
       vm.timer = setInterval(() => {
-        vm.seconds += 1;
+        if (!this.$store.state.exam.isPaused || this.$store.state.exam.showModal) {
+          this.$store.commit('addDuringSeconds', 1);
+        }
       }, 1000);
+
     },
     backHandler () {
       this.$router.push( { name: 'waitforexam' })
