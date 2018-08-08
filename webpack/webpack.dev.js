@@ -9,7 +9,7 @@ const vuxLoader = require('vux-loader')
 let localip = "http://192.168.0.113:9997";
 let remoteip = "http://112.29.173.230:9997";
 
-let proxyip = localip;
+let proxyip = remoteip;
 
 const webpackConfig = merge(common, {
     devtool: "inline-source-map",
@@ -26,6 +26,10 @@ const webpackConfig = merge(common, {
     ],
     devServer: {
         proxy: {
+            "/logout": {
+                target: proxyip,
+                changeOrigin: true,
+            },
             "/sys": {
                 target: proxyip,
                 changeOrigin: true,

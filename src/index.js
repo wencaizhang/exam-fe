@@ -10,7 +10,7 @@ Vue.use(AjaxPlugin)
 
 // require('./mock.js')
 
-axios.defaults.baseURL = '/api';
+// axios.defaults.baseURL = '/api';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults['transformRequest'] = [function(data) {
     // Do whatever you want to transform the data

@@ -29,7 +29,9 @@
 import Vue from "vue";
 import axios from "axios";
 import util from "../../util/util.js";
+import api from "../../util/api.js";
 import { Group, CellBox } from "vux";
+import { debug } from 'util';
 
 export default {
   data() {
@@ -45,27 +47,15 @@ export default {
   },
   methods: {
     logout() {
+      api.logout(this.okHandler)
+    },
+    okHandler (resp) {
       const vm = this;
-      let url = "/logout";
-      const options = {
-        url,
-        method: "GET",
-        headers: { "content-type": "application/x-www-form-urlencoded" }
-      };
-      vm
-        .$http(options)
-        .then(function(resp) {
-          vm.loading = false;
-
-          if (resp.data.code == 0) {
-            util.setUserinfo(null);
-          } else {
-            // vm.tips = "用户名或密码错误";
-          }
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
+      vm.loading = false;
+      if (resp.data.code == 0) {
+        util.setUserinfo(null);
+        vm.$router.push({ name: 'login' });
+      }
     }
   },
   created() {
