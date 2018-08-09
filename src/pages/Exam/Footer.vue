@@ -11,6 +11,13 @@
       </flexbox-item>
       <flexbox-item class="text-align-right">
         <x-button mini plain type="primary"
+          @click.native="marked"
+        >
+         {{ markText }}
+        </x-button>
+      </flexbox-item>
+      <flexbox-item class="text-align-right">
+        <x-button mini plain type="primary"
           @click.native="toNext"
           :disabled="isLast"
         >
@@ -40,12 +47,15 @@ import { XButton, Flexbox, FlexboxItem } from "vux";
 export default {
   data() {
     return {
-      is: false
+      is: false,
     };
   },
   computed: {
     index() {
       return this.$store.state.exam.index || 0;
+    },
+    markText () {
+      return this.$store.state.exam.marked ? '取消标记' : '标记一下';
     },
     length() {
       return this.$store.getters.length;
@@ -79,16 +89,19 @@ export default {
       this.$store.commit("toNext");
     },
     finish() {
-      // this.$store.commit('togglePause', true);
       this.$store.commit('setAnswerNum');
       this.$store.commit("showModal", true);
     },
     showAll() {
-      console.info("showAll, footer");
       this.$store.commit("showAll", true);
-    }
+    },
+    marked() {
+      this.$store.commit('marked');
+      this.$store.commit('changeMarkText');
+    },
   },
-  mounted() {}
+  mounted() {
+  }
 };
 </script>
 <style>

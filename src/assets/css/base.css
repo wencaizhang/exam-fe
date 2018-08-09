@@ -165,3 +165,21 @@ input:focus {
 .red {
     color: #f02345 !important;
 }
+
+.checker-item {
+    background-color: #ddd;
+    color: #222;
+    font-size: 14px;
+    padding: 5px 10px;
+    margin-right: 10px;
+    margin-bottom: 6px;
+    line-height: 18px;
+    border-radius: 15px;
+}
+.checker-item-selected {
+    background-color: #ff3b3b;
+    color: #fff;
+}
+.checker-item-disabled {
+    color: #999;
+}

@@ -14,6 +14,7 @@ const state = {
     // ---------以上为状态类 state
     index: 0,  // 当前题目的索引
     id: 0,
+    marked: false,
     idList: [],  // 所有题目的 id 
     answerNum: 0,  // 已经完成的题目数量
     totalScore: 0,  // 总分
@@ -28,7 +29,6 @@ const getters = {
         return 0;
         // return state.idList.length -state.anwsers.filter(item => item).length
     },
-
     // 当前题目
     question: state => {
         // 不能使用 index 获取题目
@@ -146,11 +146,22 @@ const mutations = {
     // 从所有题目中随机挑一个题目回答时，获取该题目的 index
     changeIndex: (state, value) => {
         state.index = value;
+        // this.commit('changeMarkText');
+        const list = state.idList.filter(item => item.id == state.id);
+        state.marked = list.length ? list[0]['marked'] : false;
     },
 
     // 从所有题目中随机挑一个题目回答时，获取该题目的 index
     changeId: (state, value) => {
         state.id = value;
+        // this.commit('changeMarkText');
+        const list = state.idList.filter(item => item.id == state.id);
+        state.marked = list.length ? list[0]['marked'] : false;
+    },
+
+    changeMarkText: state => {
+        const list = state.idList.filter(item => item.id == state.id);
+        state.marked = list.length ? list[0]['marked'] : false;
     },
 
     // 切换上一题下一题
@@ -227,6 +238,15 @@ const mutations = {
     },
     saveExamInfo: (state, payload) => {
         state.examInfo = payload;
+    },
+
+    marked: state => {
+        
+        const filter = state.idList.filter((item, index) => {
+            return state.index == index
+        });
+
+        filter[0].marked = !filter[0].marked;
     }
 }
 

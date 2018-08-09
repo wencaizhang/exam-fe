@@ -85,6 +85,7 @@ export default {
             const list = resp.data.list;
 
             vm.$store.commit('pushQuestion', list);
+            // id 和 index 同时改变
             vm.$store.commit('changeIndex', index);
             vm.$store.commit('changeId', list[0].id);
             vm.$store.commit('toggleShowQuestion', true);

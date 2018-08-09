@@ -1,6 +1,6 @@
 <template>
 	<div v-transfer-dom>
-		<popup v-model="showAll" class="checker-popup">
+		<popup v-model="showAll" >
 			<div style="padding:10px 10px 40px 10px;">
 				<p style="padding: 5px 5px 5px 2px;color:#888;">全部题目：</p>
 				<checker
@@ -10,7 +10,13 @@
 					selected-item-class="checker-item-selected"
 					disabled-item-class="checker-item-disabled"
         >
-					<checker-item v-for="item in list" :value="item" :key="item">{{ item + 1 }}</checker-item>
+					<checker-item v-for="(item,index) in list" 
+            v-bind:class="getClassName(item)"
+            :value="index" 
+            :key="item.id"
+          >
+            {{ index + 1 }}
+          </checker-item>
 				</checker>
 			</div>
 		</popup>
@@ -44,11 +50,17 @@ export default {
       return this.$store.state.exam.index;
     },
     list() {
-      let length = this.$store.getters.length;
-      return [...Array(length).keys()];
-    }
+      return this.$store.state.exam.idList;
+    },
+
   },
   methods: {
+    getClassName (item) {
+      var className = '';
+      className += item.myAnswer && item.myAnswer.length ? 'check-item-answered' : '';
+      className += item.marked ? ' check-item-marked' : '';
+      return className;
+    },
     change(value) {
       this.$store.commit("showAll", false);
       this.$store.commit("changeIndex", value);
@@ -58,25 +70,12 @@ export default {
 };
 </script>
 
-<style scoped>
-.box {
-  padding: 0 15px;
+<style>
+
+.check-item-answered {
+  border: 1px solid red;
 }
-.checker-item {
-  background-color: #ddd;
-  color: #222;
-  font-size: 14px;
-  padding: 5px 10px;
-  margin-right: 10px;
-  margin-bottom: 6px;
-  line-height: 18px;
-  border-radius: 15px;
-}
-.checker-item-selected {
-  background-color: #ff3b3b;
-  color: #fff;
-}
-.checker-item-disabled {
-  color: #999;
+.check-item-marked {
+  border: 1px dashed red;
 }
 </style>
