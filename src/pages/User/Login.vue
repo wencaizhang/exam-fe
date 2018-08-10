@@ -4,8 +4,19 @@
     <div :class="$style['tips-container']">
       <span :class="$style.tips">{{ tips }}</span>
     </div>
-    <input :class="$style.input" type="text" placeholder="请输入用户名" v-model="username" autofocus>
-    <input :class="$style.input" type="password" placeholder="请输入密码" v-model="password" v-on:keyup.enter="login">
+    
+    <div :class="$style.input_wrap">
+      <input :class="$style.input" type="text" placeholder="请输入用户名" v-model="username" ref="username" autofocus>
+      <span :class="$style.icon_wrap" v-show="username" @click="clear('username')">
+        <x-icon type="ios-close-empty" size="20"></x-icon>
+      </span>
+    </div>
+    <div :class="$style.input_wrap">
+      <input :class="$style.input" type="password" placeholder="请输入密码" v-model="password" ref="password" v-on:keyup.enter="login">
+      <span :class="$style.icon_wrap" v-show="password" @click="clear('password')">
+        <x-icon type="ios-close-empty" size="20"></x-icon>
+      </span>
+    </div>
 
     <div :class="$style.buttons">
       <XButton
@@ -59,6 +70,10 @@ export default {
     Toast
   },
   methods: {
+    clear(model) {
+      this[model] = "";
+      this.$refs[model].focus();
+    },
     login() {
       const vm = this;
       const { username, password } = vm;
@@ -140,9 +155,26 @@ export default {
   border-left: 0;
   border-right: 0;
   border-radius: 0;
-  box-shadow:none;
+  box-shadow: none;
 }
 .input:focus {
-  box-shadow:none;
+  box-shadow: none;
+}
+
+.input_wrap {
+  position: relative;
+}
+.icon_wrap {
+  position: absolute;
+  right: 4px;
+  top: 2px;
+  display: inline-block;
+  border-radius: 50%;
+  background: #f2f2f2;
+  width: 20px;
+  height: 20px;
+}
+.vux-x-icon {
+  fill: #f70968;
 }
 </style>
