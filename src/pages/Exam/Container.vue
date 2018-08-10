@@ -101,8 +101,12 @@ export default {
     }
   },
   watch: {
-    '$route': function (newV) {
-      this.getQuestionById(newV.params.index);
+    '$route': function (to, from) {
+      if (to.name == 'exam' && from.name == 'exam') {
+
+      }
+
+      this.getQuestionById(to.params.index);
     }
   },
   created() {

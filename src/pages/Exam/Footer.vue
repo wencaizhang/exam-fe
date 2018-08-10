@@ -2,27 +2,20 @@
   <div class="footer footer-container">
     <flexbox justify="space-between" class="btn-group btn-group-1">
       <flexbox-item>
-        <x-button mini plain type="primary"
-          @click.native="toPrev"
-          :disabled="isFirst"
-        >
-        上一题
-        </x-button>
+        <div :class="[ 'icon-wrap', 'icon-arrow', 'icon-arrow-left', { disabled: isFirst } ]" @click="toPrev">
+          <x-icon type="ios-arrow-left"  size="30"></x-icon>
+        </div>
+      </flexbox-item>
+      <flexbox-item class="text-align-center">
+        <div class="icon-star" @click="markHandler">
+          <x-icon v-show="isMarked" type="ios-star" size="32"></x-icon>
+          <x-icon v-show="!isMarked"  type="ios-star-outline" size="32"></x-icon>
+        </div>
       </flexbox-item>
       <flexbox-item class="text-align-right">
-        <x-button mini plain type="primary"
-          @click.native="marked"
-        >
-         {{ markText }}
-        </x-button>
-      </flexbox-item>
-      <flexbox-item class="text-align-right">
-        <x-button mini plain type="primary"
-          @click.native="toNext"
-          :disabled="isLast"
-        >
-        下一题
-        </x-button>
+        <div :class="[ 'icon-wrap', 'icon-arrow', 'icon-arrow-left', { disabled: isLast } ]" @click="toNext">
+          <x-icon type="ios-arrow-right" size="30"></x-icon>
+        </div>
       </flexbox-item>
     </flexbox>
 
@@ -54,8 +47,8 @@ export default {
     index() {
       return this.$store.state.exam.index || 0;
     },
-    markText () {
-      return this.$store.state.exam.marked ? '取消标记' : '标记一下';
+    isMarked () {
+      return this.$store.state.exam.marked;
     },
     length() {
       return this.$store.getters.length;
@@ -95,7 +88,7 @@ export default {
     showAll() {
       this.$store.commit("showAll", true);
     },
-    marked() {
+    markHandler() {
       this.$store.commit('marked');
       this.$store.commit('changeMarkText');
     },
@@ -123,4 +116,24 @@ export default {
   bottom: 0;
   width: 100%;
 }
+
+/* x-icon 颜色 */
+.vux-x-icon {
+  fill: #1aad19;
+}
+.icon-wrap {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #1aad19;
+  border-radius: 50%;
+}
+
+.icon-wrap.disabled .vux-x-icon {
+  fill: #ccc;
+}
+.icon-wrap.disabled {
+  border: 1px solid #ccc;
+}
+
 </style>

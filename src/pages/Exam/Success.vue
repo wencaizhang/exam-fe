@@ -6,7 +6,7 @@
 
     <div :class="$style.btns">
       <XButton :class="$style.btn" type="primary" text="查看答案及解析" link="/answer"></XButton>
-      <XButton :class="$style.btn" type="" text="重新开始考试" link="/waitforexam"></XButton>
+      <XButton :class="$style.btn" type="primary" text="重新开始考试" link="/waitforexam"></XButton>
     </div>
   </div>
 </template>

@@ -116,17 +116,20 @@ export default {
       vm.loading = true;
       const data = util.getPaperData();
       let url = '/exam/paperProduce/produce';
+
+      data.examinationStarTime = data.examinationStarTime + '';
+      data.examinationEndTime = data.examinationEndTime + '';
+
       const options = {
         url,
         method: 'POST',
-        headers: { 'content-type': 'application/x-www-form-urlencoded' },
-        data: qs.stringify(data),
+        data,
       };
       
       this.$http((options))
         .then(function(resp) {
+          vm.loading = false;
           if (resp.data.code == 0) {
-            vm.loading = false;
             const data = JSON.parse(resp.data.paperDuce.details);
             util.setQuestionIds(data);
 
@@ -141,6 +144,8 @@ export default {
             vm.$store.commit('setIdList', idList);
 
             vm.$router.push( { name: 'exam', params: { index: 0 } } );
+          } else {
+            alert(resp.data.msg);
           }
         })
         .catch(function(error) {
