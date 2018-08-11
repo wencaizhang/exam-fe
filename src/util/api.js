@@ -6,7 +6,6 @@ const postData = ( data=null, url='', callback=null ) => {
         url,
         method: "POST",
         data,
-        headers: { "content-type": "application/x-www-form-urlencoded" },
     };
 
     axios(options)
@@ -27,7 +26,6 @@ const getData = ( data=null, url='', callback=null ) => {
         url,
         method: "GET",
         data,
-        headers: { "content-type": "application/x-www-form-urlencoded" },
     };
 
     axios(options)
@@ -44,10 +42,13 @@ const getData = ( data=null, url='', callback=null ) => {
 }
 
 const api = {
+    login: (data=null, callback) => {
+        let url = "/sys/login";
+        postData(data, url, callback);
+    },
     logout: (data=null, callback) => {
         let url = '/logout';
-
-        getData(null, url, callback)
+        getData(data, url, callback);
     },
 };
 
