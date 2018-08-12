@@ -34,7 +34,6 @@
 </template>
 
 <script>
-import Vue from "vue";
 import { XButton, Flexbox, FlexboxItem } from "vux";
 
 export default {

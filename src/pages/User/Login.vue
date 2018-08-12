@@ -6,14 +6,23 @@
     </div>
     
     <div :class="$style.input_wrap">
-      <input :class="$style.input" type="text" placeholder="请输入用户名" v-model="username" ref="username" autofocus>
-      <span :class="$style.icon_wrap" v-show="username" @click="clear('username')">
+      <input type="text" placeholder="请输入用户名" autofocus
+        :class="$style.input" 
+        v-model="username" 
+        ref="username"
+      >
+      <span :class="$style.icon_wrap" v-show="username" @click="clearValue('username')">
         <x-icon type="ios-close-empty" size="20"></x-icon>
       </span>
     </div>
     <div :class="$style.input_wrap">
-      <input :class="$style.input" type="password" placeholder="请输入密码" v-model="password" ref="password" v-on:keyup.enter="login">
-      <span :class="$style.icon_wrap" v-show="password" @click="clear('password')">
+      <input type="password" placeholder="请输入密码" 
+        :class="$style.input" 
+        v-model="password" 
+        ref="password" 
+        v-on:keyup.enter="clickHandle"
+      >
+      <span :class="$style.icon_wrap" v-show="password" @click="clearValue('password')">
         <x-icon type="ios-close-empty" size="20"></x-icon>
       </span>
     </div>
@@ -22,7 +31,7 @@
       <XButton
         text="登 录" 
         type="primary"
-        @click.native="login" 
+        @click.native="clickHandle" 
       >
       </XButton>
       <p :class="$style['other-handler']">
@@ -40,15 +49,16 @@
 
 <script>
 import util from "../../util/util.js";
-import qs from "qs";
+import API from "../../util/api.js";
 
+import axios from 'axios'
 import {
   Toast,
   XButton,
   Loading,
   TransferDomDirective as TransferDom
 } from "vux";
-
+import { cookie } from 'vux'
 export default {
   name: "Login",
   directives: {
@@ -61,7 +71,7 @@ export default {
       clicked: false,
       tips: "",
       username: "",
-      password: ""
+      password: "",
     };
   },
   components: {
@@ -70,48 +80,31 @@ export default {
     Toast
   },
   methods: {
-    clear(model) {
+    clearValue(model) {
       this[model] = "";
       this.$refs[model].focus();
     },
-    login() {
+    clickHandle () {
+
       const vm = this;
       const { username, password } = vm;
 
-      if (!username || !password) {
+      if (username && password) {
+        // vm.login();
+        vm.loginByAction();
+      } else {
+        
         vm.tips = "用户名或密码不能为空";
-        return;
       }
-      vm.loading = true;
 
-      let url = "/sys/login";
+    },
+
+    loginByAction () {
+      
+      const { username, password } = this;
       const data = { username, password };
-      const options = {
-        url,
-        method: "POST",
-        headers: { "content-type": "application/x-www-form-urlencoded" },
-        data: qs.stringify(data)
-      };
+      this.$store.dispatch('login', data);
 
-      this.$http(options)
-        .then(function(resp) {
-          vm.loading = false;
-          if (resp.data.code == 0) {
-            vm.loginOK = true;
-
-            const userinfo = resp.data.data || {};
-            util.setUserinfo(userinfo);
-            vm.$store.commit("setUserInfo", userinfo);
-            vm.$store.commit("login", true);
-
-            vm.$router.push({ path: "/home" });
-          } else {
-            vm.tips = "用户名或密码错误";
-          }
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
     }
   }
 };

@@ -58,7 +58,7 @@ export default {
       }
       vm.loading = true;
 
-      this.$http
+      axios
         .post("/login", {
           username,
           password

@@ -1,6 +1,10 @@
 import axios from "axios";
+import api from "../util/api";
+import { cookie } from 'vux';
+import router from '../router'
+
 const state = {
-    name: '张文才',
+    name: '',
     login: false
 }
 
@@ -12,15 +16,27 @@ const mutations = {
     setUserInfo: (state, payload) => {
         Object.assign(state, payload);
     },
-    login: (state, bool) => {
+    changeLoginStat: (state, bool) => {
         Object.assign(state, { login: bool } )
     }
 }
 
 const actions = {
     login (context, payload) {
-        return axios.post("/login", payload)
-        // return axios.post("/session", payload)
+        api.login(payload)
+        .then(function(resp) {
+          if (resp.data.code == 0) {
+
+            axios.defaults.headers.token = resp.data.token;
+
+            cookie.set('token', resp.data.token);
+            context.commit("changeLoginStat", true);
+            router.push({ path: "/home" });
+
+          } else {
+            alert(resp.data.msg)
+          }
+        })
     }
 }
 

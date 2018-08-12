@@ -48,8 +48,7 @@
 </template>
 
 <script>
-import Vue from "vue";
-import qs from "qs";
+import axios from 'axios'
 import {
   Picker,
   Popup,
@@ -105,7 +104,7 @@ export default {
           value: "",
           icon: "",
           type: "text",
-          name: "userName",
+          name: "username",
           placeholder: "用户名"
         },
         {
@@ -119,7 +118,7 @@ export default {
           value: "",
           icon: "",
           type: "password",
-          name: "userPwd",
+          name: "password",
           placeholder: "密码最少 6 位"
         },
         {
@@ -143,7 +142,7 @@ export default {
       const options = {
         url,
         method: "GET",
-        headers: { "content-type": "application/x-www-form-urlencoded" }
+        // headers: { "content-type": "application/x-www-form-urlencoded" }
       };
       vm
         .$http(options)
@@ -169,7 +168,7 @@ export default {
             );
             // vm.$router.push({ path: "/home" });
           } else {
-            // vm.tips = "用户名或密码错误";
+            vm.tips = "用户名或密码错误";
           }
         })
         .catch(function(error) {
@@ -226,7 +225,7 @@ export default {
       let userPwdInput, confirmPwdInput;
 
       textInputs.forEach(input => {
-        if (input.name === "userPwd") {
+        if (input.name === "password") {
           userPwdInput = input;
         }
         if (input.name === "confirmPwd") {
@@ -316,10 +315,8 @@ export default {
       let url = "/api/register";
       const options = {
         url,
-        // data,
         method: "POST",
-        headers: { "content-type": "application/x-www-form-urlencoded" },
-        data: qs.stringify(data)
+        data
       };
       vm
         .$http(options)
@@ -342,7 +339,7 @@ export default {
       let id = (this.deptId = danweiValue.reverse()[0]);
 
       deptList.forEach(function(item) {
-        if (item.value === id) {
+        if (item.value == id) {
           name += item.name;
         }
       });

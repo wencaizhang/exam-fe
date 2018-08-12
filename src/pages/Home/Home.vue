@@ -27,21 +27,6 @@ export default {
     XButton
   },
   methods: {
-    login() {
-      const vm = this;
-      const { username, password } = vm;
-      axios
-        .post("/login", {
-          username,
-          password
-        })
-        .then(function(response) {
-          console.log(response);
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-    }
   },
   computed: {
     id() {

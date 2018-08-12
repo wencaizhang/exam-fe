@@ -1,28 +1,14 @@
 import Vue from 'vue'
 import App from './App.vue'
 import axios from 'axios'
+
 import './assets/css/base.css'
+
 import router from './router/index.js'
 import util from "./util/util.js"
 import store from './store'
-import { AjaxPlugin } from 'vux'
-Vue.use(AjaxPlugin)
 
-// require('./mock.js')
-
-// axios.defaults.baseURL = '/api';
-// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-// axios.defaults['transformRequest'] = [function(data) {
-//     // Do whatever you want to transform the data
-//     let ret = ''
-//     for (let it in data) {
-//         ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
-//     }
-//     return ret
-// }]
-
-Vue.prototype.$getParameterByName = util.getParameterByName;
-Vue.config.productionTip = false;
+// require('./mock.js');
 
 new Vue({
     el: '#app',
@@ -31,7 +17,7 @@ new Vue({
     render: h => h(App)
 });
 
-
+// 每次路由跳转都对登录状态进行检测
 router.beforeEach((to, from, next) => {
     const userInfo = util.getUserinfo();
     let isLogin = store.state.user.login;

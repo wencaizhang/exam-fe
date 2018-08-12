@@ -25,7 +25,7 @@ import PopupChecker from "./PopupChecker";
 import Modal from "./Modal";
 
 import util from "../../util/util.js";
-import qs from "qs";
+
 import { debug } from 'util';
 export default {
   data() {
@@ -67,7 +67,7 @@ export default {
       }
 
 
-      let url = '/exam/equestionmanagement/getByIds';
+      let url = '/sage/exam/equestionmanagement/getByIds';
       const options = {
         url,
         method: 'POST',
@@ -77,7 +77,7 @@ export default {
         // data: qs.stringify(data),
       };
       
-      this.$http((options))
+      axios((options))
         .then(function(resp) {
           if (resp.data.code == 0) {
             vm.loading = false;

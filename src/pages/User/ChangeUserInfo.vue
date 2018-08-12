@@ -28,7 +28,7 @@
 
 <script>
 import util from "../../util/util.js";
-import qs from "qs";
+// import qs from "qs";
 
 import {
   Toast,
@@ -76,11 +76,11 @@ export default {
       const options = {
         url,
         method: "POST",
-        headers: { "content-type": "application/x-www-form-urlencoded" },
-        data: qs.stringify(data)
+        // headers: { "content-type": "application/x-www-form-urlencoded" },
+        // data: qs.stringify(data)
       };
 
-      this.$http(options)
+      axios(options)
         .then(function(resp) {
           vm.loading = false;
           if (resp.data.code == 0) {

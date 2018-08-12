@@ -26,7 +26,6 @@
 </template>
 
 <script>
-import Vue from "vue";
 import axios from "axios";
 import util from "../../util/util.js";
 import api from "../../util/api.js";
@@ -64,7 +63,6 @@ export default {
     const options = {
       url,
       method: "GET",
-      headers: { "content-type": "application/x-www-form-urlencoded" }
     };
     vm
       .$http(options)
@@ -75,7 +73,6 @@ export default {
           vm.loginOK = true;
           vm.userInfo = Object.assign({}, vm.userInfo, resp.data.student);
         } else {
-          // vm.tips = "用户名或密码错误";
         }
       })
       .catch(function(error) {

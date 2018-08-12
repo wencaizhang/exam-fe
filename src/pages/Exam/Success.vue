@@ -13,7 +13,7 @@
 
 <script>
 import { XButton, dateFormat } from "vux";
-import qs from 'qs';
+import axios from 'axios'
 export default {
   components: {
     dateFormat,
@@ -63,7 +63,7 @@ export default {
       data: qs.stringify(data),
     };
     
-    this.$http((options))
+    axios((options))
       .then(function(resp) {
         if (resp.data.code == 0) {
           // debugger;

@@ -38,6 +38,10 @@ const webpackConfig = merge(common, {
                 target: proxyip,
                 changeOrigin: true,
             },
+            "/sage": {
+                target: proxyip,
+                changeOrigin: true,
+            },
             "/student": {
                 target: proxyip,
                 changeOrigin: true,
