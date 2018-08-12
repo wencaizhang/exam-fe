@@ -70,8 +70,11 @@ export default {
     getInfo () {
       const vm = this;
       let url = '/sage/exam/examination/info';
+
+      let temp = '7D30FE5031B7A85DCD222D69D0DD29938625350D7D2A79247B160A34623B700E1CBE6B388EA84AB706C401034FDB5E3C31B0BCA5BDA1F94E8999FC531992C40EED83D584FBD4A50791CEFE8B6380D31BBACB6C8354FC9715';
+
       const data = { 
-        data: '7D30FE5031B7A85DCD222D69D0DD29938625350D7D2A79247B160A34623B700E1CBE6B388EA84AB706C401034FDB5E3C31B0BCA5BDA1F94E8999FC531992C40EED83D584FBD4A50791CEFE8B6380D31BBACB6C8354FC9715'
+        data: vm.$store.state.exam.data || temp
       };
       const options = {
         url,
@@ -91,14 +94,8 @@ export default {
             const data = {
               paperDesignId: resp.data.examination.paperId,
               examinationNumber: resp.data.countExamNumber,
-              examinationStarTime: vm.dateToMs(resp.data.examination.examinationStartTime),
-              examinationEndTime: vm.dateToMs(resp.data.examination.examinationEndTime),
-              // deptNo: 'xxxxxxxx'
-            }
-
-            // console.log('-0------------')
-            // console.log(data);
-            // console.log('-0------------')
+              id: resp.data.examination.id,
+            };
 
             util.setPaperData(data)
           } else {
@@ -115,9 +112,6 @@ export default {
       vm.loading = true;
       const data = util.getPaperData();
       let url = '/sage/exam/paperProduce/produce';
-
-      data.examinationStarTime = data.examinationStarTime + '';
-      data.examinationEndTime = data.examinationEndTime + '';
 
       const options = {
         url,

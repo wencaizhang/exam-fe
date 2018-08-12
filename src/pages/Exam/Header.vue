@@ -6,7 +6,7 @@
       @on-click-back="backHandler"
     >
       {{ time }}
-      <a slot="right" @click="togglePause">{{ buttonText }}</a>
+      <!-- <a slot="right" @click="togglePause">{{ buttonText }}</a> -->
     </x-header>
     
     <div v-transfer-dom>

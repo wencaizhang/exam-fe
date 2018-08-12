@@ -47,7 +47,7 @@ export default [
             footer: Footer
         },
         meta: {
-            title: '排行榜'
+            title: '闯关'
         }
     },
     {

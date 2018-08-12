@@ -12,6 +12,7 @@ const state = {
     endTime: 0,
 
     // ---------以上为状态类 state
+    data: '',
     index: 0,  // 当前题目的索引
     id: 0,
     marked: false,
@@ -106,6 +107,10 @@ const getters = {
 }
 
 const mutations = {
+
+    setExamData: (state, payload) => {
+        state.data = payload;
+    },
 
     addDuringSeconds: (state, value) => {
 

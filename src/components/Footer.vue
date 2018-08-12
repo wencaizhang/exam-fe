@@ -5,7 +5,7 @@
         <span slot="label">首页</span>
       </tabbar-item>
       <tabbar-item :selected="$route.name === 'rank'" link="/rank">
-        <span slot="label">排行榜</span>
+        <span slot="label">闯关</span>
       </tabbar-item>
       <tabbar-item :selected="$route.name === 'user'" link="/user">
         <span slot="label">我</span>

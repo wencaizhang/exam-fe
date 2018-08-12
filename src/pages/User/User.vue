@@ -2,7 +2,7 @@
     <div class="">
         <header :class="$style.header">
             <div :class="$style.photo">
-                <img :class="$style.avatar" v-bind:src="userInfo.avatar" alt="头像">
+                <img :class="$style.avatar" v-bind:src="avatar" alt="头像">
             </div>
             <div :class="$style.nick">
                 <span>{{ userInfo.userName }}</span>
@@ -18,10 +18,10 @@
             <cell-box is-link :link="{ path: '/waitforexam' }">
                 进入考试
             </cell-box>
-            <cell-box>
-                <div class="logout-box" @click="logout"> 退出 </div>
-            </cell-box>
         </group>
+        <div :class="$style.btns">
+          <x-button type="warn" @click.native="logout">安全退出</x-button>
+        </div>
     </div>
 </template>
 
@@ -29,24 +29,27 @@
 import axios from "axios";
 import util from "../../util/util.js";
 import api from "../../util/api.js";
-import { Group, CellBox } from "vux";
-import { debug } from 'util';
+import { XButton, Group, CellBox } from "vux";
 
 export default {
   data() {
     return {
-      userInfo: {
-        avatar: "http://5b0988e595225.cdn.sohucs.com/images/20171216/a72351d45dee4e6fa270985fb5394f1e.jpeg"
-      }
+      avatar: 'http://5b0988e595225.cdn.sohucs.com/images/20171216/a72351d45dee4e6fa270985fb5394f1e.jpeg'
     };
   },
   components: {
+    XButton,
     Group,
     CellBox
   },
+  computed: {
+    userInfo () {
+      return this.$store.state.user.userInfo;
+    }
+  },
   methods: {
     logout() {
-      api.logout(this.okHandler)
+      this.$store.dispatch('logout');
     },
     okHandler (resp) {
       const vm = this;
@@ -58,26 +61,7 @@ export default {
     }
   },
   created() {
-    const vm = this;
-    let url = "/student/student/getStudentByUserId";
-    const options = {
-      url,
-      method: "GET",
-    };
-    vm
-      .$http(options)
-      .then(function(resp) {
-        vm.loading = false;
-
-        if (resp.data.code == 0) {
-          vm.loginOK = true;
-          vm.userInfo = Object.assign({}, vm.userInfo, resp.data.student);
-        } else {
-        }
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
+    this.$store.dispatch('getUserInfo');
   }
 };
 </script>
@@ -100,5 +84,10 @@ export default {
 .avatar {
   width: 80px;
   height: 80px;
+}
+
+.btns {
+  margin: 20px auto;
+  width: 80%;
 }
 </style>

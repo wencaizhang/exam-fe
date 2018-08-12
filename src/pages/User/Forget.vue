@@ -4,8 +4,9 @@
     <div :class="$style['tips-container']">
       <span :class="$style.tips">{{ tips }}</span>
     </div>
-    <input :class="$style.input" type="text" placeholder="请输入用户名" v-model="username" autofocus>
-    <input :class="$style.input" type="password" placeholder="请输入验证码" v-model="password">
+    <input :class="$style.input" type="text" placeholder="请输入原密码" v-model="username" autofocus>
+    <input :class="$style.input" type="password" placeholder="请输入新密码" v-model="password">
+    <input :class="$style.input" type="password2" placeholder="请确认新密码" v-model="password2">
     <XButton
       text="确定" 
       type="primary"
@@ -39,7 +40,8 @@ export default {
       clicked: false,
       tips: "",
       username: "",
-      password: ""
+      password: "",
+      password2: "",
     };
   },
   components: {

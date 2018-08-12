@@ -85,6 +85,7 @@ export default {
       formPass: false,
 
       deptId: "", // 部门
+      deptNumber: '',
       textInputs: [
         {
           value: "",
@@ -138,34 +139,29 @@ export default {
     _getDeptList() {
       // 获取所属单位列表数据
       const vm = this;
+      vm.$store.commit('setLoadText', '正在请求单位列表')
       let url = "/sys/dept/list";
       const options = {
         url,
         method: "GET",
         // headers: { "content-type": "application/x-www-form-urlencoded" }
       };
-      vm
-        .$http(options)
+      axios(options)
         .then(function(resp) {
           vm.loading = false;
-
           if (resp.data.code == 0) {
             vm.loginOK = true;
             vm.deptList = resp.data.deptList.map(item => {
-              return Object.assign(
-                {},
-                {
-                  value: item.deptId,
-                  name: item.name,
-                  parent: item.parentId
-                }
-              );
+              return {
+                value: item.deptId,
+                name: item.name,
+                parent: item.parentId,
+                deptNumber: item.deptNo
+              }
             });
 
             console.log(
-              "deptList",
-              JSON.parse(JSON.stringify(Object.assign({}, vm.deptList)))
-            );
+              "deptList", JSON.parse(JSON.stringify(vm.deptList)));
             // vm.$router.push({ path: "/home" });
           } else {
             vm.tips = "用户名或密码错误";
@@ -187,6 +183,7 @@ export default {
       });
       delete data.dept;
       data.deptId = this.deptId;
+      data.deptNumber = this.deptNumber;
       return data;
     },
     _isEmpty4Item(name) {
@@ -318,8 +315,7 @@ export default {
         method: "POST",
         data
       };
-      vm
-        .$http(options)
+      axios(options)
         .then(function(resp) {
           vm.loading = false;
           if (resp.data.code == 0) {
@@ -335,11 +331,13 @@ export default {
     },
     setCompanyName() {
       const { deptList, danweiValue, textInputs } = this;
+      const vm = this;
       let name = "";
       let id = (this.deptId = danweiValue.reverse()[0]);
 
       deptList.forEach(function(item) {
         if (item.value == id) {
+          vm.deptNumber = item.deptNumber;
           name += item.name;
         }
       });

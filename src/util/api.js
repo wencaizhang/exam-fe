@@ -8,8 +8,8 @@ const user = {
         return axios.post(url, data);
     },
     logout: (data=null) => {
-        let url = '/logout';
-        return axios.get(url, { params: data });
+        let url = '/sys/logout';
+        return axios.post(url, data);
     },
     register: (data=null) => {
         let url = "/api/register";
@@ -33,8 +33,8 @@ const user = {
         return axios.get(url, { params: data });
     },
     getUserInfo: (data=null) => {
-        let url = "/student/student/getStudentByUserId";
-        return axios.get(url, { params: data });
+        let url = "/sage/student/student/getStudentByUserId";
+        return axios.post(url, data);
     },
 
 };
