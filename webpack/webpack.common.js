@@ -1,7 +1,10 @@
 const path = require("path");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 
-module.exports = {
+const vuxLoader = require('vux-loader')
+
+
+const webpackConfig = {
   entry: {
     main: "./src/index"
   },
@@ -68,3 +71,10 @@ module.exports = {
     extensions: ["*", ".js", ".vue", ".json"]
   }
 };
+
+module.exports = vuxLoader.merge(webpackConfig, {
+  options: {},
+  plugins: [{
+      name: 'vux-ui'
+  }]
+})

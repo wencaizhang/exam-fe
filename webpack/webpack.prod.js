@@ -35,3 +35,11 @@ module.exports = merge(common, {
     })
   ]
 });
+
+
+module.exports = vuxLoader.merge(webpackConfig, {
+  options: {},
+  plugins: [{
+      name: 'vux-ui'
+  }]
+})

@@ -3,15 +3,13 @@ const merge = require("webpack-merge");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const common = require("./webpack.common.js");
 
-const vuxLoader = require('vux-loader')
-
 
 let localip = "http://192.168.0.113:9997";
 let remoteip = "http://112.29.173.230:9997";
 
 let proxyip = localip;
 
-const webpackConfig = merge(common, {
+module.exports = merge(common, {
     devtool: "inline-source-map",
     output: {
         publicPath: '/dist/',
@@ -61,10 +59,3 @@ const webpackConfig = merge(common, {
         }
     }
 });
-
-module.exports = vuxLoader.merge(webpackConfig, {
-    options: {},
-    plugins: [{
-        name: 'vux-ui'
-    }]
-})
