@@ -19,12 +19,20 @@
           <input v-bind:readonly="input.name == 'dept'"
             v-bind:placeholder="input.placeholder"
             v-bind:id="input.name"
-            v-bind:type="input.type"
+            v-bind:type="getType(input.type, input.name)"
             v-model="input.value"
             v-on:input="inputHandler(input.name)"
             v-on:blur="blurHandler(input.name)"
             v-on:click="showPic(input.name)"
           >
+          <template v-if="input.name == 'password'">
+            <span :class="[$style.icon_wrap, $style.eye]" v-show="input.value && showPwd" @click="toggleShowPwd"></span>
+            <span :class="[$style.icon_wrap, $style.eye2]" v-show="input.value && !showPwd" @click="toggleShowPwd"></span>
+          </template>
+          <template v-if="input.name == 'confirmPwd'">
+            <span :class="[$style.icon_wrap, $style.eye]" v-show="input.value && showPwd2" @click="toggleShowPwd2"></span>
+            <span :class="[$style.icon_wrap, $style.eye2]" v-show="input.value && !showPwd2" @click="toggleShowPwd2"></span>
+          </template>
           <span :class="$style['icon-placeholder']">
             <icon v-bind:type="input.icon"></icon>
           </span>
@@ -84,6 +92,9 @@ export default {
       showToast: false,
       formPass: false,
 
+      showPwd: false,
+      showPwd2: false,
+
       deptId: "", // 部门
       deptNumber: '',
       textInputs: [
@@ -136,6 +147,22 @@ export default {
     this._getDeptList();
   },
   methods: {
+    getType(type, name) {
+      if (type === 'password') {
+        if (name === 'password') {
+          return this.showPwd ? 'text' : 'password';
+        } else {
+          return this.showPwd2 ? 'text' : 'password';
+        }
+      }
+      return type;
+    },
+    toggleShowPwd () {
+      this.showPwd = !this.showPwd;
+    },
+    toggleShowPwd2 () {
+      this.showPwd2 = !this.showPwd2;
+    },
     _getDeptList() {
       // 获取所属单位列表数据
       const vm = this;
@@ -461,5 +488,24 @@ input {
 }
 input:focus {
   box-shadow:none;
+}
+
+.icon_wrap {
+  position: absolute;
+  right: 34px;
+  top: 2px;
+  display: inline-block;
+  border-radius: 50%;
+  background: #f2f2f2;
+  width: 20px;
+  height: 20px;
+}
+.eye {
+  background: url(../../assets/images/eye.png);
+  background-size: cover;
+}
+.eye2 {
+  background: url(../../assets/images/eye2.png);
+  background-size: cover;
 }
 </style>

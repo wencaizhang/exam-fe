@@ -11,20 +11,19 @@
         v-model="username" 
         ref="username"
       >
-      <span :class="$style.icon_wrap" v-show="username" @click="clearValue('username')">
+      <!-- <span :class="$style.icon_wrap" v-show="username" @click="clearValue('username')">
         <x-icon type="ios-close-empty" size="20"></x-icon>
-      </span>
+      </span> -->
     </div>
     <div :class="$style.input_wrap">
-      <input type="password" placeholder="请输入密码" 
+      <input :type="showPwd ? 'text' : 'password'" placeholder="请输入密码" 
         :class="$style.input" 
         v-model="password" 
         ref="password" 
         v-on:keyup.enter="clickHandle"
       >
-      <span :class="$style.icon_wrap" v-show="password" @click="clearValue('password')">
-        <x-icon type="ios-close-empty" size="20"></x-icon>
-      </span>
+      <span :class="[$style.icon_wrap, $style.eye]" v-show="password && showPwd" @click="toggleShowPwd"></span>
+      <span :class="[$style.icon_wrap, $style.eye2]" v-show="password && !showPwd" @click="toggleShowPwd"></span>
     </div>
 
     <div :class="$style.buttons">
@@ -72,6 +71,7 @@ export default {
       tips: "",
       username: "",
       password: "",
+      showPwd: false,
     };
   },
   components: {
@@ -80,9 +80,12 @@ export default {
     Toast
   },
   methods: {
-    clearValue(model) {
-      this[model] = "";
-      this.$refs[model].focus();
+    // clearValue(model) {
+    //   this[model] = "";
+    //   this.$refs[model].focus();
+    // },
+    toggleShowPwd () {
+      this.showPwd = !this.showPwd;
     },
     clickHandle () {
 
@@ -96,7 +99,6 @@ export default {
         
         vm.tips = "用户名或密码不能为空";
       }
-
     },
 
     loginByAction () {
@@ -169,5 +171,14 @@ export default {
 }
 .vux-x-icon {
   fill: #f70968;
+}
+
+.eye {
+  background: url(../../assets/images/eye.png);
+  background-size: cover;
+}
+.eye2 {
+  background: url(../../assets/images/eye2.png);
+  background-size: cover;
 }
 </style>
