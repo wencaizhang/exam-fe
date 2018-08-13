@@ -86,6 +86,7 @@ export default {
     // },
     toggleShowPwd () {
       this.showPwd = !this.showPwd;
+      this.$refs.password.focus();
     },
     clickHandle () {
 

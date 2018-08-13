@@ -39,6 +39,7 @@ export default {
         },
     },
     created () {
+        console.log(this.$route.query.data);
         this.$store.commit('setExamData', this.$route.query.data)
     }
 }

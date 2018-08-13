@@ -89,7 +89,7 @@ export default {
     },
     markHandler() {
       this.$store.commit('marked');
-      this.$store.commit('changeMarkText');
+      this.$store.commit('changeMarkStatus');
     },
   },
   mounted() {

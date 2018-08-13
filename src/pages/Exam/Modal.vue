@@ -6,6 +6,7 @@
     :cancel-text="cancelText"
     @on-confirm="onConfirm">
       <p style="text-align:center;">您还有 {{ num }} 道题未做</p>
+      <p style="text-align:center;">有 {{ markedNum }} 道题被标记</p>
     </confirm>
   </div>
 </template>
@@ -40,6 +41,9 @@ export default {
     },
     num () {
       return this.$store.getters.length - this.$store.state.exam.answerNum;
+    },
+    markedNum () {
+      return this.$store.state.exam.markedNum;
     }
   },
   methods: {

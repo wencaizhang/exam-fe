@@ -5,9 +5,9 @@ const common = require("./webpack.common.js");
 
 
 let localip = "http://192.168.0.113:9997";
-let remoteip = "http://112.29.173.230:9997";
+let remoteip = "http://119.23.217.88:8080";
 
-let proxyip = localip;
+let proxyip = remoteip;
 
 module.exports = merge(common, {
     devtool: "inline-source-map",

@@ -24,6 +24,7 @@
             v-on:input="inputHandler(input.name)"
             v-on:blur="blurHandler(input.name)"
             v-on:click="showPic(input.name)"
+            v-bind:ref="input.name" 
           >
           <template v-if="input.name == 'password'">
             <span :class="[$style.icon_wrap, $style.eye]" v-show="input.value && showPwd" @click="toggleShowPwd"></span>
@@ -159,9 +160,11 @@ export default {
     },
     toggleShowPwd () {
       this.showPwd = !this.showPwd;
+      this.$refs.password.focus();
     },
     toggleShowPwd2 () {
       this.showPwd2 = !this.showPwd2;
+      this.$refs.confirmPwd.focus();
     },
     _getDeptList() {
       // 获取所属单位列表数据
