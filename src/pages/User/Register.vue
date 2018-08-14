@@ -1,58 +1,61 @@
 <template>
   <div>
-    <form :class="$style['form-box']" autocomplete="off" @submit.prevent="register">
-      <div :class="$style.logoBox"><img :class="$style.logo" src="../../assets/images/logo.png" alt="logo"></div>
-      <div v-transfer-dom>
-        <popup v-model="showPopup">
-          <div :class="$style['popup-box']">
-            <p :class="$style['popup-buttons']">
-              <span :class="$style.cancel" @click="popupCancelHandle">取消</span>
-              <span :class="$style.select">请选择</span>
-              <span :class="$style.success" @click="popupSuccessHandle">确定</span>
-            </p>
-            <picker :data='deptList' :columns=4 v-model='danweiValue'></picker>
-          </div>
-        </popup>
-      </div>
-      <div v-for="input in textInputs" v-bind:key="input.name" :class="$style.infoBox">
-        <div :class="$style.infoInput">
-          <input v-bind:readonly="input.name == 'dept'"
-            v-bind:placeholder="input.placeholder"
-            v-bind:id="input.name"
-            v-bind:type="getType(input.type, input.name)"
-            v-model="input.value"
-            v-on:input="inputHandler(input.name)"
-            v-on:blur="blurHandler(input.name)"
-            v-on:click="showPic(input.name)"
-            v-bind:ref="input.name" 
-          >
-          <template v-if="input.name == 'password'">
-            <span :class="[$style.icon_wrap, $style.eye]" v-show="input.value && showPwd" @click="toggleShowPwd"></span>
-            <span :class="[$style.icon_wrap, $style.eye2]" v-show="input.value && !showPwd" @click="toggleShowPwd"></span>
-          </template>
-          <template v-if="input.name == 'confirmPwd'">
-            <span :class="[$style.icon_wrap, $style.eye]" v-show="input.value && showPwd2" @click="toggleShowPwd2"></span>
-            <span :class="[$style.icon_wrap, $style.eye2]" v-show="input.value && !showPwd2" @click="toggleShowPwd2"></span>
-          </template>
-          <span :class="$style['icon-placeholder']">
-            <icon v-bind:type="input.icon"></icon>
-          </span>
+    <template v-if="!showMsg">
+      <form :class="$style['form-box']" autocomplete="off" @submit.prevent="register">
+        <div :class="$style.logoBox"><img :class="$style.logo" src="../../assets/images/logo.png" alt="logo"></div>
+        <div v-transfer-dom>
+          <popup v-model="showPopup">
+            <div :class="$style['popup-box']">
+              <p :class="$style['popup-buttons']">
+                <span :class="$style.cancel" @click="popupCancelHandle">取消</span>
+                <span :class="$style.select">请选择</span>
+                <span :class="$style.success" @click="popupSuccessHandle">确定</span>
+              </p>
+              <picker :data='deptList' :columns=4 v-model='danweiValue'></picker>
+            </div>
+          </popup>
         </div>
+        <div v-for="input in textInputs" v-bind:key="input.name" :class="$style.infoBox">
+          <div :class="$style.infoInput">
+            <input v-bind:readonly="input.name == 'dept'"
+              v-bind:placeholder="input.placeholder"
+              v-bind:id="input.name"
+              v-bind:type="getType(input.type, input.name)"
+              v-model="input.value"
+              v-on:input="inputHandler(input.name)"
+              v-on:blur="blurHandler(input.name)"
+              v-on:click="showPic(input.name)"
+              v-bind:ref="input.name" 
+            >
+            <template v-if="input.name == 'password'">
+              <span :class="[$style.icon_wrap, $style.eye]" v-show="input.value && showPwd" @click="toggleShowPwd"></span>
+              <span :class="[$style.icon_wrap, $style.eye2]" v-show="input.value && !showPwd" @click="toggleShowPwd"></span>
+            </template>
+            <template v-if="input.name == 'confirmPwd'">
+              <span :class="[$style.icon_wrap, $style.eye]" v-show="input.value && showPwd2" @click="toggleShowPwd2"></span>
+              <span :class="[$style.icon_wrap, $style.eye2]" v-show="input.value && !showPwd2" @click="toggleShowPwd2"></span>
+            </template>
+            <span :class="$style['icon-placeholder']">
+              <icon v-bind:type="input.icon"></icon>
+            </span>
+          </div>
+        </div>
+      </form>
+      <div :class="$style.buttons">
+        <XButton
+          text="注册"
+          type="primary"
+          @click.native="register"
+        >
+        </XButton>
+        <p :class="$style['other-handler']">
+          <router-link :to="{ name: 'login'}" class="fl">返回登录</router-link>
+          <router-link :to="{ name: 'forget'}" class="fr">忘记密码</router-link>
+        </p>
       </div>
-    </form>
-    <div :class="$style.buttons">
-      <XButton
-        text="注册"
-        type="primary"
-        @click.native="register"
-      >
-      </XButton>
-      <p :class="$style['other-handler']">
-        <router-link :to="{ name: 'login'}" class="fl">返回登录</router-link>
-        <router-link :to="{ name: 'login'}" class="fr">忘记密码</router-link>
-      </p>
-    </div>
-    <toast v-model="showToast" type="warn">请正确填写注册信息</toast>
+      <toast v-model="showToast" type="warn">请正确填写注册信息</toast>
+    </template>
+    <msg v-if="showMsg" title="恭喜您注册成功！" description="即将跳转到登录界面，请稍后..." :buttons="buttons" icon="success"></msg>
   </div>
 </template>
 
@@ -67,6 +70,7 @@ import {
   XButton,
   Loading,
   Icon,
+  Msg,
   TransferDomDirective as TransferDom
 } from "vux";
 
@@ -83,10 +87,18 @@ export default {
     XButton,
     Loading,
     Icon,
+    Msg,
     Toast
   },
   data() {
     return {
+      buttons: [{
+        type: 'primary',
+        text: '立即登录',
+        onClick: this.toLogin.bind(this)
+      }],
+      showMsg: false,
+
       deptList: [],
       danweiValue: [],
       showPopup: false,
@@ -165,6 +177,15 @@ export default {
     toggleShowPwd2 () {
       this.showPwd2 = !this.showPwd2;
       this.$refs.confirmPwd.focus();
+    },
+    show () {
+      this.showMsg = true;
+      this.toLogin();
+    },
+    toLogin () {
+      setTimeout(() => {
+        this.$router.push({ path: "/home" });
+      }, 2000);
     },
     _getDeptList() {
       // 获取所属单位列表数据
@@ -351,7 +372,7 @@ export default {
           vm.loading = false;
           if (resp.data.code == 0) {
             vm.loginOK = true;
-            vm.$router.push({ path: "/home" });
+            vm.showMsg = true;
           } else {
             // vm.tips = resp.data.message;
           }
@@ -446,7 +467,7 @@ label {
   width: 34px;
 }
 input {
-  text-indent: 10px;
+  /* text-indent: 10px; */
   width: 100%;
 }
 

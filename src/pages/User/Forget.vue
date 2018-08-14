@@ -4,71 +4,99 @@
     <div :class="$style['tips-container']">
       <span :class="$style.tips">{{ tips }}</span>
     </div>
-    <input :class="$style.input" type="text" placeholder="请输入原密码" v-model="username" autofocus>
-    <input :class="$style.input" type="password" placeholder="请输入新密码" v-model="password">
-    <input :class="$style.input" type="password2" placeholder="请确认新密码" v-model="password2">
-    <XButton
-      text="确定" 
-      type="primary"
-      @click.native="login" 
-    >
-    </XButton>
-    <div v-transfer-dom>
-      <loading :show="loading" text="登录中"></loading>
-    </div>
-    <toast v-model="loginOK">登录成功</toast>
+    <template v-if="!validate">
+      <input :class="$style.input" type="number" placeholder="手机号" v-model="phone" autofocus>
+      
+      <div :class="$style.input_wrap">
+        <input :class="$style.input" type="text" placeholder="验证码" v-model="code">
+        <XButton :class="$style.code_btn" text="获取验证码" @click.native="sendCode"></XButton>
+      </div>
+      <XButton
+        text="下一步" 
+        type="primary"
+        :disabled="nextDisabled"
+        @click.native="next" 
+      >
+      </XButton>
+    </template>
+    <template v-else>
+      <div :class="$style.input_wrap">
+        <input :class="$style.input" type="password" placeholder="新密码" v-model="password" autofocus>
+      </div>
+      
+      <div :class="$style.input_wrap">
+        <input :class="$style.input" type="password" placeholder="确认新密码" v-model="password2">
+      </div>
+      <XButton
+        text="确认" 
+        type="primary"
+        @click.native="submit" 
+      >
+      </XButton>
+    </template>
   </form>
 </template>
 
 <script>
 import {
-  Toast,
   XButton,
-  Loading,
-  TransferDomDirective as TransferDom
 } from "vux";
 
 export default {
   name: "Forget",
-  directives: {
-    TransferDom
-  },
   data() {
     return {
-      loading: false,
-      loginOK: false,
-      clicked: false,
       tips: "",
-      username: "",
-      password: "",
-      password2: "",
+      phone: "",
+      code: "",
+
+      validate: false, // 是否通过验证码验证
+
+      password: '',
+      password2: '',
     };
   },
   components: {
     XButton,
-    Loading,
-    Toast
+  },
+  computed: {
+    nextDisabled () {
+      if (this.phone.length === 11 && this.code.length === 6) {
+        return true;
+      }
+      return false;
+    }
   },
   methods: {
-    login() {
-      const vm = this;
-      const { username, password } = vm;
+    sendCode () {
+      this.$vux.toast.show({
+        text: '已发送'
+      })
+    },
 
-      if (!username || !password) {
+    next () {
+      this.validate = true;
+    },
+    submit() {
+      const vm = this;
+      const { password, password2 } = vm;
+
+      if (!password || !password2) {
         vm.tips = "用户名或密码不能为空";
         return;
       }
-      vm.loading = true;
 
       axios
         .post("/login", {
-          username,
+          phone,
           password
         })
         .then(function(resp) {
-          vm.loading = false;
           if (resp.data.code == 0) {
-            vm.loginOK = true;
+            
+            vm.$vux.toast.show({
+              text: '登录成功'
+            })
             vm.$store.commit('setUserInfo', resp.data.data.user);
             vm.$store.commit('login', true);
             
@@ -118,5 +146,25 @@ export default {
 }
 .input:focus {
   box-shadow:none;
+}
+
+.input_wrap {
+  position: relative;
+}
+
+.code_btn {
+  position: absolute!important;
+  right: 0px!important;
+  top: 0px!important;
+  height: 30px!important;
+  line-height: 30px!important;
+  padding: 0 5px!important;
+  background: #fff!important;
+  width: auto!important;
+  font-size: 16px!important;
+  color: #1AAD19!important;
+}
+.code_btn::after {
+  border: 0!important;
 }
 </style>

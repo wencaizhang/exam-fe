@@ -10,6 +10,9 @@ import store from './store'
 
 // require('./mock.js');
 
+import  { ToastPlugin, LoadingPlugin } from 'vux'
+Vue.use(ToastPlugin)
+Vue.use(LoadingPlugin)
 
 //添加请求拦截器
 // 发送请求时显示 loading，完成时关闭 loading
@@ -19,31 +22,35 @@ axios.interceptors.request.use(config => {
 
     // 这个接口用于请求题目，频繁出现 loading 太乱，跳过这个接口
     if (config.url !== '/sage/exam/equestionmanagement/getByIds') {
-        store.commit('toggleShowLoading', true);
+        // store.commit('toggleShowLoading', true);
+        Vue.$vux.loading.show({
+            text: 'Loading'
+        })
     } 
 
     return config;
   }, error => {
     //请求错误时做些事
-    store.commit('toggleShowLoading', false);
+    Vue.$vux.loading.hide()
     return Promise.reject(error);
   });
 
 //添加响应拦截器
 axios.interceptors.response.use( response => {
-    store.commit('toggleShowLoading', false);
+    Vue.$vux.loading.hide()
     store.commit('setLoadText', '');
     //对响应数据做些事
     if (response.data.code != 0) {
-        store.commit('toggleShowWarn', true);
-        store.commit('setWarnText', response.data.msg)
+        Vue.$vux.toast.show({
+            text: response.data.msg
+        })
         return response;
     } else {
         return response;
     }
   }, error => {
     //请求错误时做些事
-    store.commit('toggleShowLoading', false);
+    Vue.$vux.loading.hide()
     return Promise.reject(error);
   });
 

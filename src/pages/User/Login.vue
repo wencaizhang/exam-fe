@@ -1,36 +1,42 @@
 <template>
   <div :class="$style.container">
+
     <img :class="$style.logo" src="../../assets/images/logo.png" alt="logo">
+    
     <div :class="$style['tips-container']">
       <span :class="$style.tips">{{ tips }}</span>
     </div>
     
-    <div :class="$style.input_wrap">
-      <input type="text" placeholder="请输入用户名" autofocus
-        :class="$style.input" 
-        v-model="username" 
-        ref="username"
-      >
-      <!-- <span :class="$style.icon_wrap" v-show="username" @click="clearValue('username')">
-        <x-icon type="ios-close-empty" size="20"></x-icon>
-      </span> -->
-    </div>
-    <div :class="$style.input_wrap">
-      <input :type="showPwd ? 'text' : 'password'" placeholder="请输入密码" 
-        :class="$style.input" 
-        v-model="password" 
-        ref="password" 
-        v-on:keyup.enter="clickHandle"
-      >
-      <span :class="[$style.icon_wrap, $style.eye]" v-show="password && showPwd" @click="toggleShowPwd"></span>
-      <span :class="[$style.icon_wrap, $style.eye2]" v-show="password && !showPwd" @click="toggleShowPwd"></span>
-    </div>
+    <template>
+      <div :class="$style.input_wrap">
+        <input :type="loginByPhone ? 'number' : 'text'" :placeholder="loginByPhone ? '请输入手机号' : '请输入身份证号'" autofocus
+          :class="$style.input" 
+          v-model="username" 
+          v-bind:input="inputHandler"
+          ref="username"
+        >
+        <!-- <span :class="$style.icon_wrap" v-show="username" @click="clearValue('username')">
+          <x-icon type="ios-close-empty" size="20"></x-icon>
+        </span> -->
+      </div>
+      <div :class="$style.input_wrap">
+        <input :type="showPwd ? 'text' : 'password'" placeholder="请输入密码" 
+          :class="$style.input" 
+          v-model="password" 
+          v-bind:input="inputHandler"
+          ref="password" 
+          v-on:keyup.enter="submitHandle"
+        >
+        <span :class="[$style.icon_wrap, $style.eye]" v-show="password && showPwd" @click="toggleShowPwd"></span>
+        <span :class="[$style.icon_wrap, $style.eye2]" v-show="password && !showPwd" @click="toggleShowPwd"></span>
+      </div>
+    </template>
 
     <div :class="$style.buttons">
       <XButton
         text="登 录" 
         type="primary"
-        @click.native="clickHandle" 
+        @click.native="submitHandle" 
       >
       </XButton>
       <p :class="$style['other-handler']">
@@ -39,10 +45,8 @@
       </p>
     </div>
 
-    <div v-transfer-dom>
-      <loading :show="loading" text="登录中"></loading>
-    </div>
-    <toast v-model="loginOK">登录成功</toast>
+    <span :class="$style.login_type_btn" @click="changeLoginType">{{ loginByPhone ? '身份证号登录' : '手机号登录' }}</span>
+
   </div>
 </template>
 
@@ -54,29 +58,23 @@ import axios from 'axios'
 import {
   Toast,
   XButton,
-  Loading,
-  TransferDomDirective as TransferDom
 } from "vux";
 import { cookie } from 'vux'
 export default {
   name: "Login",
-  directives: {
-    TransferDom
-  },
   data() {
     return {
-      loading: false,
-      loginOK: false,
-      clicked: false,
       tips: "",
+      showPwd: false,
+
       username: "",
       password: "",
-      showPwd: false,
+
+      loginByPhone: true,
     };
   },
   components: {
     XButton,
-    Loading,
     Toast
   },
   methods: {
@@ -88,26 +86,39 @@ export default {
       this.showPwd = !this.showPwd;
       this.$refs.password.focus();
     },
-    clickHandle () {
+    changeLoginType () {
+      this.loginByPhone = !this.loginByPhone;
+      this.tips = '';
+    },
+    submitHandle () {
 
       const vm = this;
-      const { username, password } = vm;
+      const { loginByPhone, username, password } = vm;
 
-      if (username && password) {
-        // vm.login();
-        vm.loginByAction();
-      } else {
-        
-        vm.tips = "用户名或密码不能为空";
+      if (!username) {
+        vm.tips = loginByPhone ? "手机号不能为空" : '身份证号不能为空';
+        return;
       }
+      if (!password) {
+        vm.tips = '密码不能为空';
+        return;
+      }
+      if (username && password) {
+        vm.loginByAction();
+      } 
     },
 
     loginByAction () {
       
-      const { username, password } = this;
-      const data = { username, password };
+      const { loginByPhone, username, password } = this;
+      const data = { password };
+      loginByPhone ? data.phone = username : data.idcards = username;
+
       this.$store.dispatch('login', data);
 
+    },
+    inputHandler () {
+      this.tips = '';
     }
   }
 };
@@ -181,5 +192,13 @@ export default {
 .eye2 {
   background: url(../../assets/images/eye2.png);
   background-size: cover;
+}
+
+.login_type_btn {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  color: #1AAD19;
+  transform: translateX(-50%);
 }
 </style>

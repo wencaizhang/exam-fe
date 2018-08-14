@@ -1,7 +1,6 @@
 import axios from "axios";
 import api from "../util/api";
 import router from '../router'
-import { userInfo } from "os";
 
 const state = {
     name: '',
@@ -73,6 +72,10 @@ const actions = {
           }
         })
     },
+
+    sendCode (context, payload) {
+        // api.
+    }
 }
 
 export default {
