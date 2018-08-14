@@ -182,10 +182,11 @@ export default {
           if (resp.data.code == 0) {
             vm.loginOK = true;
             vm.deptList = resp.data.deptList.map(item => {
+              // 数字转成字符串，否则会出问题
               return {
-                value: item.deptId,
+                value: item.deptId + '',
                 name: item.name,
-                parent: item.parentId,
+                parent: item.parentId + '',
                 deptNumber: item.deptNo
               }
             });
