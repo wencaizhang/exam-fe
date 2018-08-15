@@ -1,6 +1,7 @@
 import axios from "axios";
 import api from "../util/api";
-import router from '../router'
+import router from '../router';
+import { cookie } from 'vux'
 
 const state = {
     name: '',
@@ -18,7 +19,7 @@ const mutations = {
         state.userId = id;
     },
     setUserInfo: (state, payload) => {
-        Object.assign(state.userInfo, payload);
+        Object.assign(state.userInfo, payload, { saved: true });
     },
     changeLoginStat: (state, bool) => {
         state.login = bool;
@@ -31,30 +32,28 @@ const actions = {
         .then(function(resp) {
           if (resp.data.code == 0) {
 
-            axios.defaults.headers.token = resp.data.token;
+            
+            cookie.set('token', resp.data.token);
+            cookie.set('userId', resp.data.userId);
 
             context.commit("setUserId", resp.data.userId);
             context.commit("changeLoginStat", true);
             router.push({ path: "/home" });
 
-          } else {
-            alert(resp.data.msg)
           }
         })
     },
     logout (context, payload) {
         
-        api.logout({ userId: context.state.userId })
+        api.logout({ userId: context.state.userId || cookie.get('userId') })
         .then(function(resp) {
           if (resp.data.code == 0) {
 
             axios.defaults.headers.token = '';
-
+            cookie.set('token', '');
             context.commit("changeLoginStat", false);
             router.push({ path: "/login" });
 
-          } else {
-            alert(resp.data.msg)
           }
         })
     },
@@ -67,8 +66,6 @@ const actions = {
 
             context.commit("setUserInfo", resp.data.data);
 
-          } else {
-            alert(resp.data.msg)
           }
         })
     },

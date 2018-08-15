@@ -5,7 +5,7 @@
                 <img :class="$style.avatar" v-bind:src="avatar" alt="头像">
             </div>
             <div :class="$style.nick">
-                <span>{{ userInfo.userName }}</span>
+                <span>{{ userInfo.name }}</span>
             </div>
         </header>
         <group>
@@ -61,7 +61,9 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch('getUserInfo');
+    if (!this.$store.state.user.userInfo.saved) {
+      this.$store.dispatch('getUserInfo');
+    }
   }
 };
 </script>

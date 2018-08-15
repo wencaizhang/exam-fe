@@ -2,7 +2,9 @@
   <div :class="$style.container">
 
     <img :class="$style.logo" src="../../assets/images/logo.png" alt="logo">
-    
+    <!-- <p style="text-align: left;">{{ loginByPhone ? ' 手机号登录' : ' 身份证号登录' }}
+      <span :class="$style.tips">{{ tips }}</span>
+    </p> -->
     <div :class="$style['tips-container']">
       <span :class="$style.tips">{{ tips }}</span>
     </div>
@@ -12,7 +14,7 @@
         <input :type="loginByPhone ? 'number' : 'text'" :placeholder="loginByPhone ? '请输入手机号' : '请输入身份证号'" autofocus
           :class="$style.input" 
           v-model="username" 
-          v-bind:input="inputHandler"
+          v-on:input="inputHandler"
           ref="username"
         >
         <!-- <span :class="$style.icon_wrap" v-show="username" @click="clearValue('username')">
@@ -23,7 +25,7 @@
         <input :type="showPwd ? 'text' : 'password'" placeholder="请输入密码" 
           :class="$style.input" 
           v-model="password" 
-          v-bind:input="inputHandler"
+          v-on:input="inputHandler"
           ref="password" 
           v-on:keyup.enter="submitHandle"
         >
@@ -96,7 +98,7 @@ export default {
       const { loginByPhone, username, password } = vm;
 
       if (!username) {
-        vm.tips = loginByPhone ? "手机号不能为空" : '身份证号不能为空';
+        vm.tips = loginByPhone ? '手机号不能为空' : '身份证号不能为空';
         return;
       }
       if (!password) {
@@ -133,6 +135,7 @@ export default {
 .container {
   text-align: center;
   padding: 40px;
+  padding-top: 20px;
   letter-spacing: 1px;
 }
 .other-handler {
@@ -146,6 +149,9 @@ export default {
   text-align: left;
   color: red;
   margin-bottom: 5px;
+}
+.tips {
+  color: red;
 }
 
 .buttons {
