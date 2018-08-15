@@ -44,6 +44,7 @@ axios.interceptors.response.use( response => {
     if (response.data.code != 0) {
         Vue.$vux.toast.show({
             type: 'warn',
+            width: '10em',
             text: response.data.msg
         })
         return response;

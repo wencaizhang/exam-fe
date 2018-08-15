@@ -1,7 +1,7 @@
 <template>
   <div>
     <x-header  :left-options="{preventGoBack: true,backText: ''}" @on-click-back="backHandler">准备考试</x-header>
-    <div :class="$style['home-container']">
+    <div  v-if="examination" :class="$style['home-container']">
       <div :class="$style['fast-entry']">
         <h3 :class="[$style.h3]">注意事项</h3>
         <div v-if="examination">
@@ -10,7 +10,7 @@
       </div>
       <div :class="$style.message">
         <h3 :class="[$style.h3]">活动信息</h3>
-        <div v-if="examination" :class="$style.examination">
+        <div :class="$style.examination">
           <!-- <p>姓名：{{ examination }}</p> -->
           <p><span :class="$style.text">考试单位：</span>{{ examination.deptName }}</p>
           <p><span :class="$style.text">剩余次数：</span>{{ countExamNumber }}</p>
@@ -22,12 +22,12 @@
           <p>{{ examination.examinationEndTime }}</p>
         </div>
       </div>
-      <XButton type="primary" :disabled="loading" text="开始考试" @click.native="startHandler"></XButton>
+      <XButton type="primary" text="开始考试" @click.native="startHandler"></XButton>
     </div>
-    <toast v-model="showToast" type="warn">{{ errMsg }}</toast>
-    <div v-transfer-dom>
-      <loading :show="loading" text="loading..."></loading>
-    </div>
+    
+    <p v-else style="text-align:center; margin-top: 30px;">
+      <span style="vertical-align:middle;display:inline-block;font-size:14px;">加载中&nbsp;&nbsp;</span><inline-loading></inline-loading>
+    </p>
   </div>
 </template>
 
@@ -35,26 +35,18 @@
 import axios from 'axios'
 import util from "../../util/util.js";
 
-import { XButton, XHeader, Toast, Loading, TransferDomDirective as TransferDom } from "vux";
+import { XButton, XHeader, InlineLoading } from "vux";
 export default {
-  directives: {
-    TransferDom
-  },
   data() {
     return {
-      loading: true,
-      showToast: false,
-      errMsg: '',
-      isRed: true,
       countExamNumber: 0,
       examination: null
     };
   },
   components: {
-    Toast,
+    InlineLoading,
     XButton,
     XHeader,
-    Loading
   },
   methods: {
     startHandler () {
@@ -87,7 +79,6 @@ export default {
       axios((options))
         .then(function(resp) {
           if (resp.data.code == 0) {
-            vm.loading = false;
             vm.countExamNumber = resp.data.countExamNumber;
             vm.examination = resp.data.examination;
 
@@ -100,9 +91,6 @@ export default {
             };
 
             util.setPaperData(data)
-          } else {
-            vm.showToast = true;
-            vm.errMsg = resp.data.msg;
           }
         })
         .catch(function(error) {
@@ -111,7 +99,6 @@ export default {
     },
     getIds () {
       const vm = this;
-      vm.loading = true;
       const data = util.getPaperData();
       let url = '/sage/exam/paperProduce/produce';
 
@@ -123,7 +110,6 @@ export default {
       
       axios((options))
         .then(function(resp) {
-          vm.loading = false;
           if (resp.data.code == 0) {
             const data = JSON.parse(resp.data.paperDuce.details);
             util.setQuestionIds(data);
