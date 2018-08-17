@@ -1,11 +1,11 @@
 <template>
-    <div class="">
+    <div :class="$style.container">
         <header :class="$style.header">
             <div :class="$style.photo">
                 <img :class="$style.avatar" v-bind:src="avatar" alt="头像">
             </div>
             <div :class="$style.nick">
-                <span>{{ userInfo.name }}</span>
+                <p>{{ userInfo.name || '用户名' }}</p>
             </div>
         </header>
         <group>
@@ -34,7 +34,8 @@ import { XButton, Group, CellBox } from "vux";
 export default {
   data() {
     return {
-      avatar: 'http://5b0988e595225.cdn.sohucs.com/images/20171216/a72351d45dee4e6fa270985fb5394f1e.jpeg'
+      // avatar: 'http://5b0988e595225.cdn.sohucs.com/images/20171216/a72351d45dee4e6fa270985fb5394f1e.jpeg'
+      avatar: 'http://dwz.cn/f2Tyb1OM',
     };
   },
   components: {
@@ -69,23 +70,32 @@ export default {
 </script>
 
 <style module>
+.container {
+  height: 100%;
+  background-color: #f2f2f2;
+  padding-top: 20px;
+}
 .header {
-  height: 70px;
-  line-height: 70px;
-  padding: 20px;
+  height: 80px;
+  background-color: #fff;
 }
 .photo,
 .nick {
   display: inline-block;
+  box-sizing: border-box;
   vertical-align: top;
 }
+.nick {
+  padding-top: 20px;
+}
 .photo {
-  width: 70px;
-  height: 70px;
+  width: 100px;
+  height: 80px;
+  padding: 10px 20px;
 }
 .avatar {
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
 }
 
 .btns {
