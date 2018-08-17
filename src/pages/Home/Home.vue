@@ -6,7 +6,6 @@
     </div>
     <div :class="$style.message">
       <panel header="好消息" :list="list" :type="type"></panel>
-  </div>
     </div>
   </div>
 </template>
