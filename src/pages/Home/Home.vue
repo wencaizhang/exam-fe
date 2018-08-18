@@ -2,7 +2,7 @@
   <div :class="$style.container">
     <div :class="$style['fast-entry']">
       <p>通过已有的准考证快速参加考试，具体的准考信息请咨询相关人事。</p>
-      <XButton :class="$style.btn" type="primary" text="快速进入考试" link="/waitforexam"></XButton>
+      <XButton :class="$style.btn" type="primary" text="快速进入考试" @click.native="click"></XButton>
     </div>
     <div :class="$style.message">
       <panel header="好消息" :list="list" :type="type"></panel>
@@ -18,7 +18,6 @@ import { XButton, Panel  } from "vux";
 export default {
   data() {
     return {
-      
       type: '1',
       list: [{
         src: 'http://placeholder.qiniudn.com/60x60/3cc51f/ffffff',
@@ -36,11 +35,23 @@ export default {
     Panel 
   },
   methods: {
+    click() {
+      let data = this.$store.state.exam.data;
+      if (!data) {
+        this.$vux.toast.show({
+            type: 'warn',
+            width: '10em',
+            text: '缺少考试数据'
+        });
+        return;
+      }
+      this.$router.push({ path: '/waitforexam' })
+    }
   },
   computed: {
-    id() {
-      return this.$route.params.id;
-    }
+  },
+  created () {
+    this.$store.commit('setExamData', this.$route.params.data);
   }
 };
 </script>

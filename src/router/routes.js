@@ -18,6 +18,17 @@ import ChangeUserInfo from '../pages/User/ChangeUserInfo'
 
 export default [
     {
+        path: '/home/:data',
+        name: 'home2',
+        components: {
+            default: Home,
+            footer: Footer
+        },
+        meta: {
+            title: '首页'
+        }
+    },
+    {
         path: '/home',
         name: 'home',
         components: {

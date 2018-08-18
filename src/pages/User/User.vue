@@ -5,7 +5,7 @@
                 <img :class="$style.avatar" v-bind:src="avatar" alt="头像">
             </div>
             <div :class="$style.nick">
-                <p>{{ userInfo.name || '用户名' }}</p>
+                <p>{{ name }}</p>
             </div>
         </header>
         <group>
@@ -44,6 +44,9 @@ export default {
     CellBox
   },
   computed: {
+    name () {
+      return this.$store.state.user.name;
+    },
     userInfo () {
       return this.$store.state.user.userInfo;
     }

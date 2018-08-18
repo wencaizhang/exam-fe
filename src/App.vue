@@ -10,9 +10,6 @@
 
 export default {
     name: "app",
-    created () {
-        this.$store.commit('setExamData', this.$route.query.data);
-    }
 }
 
 </script>

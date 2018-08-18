@@ -4,14 +4,13 @@ import router from '../router';
 import { cookie } from 'vux'
 
 const state = {
-    name: '',
+    name: '用户名',
     userId: '',
     login: false,
-    userInfo: {}
+    userInfo: {},
 }
 
 const getters = {
-    
 }
 
 const mutations = {
@@ -19,6 +18,7 @@ const mutations = {
         state.userId = id;
     },
     setUserInfo: (state, payload) => {
+        state.name = payload.name;
         Object.assign(state.userInfo, payload, { saved: true });
     },
     changeLoginStat: (state, bool) => {
