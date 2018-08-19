@@ -23,6 +23,7 @@ module.exports = merge(common, {
         })
     ],
     devServer: {
+        disableHostCheck: true,
         proxy: {
             "/logout": {
                 target: proxyip,
