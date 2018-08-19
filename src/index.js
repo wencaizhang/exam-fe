@@ -15,18 +15,18 @@ Vue.use(ToastPlugin)
 Vue.use(LoadingPlugin)
 
 Vue.prototype.$storage = {
-    setItem = (key, value) => {
+    setItem: (key, value) => {
         // 需要转化成字符串之后储存
         window.sessionStorage.setItem(key, JSON.stringify(value));
     },
-    getItem = (key) => {
+    getItem: (key) => {
         // sessionStorage 中以字符串存储，获取之后转为 JSON 格式
         return JSON.parse(window.sessionStorage.getItem(key)) || null;
     },
-    removeItem = (key) => {
+    removeItem: (key) => {
         window.localStorage.removeItem(key);
     },
-    clear = (key) => {
+    clear: (key) => {
         window.localStorage.clear();
     },
 };
