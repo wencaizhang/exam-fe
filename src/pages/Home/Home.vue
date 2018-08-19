@@ -13,7 +13,6 @@
 <script>
 import Vue from "vue";
 import axios from "axios";
-
 import { XButton, Panel  } from "vux";
 export default {
   data() {
@@ -51,7 +50,12 @@ export default {
   computed: {
   },
   created () {
-    this.$store.commit('setExamData', this.$route.params.data);
+    let data = this.$route.params.data;
+    if (data) {
+      this.$store.commit('setExamData', this.$route.params.data);
+      this.$storage.setItem('data', this.$route.params.data);
+      this.$router.push({ name: 'home' });
+    }
   }
 };
 </script>

@@ -10,9 +10,27 @@ import store from './store'
 
 // require('./mock.js');
 
-import  { ToastPlugin, LoadingPlugin, cookie } from 'vux'
+import  { ToastPlugin, LoadingPlugin } from 'vux'
 Vue.use(ToastPlugin)
 Vue.use(LoadingPlugin)
+
+Vue.prototype.$storage = {
+    setItem = (key, value) => {
+        // 需要转化成字符串之后储存
+        window.sessionStorage.setItem(key, JSON.stringify(value));
+    },
+    getItem = (key) => {
+        // sessionStorage 中以字符串存储，获取之后转为 JSON 格式
+        return JSON.parse(window.sessionStorage.getItem(key)) || null;
+    },
+    removeItem = (key) => {
+        window.localStorage.removeItem(key);
+    },
+    clear = (key) => {
+        window.localStorage.clear();
+    },
+};
+
 
 //添加请求拦截器
 // 发送请求时显示 loading，完成时关闭 loading
@@ -20,7 +38,7 @@ Vue.use(LoadingPlugin)
 axios.interceptors.request.use(config => {
     //在发送请求之前做某事
 
-    config.headers.token = cookie.get('token');
+    config.headers.token = Vue.$storage.getItem('token');
 
     // 这个接口用于请求题目，频繁出现 loading 太乱，跳过这个接口
     if (config.url !== '/sage/exam/equestionmanagement/getByIds') {
@@ -70,7 +88,7 @@ router.beforeEach((to, from, next) => {
     let notCheckLogin = to.matched.some( record => record.meta.notCheckLogin )
 
     // 未登录,且需要检测登录状态的路由
-    if (!cookie.get('token') && !notCheckLogin){
+    if (!Vue.$storage.getItem('token') && !notCheckLogin){
         next({ path: '/login' });
     } else {
         next();
@@ -79,22 +97,6 @@ router.beforeEach((to, from, next) => {
 });
 
 
-Vue.prototype.$storage = {
-    setItem = (key, value) => {
-        // 需要转化成字符串之后储存
-        window.sessionStorage.setItem(key, JSON.stringify(value));
-    },
-    getItem = (key) => {
-        // sessionStorage 中以字符串存储，获取之后转为 JSON 格式
-        return JSON.parse(window.sessionStorage.getItem(key)) || null;
-    },
-    removeItem = (key) => {
-        window.localStorage.removeItem(key);
-    },
-    clear = (key) => {
-        window.localStorage.clear();
-    },
-}
 
 
 // 引入外部js

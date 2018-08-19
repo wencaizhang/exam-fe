@@ -57,11 +57,7 @@ import util from "../../util/util.js";
 import API from "../../util/api.js";
 
 import axios from 'axios'
-import {
-  Toast,
-  XButton,
-} from "vux";
-import { cookie } from 'vux'
+import { XButton } from "vux";
 export default {
   name: "Login",
   data() {
@@ -77,7 +73,6 @@ export default {
   },
   components: {
     XButton,
-    Toast
   },
   methods: {
     // clearValue(model) {

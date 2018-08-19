@@ -87,7 +87,6 @@ export default {
             vm.loginOK = true;
 
             const userinfo = resp.data.data || {};
-            util.setUserinfo(userinfo);
             vm.$store.commit("setUserInfo", userinfo);
             vm.$store.commit("login", true);
 

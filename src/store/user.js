@@ -1,7 +1,6 @@
 import axios from "axios";
 import api from "../util/api";
 import router from '../router';
-import { cookie } from 'vux'
 
 const state = {
     name: '用户名',
@@ -32,9 +31,8 @@ const actions = {
         .then(function(resp) {
           if (resp.data.code == 0) {
 
-            
-            cookie.set('token', resp.data.token);
-            cookie.set('userId', resp.data.userId);
+            Vue.$storage.setItem('token', resp.data.token);
+            Vue.$storage.setItem('userId', resp.data.userId);
 
             context.commit("setUserId", resp.data.userId);
             context.commit("changeLoginStat", true);
@@ -45,12 +43,13 @@ const actions = {
     },
     logout (context, payload) {
         
-        api.logout({ userId: context.state.userId || cookie.get('userId') })
+        api.logout({ userId: (context.state.userId || Vue.$storage.getItem('userId')) + '' })
         .then(function(resp) {
           if (resp.data.code == 0) {
 
             axios.defaults.headers.token = '';
-            cookie.set('token', '');
+            Vue.$storage.clear();
+
             context.commit("changeLoginStat", false);
             router.push({ path: "/login" });
 
@@ -59,8 +58,8 @@ const actions = {
     },
 
     getUserInfo (context, payload) {
-        
-        api.getUserInfo({ userId: context.state.userId })
+
+        api.getUserInfo({ userId: (context.state.userId || Vue.$storage.getItem('userId')) + '' })
         .then(function(resp) {
           if (resp.data.code == 0) {
 

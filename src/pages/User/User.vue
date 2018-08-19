@@ -59,7 +59,6 @@ export default {
       const vm = this;
       vm.loading = false;
       if (resp.data.code == 0) {
-        util.setUserinfo(null);
         vm.$router.push({ name: 'login' });
       }
     }
