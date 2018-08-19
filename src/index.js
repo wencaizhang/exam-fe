@@ -78,6 +78,25 @@ router.beforeEach((to, from, next) => {
 
 });
 
+
+Vue.prototype.$storage = {
+    setItem = (key, value) => {
+        // 需要转化成字符串之后储存
+        window.sessionStorage.setItem(key, JSON.stringify(value));
+    },
+    getItem = (key) => {
+        // sessionStorage 中以字符串存储，获取之后转为 JSON 格式
+        return JSON.parse(window.sessionStorage.getItem(key)) || null;
+    },
+    removeItem = (key) => {
+        window.localStorage.removeItem(key);
+    },
+    clear = (key) => {
+        window.localStorage.clear();
+    },
+}
+
+
 // 引入外部js
 Vue.component('remote-script', {
     render: function(createElement) {
