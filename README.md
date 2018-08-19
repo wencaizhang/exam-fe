@@ -67,7 +67,4 @@ git pull
 └── package.json
 ```
 
-实践的过程中会做一些记录：
-
-+ [权限管理](./note/Auth.md)
-+ [vuex 使用](./note/vuex.md)
+实践的过程中会做一些记录，见 [Issues](https://github.com/Awesome-FE/exam-system-fe/issues)
