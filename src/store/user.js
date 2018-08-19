@@ -31,8 +31,8 @@ const actions = {
         .then(function(resp) {
           if (resp.data.code == 0) {
 
-            Vue.$storage.setItem('token', resp.data.token);
-            Vue.$storage.setItem('userId', resp.data.userId);
+            Vue.prototype.$storage.setItem('token', resp.data.token);
+            Vue.prototype.$storage.setItem('userId', resp.data.userId);
 
             context.commit("setUserId", resp.data.userId);
             context.commit("changeLoginStat", true);
@@ -43,12 +43,12 @@ const actions = {
     },
     logout (context, payload) {
         
-        api.logout({ userId: (context.state.userId || Vue.$storage.getItem('userId')) + '' })
+        api.logout({ userId: (context.state.userId || Vue.prototype.$storage.getItem('userId')) + '' })
         .then(function(resp) {
           if (resp.data.code == 0) {
 
             axios.defaults.headers.token = '';
-            Vue.$storage.clear();
+            Vue.prototype.$storage.clear();
 
             context.commit("changeLoginStat", false);
             router.push({ path: "/login" });
@@ -59,7 +59,7 @@ const actions = {
 
     getUserInfo (context, payload) {
 
-        api.getUserInfo({ userId: (context.state.userId || Vue.$storage.getItem('userId')) + '' })
+        api.getUserInfo({ userId: (context.state.userId || Vue.prototype.$storage.getItem('userId')) + '' })
         .then(function(resp) {
           if (resp.data.code == 0) {
 

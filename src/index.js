@@ -38,7 +38,7 @@ Vue.prototype.$storage = {
 axios.interceptors.request.use(config => {
     //在发送请求之前做某事
 
-    config.headers.token = Vue.$storage.getItem('token');
+    config.headers.token = Vue.prototype.$storage.getItem('token');
 
     // 这个接口用于请求题目，频繁出现 loading 太乱，跳过这个接口
     if (config.url !== '/sage/exam/equestionmanagement/getByIds') {
@@ -88,7 +88,7 @@ router.beforeEach((to, from, next) => {
     let notCheckLogin = to.matched.some( record => record.meta.notCheckLogin )
 
     // 未登录,且需要检测登录状态的路由
-    if (!Vue.$storage.getItem('token') && !notCheckLogin){
+    if (!Vue.prototype.$storage.getItem('token') && !notCheckLogin){
         next({ path: '/login' });
     } else {
         next();
