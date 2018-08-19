@@ -9,7 +9,7 @@
       
       <div :class="$style.input_wrap">
         <input :class="$style.input" type="text" placeholder="验证码" v-model="code">
-        <XButton :class="$style.code_btn" text="获取验证码" @click.native="sendCode"></XButton>
+        <XButton :class="$style.code_btn" :disabled="btnDisabled" :text="btnText" @click.native="sendCode"></XButton>
       </div>
       <XButton
         text="下一步" 
@@ -33,6 +33,12 @@
         @click.native="submit" 
       >
       </XButton>
+      <XButton
+        text="返回上一步" 
+        plain
+        @click.native="prev" 
+      >
+      </XButton>
     </template>
   </form>
 </template>
@@ -41,6 +47,7 @@
 import {
   XButton,
 } from "vux";
+import { setInterval, clearInterval } from 'timers';
 
 export default {
   name: "Forget",
@@ -54,6 +61,9 @@ export default {
 
       password: '',
       password2: '',
+
+      btnText: '获取验证码',
+      btnDisabled: false,
     };
   },
   components: {
@@ -69,13 +79,33 @@ export default {
   },
   methods: {
     sendCode () {
+      this.countDown();
       this.$vux.toast.show({
         text: '已发送'
-      })
+      });
+
     },
 
     next () {
       this.validate = true;
+    },
+    prev () {
+      this.validate = false;
+    },
+    countDown () {
+      // 发送验证码后开始倒计时
+      let count = 30;
+      const timer = setInterval( () => {
+        if (count > 0) {
+          this.btnDisabled = true;
+          this.btnText = `${count}秒`
+          count--;
+        } else {
+          this.btnDisabled = false;
+          this.btnText = '获取验证码';
+          clearInterval(timer);
+        }
+      }, 1000)
     },
     submit() {
       const vm = this;
@@ -163,6 +193,11 @@ export default {
   width: auto!important;
   font-size: 16px!important;
   color: #1AAD19!important;
+  width: 90px!important;
+}
+.code_btn[disabled] {
+  color: rgba(0, 0, 0, 0.3)!important;
+  background-color: #F7F7F7!important;
 }
 .code_btn::after {
   border: 0!important;
