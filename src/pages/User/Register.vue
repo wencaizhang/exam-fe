@@ -189,8 +189,7 @@ export default {
     },
     _getDeptList() {
       // 获取所属单位列表数据
-      const vm = this;
-      vm.$store.commit('setLoadText', '正在请求单位列表')
+      this.$store.commit('setLoadText', '正在请求单位列表')
       let url = "/sys/dept/list";
       const options = {
         url,
@@ -198,11 +197,11 @@ export default {
         // headers: { "content-type": "application/x-www-form-urlencoded" }
       };
       axios(options)
-        .then(function(resp) {
-          vm.loading = false;
+        .then(resp => {
+          this.loading = false;
           if (resp.data.code == 0) {
-            vm.loginOK = true;
-            vm.deptList = resp.data.deptList.map(item => {
+            this.loginOK = true;
+            this.deptList = resp.data.deptList.map(item => {
               // 数字转成字符串，否则会出问题
               return {
                 value: item.deptId + '',
@@ -211,17 +210,10 @@ export default {
                 deptNumber: item.deptNo
               }
             });
-
-            console.log(
-              "deptList", JSON.parse(JSON.stringify(vm.deptList)));
-            // vm.$router.push({ path: "/home" });
           } else {
-            vm.tips = "用户名或密码错误";
+            this.tips = "用户名或密码错误";
           }
         })
-        .catch(function(error) {
-          console.log(error);
-        });
     },
     _getData() {
       // 获取页面表单数据
@@ -240,13 +232,12 @@ export default {
     },
     _isEmpty4Item(name) {
       // 判断指定表单是否为空
-      const vm = this;
-      const { textInputs } = vm;
+      const { textInputs } = this;
       textInputs.forEach(input => {
         if (input.name === name) {
           if (input.value.trim() === "") {
             input.icon = "warn";
-            vm.formPass = false;
+            this.formPass = false;
           } else {
             input.icon = "";
           }
@@ -255,13 +246,12 @@ export default {
     },
     _isEmpty4All() {
       // 判断所有表单是否存在空
-      const vm = this;
       const { textInputs } = this;
 
       textInputs.forEach(input => {
         if (input.value.trim() === "") {
           input.icon = "warn";
-          vm.formPass = false;
+          this.formPass = false;
         }
       });
 
@@ -269,7 +259,6 @@ export default {
     },
     _confirmPwd() {
       // 确认两次密码输入是否相同
-      const vm = this;
       const { textInputs } = this;
       let userPwdInput, confirmPwdInput;
 
@@ -286,13 +275,12 @@ export default {
           confirmPwdInput.icon = "success";
         } else {
           confirmPwdInput.icon = "warn";
-          vm.formPass = false;
+          this.formPass = false;
         }
       }
     },
     blurHandler(name) {
       // 失去焦点时进行校验
-      const vm = this;
       const { textInputs } = this;
       const input = textInputs.filter(input => input.name === name)[0];
 
@@ -302,7 +290,7 @@ export default {
         let isNum = reg.test(input.value);
         if (!isNum) {
           input.icon = "warn";
-          vm.formPass = false;
+          this.formPass = false;
           return;
         } else if (isNum && input.icon === "warn") {
           input.icon = "";
@@ -313,21 +301,20 @@ export default {
       if (name === "userPwd") {
         if (input.value.trim().length < 6) {
           input.icon = "warn";
-          vm.formPass = false;
+          this.formPass = false;
           return;
         }
       }
     },
     inputHandler(name) {
       // 用户输入时进行校验
-      const vm = this;
       const { textInputs } = this;
       const input = textInputs.filter(input => input.name === name)[0];
 
       // 判断是否为空
       if (input.value.trim() === "") {
         input.icon = "warn";
-        vm.formPass = false;
+        this.formPass = false;
         return;
       } else if (input.value.trim() != "" && input.icon === "warn") {
         input.icon = "";
@@ -339,7 +326,7 @@ export default {
         let isNum = reg.test(input.value);
         if (!isNum) {
           input.icon = "warn";
-          vm.formPass = false;
+          this.formPass = false;
           return;
         } else if (isNum && input.icon === "warn") {
           input.icon = "";
@@ -347,8 +334,7 @@ export default {
       }
     },
     register() {
-      const vm = this;
-      vm.formPass = true;
+      this.formPass = true;
       // 点击注册按钮时触发
       this._isEmpty4All();
       this._confirmPwd();
@@ -358,8 +344,8 @@ export default {
         return;
       }
 
-      const data = vm._getData();
-      vm.loading = true;
+      const data = this._getData();
+      this.loading = true;
 
       let url = "/api/register";
       const options = {
@@ -368,28 +354,24 @@ export default {
         data
       };
       axios(options)
-        .then(function(resp) {
-          vm.loading = false;
+        .then(resp => {
+          this.loading = false;
           if (resp.data.code == 0) {
-            vm.loginOK = true;
-            vm.showMsg = true;
+            this.loginOK = true;
+            this.showMsg = true;
           } else {
-            // vm.tips = resp.data.message;
+            // this.tips = resp.data.message;
           }
         })
-        .catch(function(error) {
-          console.log(error);
-        });
     },
     setCompanyName() {
       const { deptList, danweiValue, textInputs } = this;
-      const vm = this;
       let name = "";
       let id = (this.deptId = danweiValue.reverse()[0]);
 
       deptList.forEach(function(item) {
         if (item.value == id) {
-          vm.deptNumber = item.deptNumber;
+          this.deptNumber = item.deptNumber;
           name += item.name;
         }
       });
