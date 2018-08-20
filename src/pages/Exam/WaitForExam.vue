@@ -87,6 +87,9 @@ export default {
             };
 
             vm.$storage.setItem('paper', data);
+          } else {
+            this.$router.push({name: 'home'})
+            return;
           }
         })
         .catch(function(error) {

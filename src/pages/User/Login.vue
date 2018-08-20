@@ -196,7 +196,7 @@ export default {
 }
 
 .login_type_btn {
-  position: fixed;
+  position: absolute;
   bottom: 60px;
   left: 50%;
   color: #1AAD19;
@@ -204,7 +204,7 @@ export default {
 }
 
 .copyright {
-  position: fixed;
+  position: absolute;
   bottom: 15px;
   left: 50%;
   color: #ccc;
