@@ -1,7 +1,7 @@
 <template>
   <div>
     <template v-if="!showMsg">
-      <form :class="$style['form-box']" autocomplete="off" @submit.prevent="register">
+      <form :class="$style['form-box']" autocomplete="off" @submit.prevent="1">
         <div :class="$style.logoBox"><img :class="$style.logo" src="../../assets/images/logo.png" alt="logo"></div>
         <div v-transfer-dom>
           <popup v-model="showPopup">
@@ -27,6 +27,9 @@
               v-on:click="showPic(input.name)"
               v-bind:ref="input.name" 
             >
+            <template v-if="input.name == 'checkCode'">
+              <XButton :class="$style.code_btn" :disabled="btnDisabled" :text="btnText" @click.native="sendCode"></XButton>
+            </template>
             <template v-if="input.name == 'password'">
               <span :class="[$style.icon_wrap, $style.eye]" v-show="input.value && showPwd" @click="toggleShowPwd"></span>
               <span :class="[$style.icon_wrap, $style.eye2]" v-show="input.value && !showPwd" @click="toggleShowPwd"></span>
@@ -35,7 +38,7 @@
               <span :class="[$style.icon_wrap, $style.eye]" v-show="input.value && showPwd2" @click="toggleShowPwd2"></span>
               <span :class="[$style.icon_wrap, $style.eye2]" v-show="input.value && !showPwd2" @click="toggleShowPwd2"></span>
             </template>
-            <span :class="$style['icon-placeholder']">
+            <span :class="$style['icon-placeholder']" v-bind:style="{ right: input.name == 'checkCode' ? '90px' : '0' }">
               <icon v-bind:type="input.icon"></icon>
             </span>
           </div>
@@ -55,7 +58,7 @@
       </div>
       <toast v-model="showToast" type="warn">请正确填写注册信息</toast>
     </template>
-    <msg v-if="showMsg" title="恭喜您注册成功！" description="即将跳转到登录界面，请稍后..." :buttons="buttons" icon="success"></msg>
+    <msg v-if="showMsg" title="恭喜您注册成功！" :buttons="buttons" icon="success"></msg>
   </div>
 </template>
 
@@ -98,6 +101,8 @@ export default {
         onClick: this.toLogin.bind(this)
       }],
       showMsg: false,
+      btnText: '获取验证码',
+      btnDisabled: false,
 
       deptList: [],
       danweiValue: [],
@@ -135,9 +140,23 @@ export default {
         {
           value: "",
           icon: "",
+          type: "text",
+          name: "idcards",
+          placeholder: "身份证"
+        },
+        {
+          value: "",
+          icon: "",
           type: "tel",
           name: "phone",
           placeholder: "手机号码"
+        },
+        {
+          value: "",
+          icon: "",
+          type: "text",
+          name: "checkCode",
+          placeholder: "验证码"
         },
         {
           value: "",
@@ -160,6 +179,63 @@ export default {
     this._getDeptList();
   },
   methods: {
+
+    sendCode () {
+      let name = 'phone'
+      const { textInputs } = this;
+      textInputs.forEach(input => {
+        if (input.name === name) {
+          let phone = input.value.trim();
+          if (phone === "") {
+            input.icon = "warn";
+            this.$vux.toast.show({
+              text: '请先输入手机号',
+              type: 'warn'
+            });
+          } else if (phone.length != 11) {
+            input.icon = "warn";
+            this.$vux.toast.show({
+              text: '请输入正确的手机号',
+              type: 'warn'
+            });
+          } else {
+            input.icon = "";
+            this.$store.dispatch('sendCode', { phone }).then( resp => {
+              if (resp.code == 0) {
+                this.countDown();
+                this.$vux.toast.show({
+                  text: '已发送'
+                });
+              }
+            })
+          }
+        }
+      });
+    },
+
+    next () {
+      this.validate = true;
+    },
+    prev () {
+      this.validate = false;
+    },
+    countDown () {
+      // 发送验证码后开始倒计时
+      let count = 120;
+      const timer = setInterval( () => {
+        if (count > 0) {
+          this.btnDisabled = true;
+          this.btnText = `${count}秒`
+          count--;
+        } else {
+          this.btnDisabled = false;
+          this.btnText = '获取验证码';
+          clearInterval(timer);
+        }
+      }, 1000)
+    },
+
+
     getType(type, name) {
       if (type === 'password') {
         if (name === 'password') {
@@ -183,9 +259,7 @@ export default {
       this.toLogin();
     },
     toLogin () {
-      setTimeout(() => {
-        this.$router.push({ path: "/home" });
-      }, 2000);
+      this.$router.push({ path: "/login" });
     },
     _getDeptList() {
       // 获取所属单位列表数据
@@ -340,7 +414,6 @@ export default {
       this._confirmPwd();
       if (!this.formPass) {
         this.showToast = !this.formPass;
-        console.log(this.showToast);
         return;
       }
 
@@ -369,7 +442,7 @@ export default {
       let name = "";
       let id = (this.deptId = danweiValue.reverse()[0]);
 
-      deptList.forEach(function(item) {
+      deptList.forEach(item => {
         if (item.value == id) {
           this.deptNumber = item.deptNumber;
           name += item.name;
@@ -406,7 +479,7 @@ body {
 
 .logoBox {
   text-align: center;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .infoBox {
@@ -514,5 +587,27 @@ input:focus {
 .eye2 {
   background: url(../../assets/images/eye2.png);
   background-size: cover;
+}
+
+
+.code_btn {
+  position: absolute!important;
+  right: 0px!important;
+  top: 0px!important;
+  height: 30px!important;
+  line-height: 30px!important;
+  padding: 0 5px!important;
+  background: #fff!important;
+  width: auto!important;
+  font-size: 16px!important;
+  color: #1AAD19!important;
+  width: 90px!important;
+}
+.code_btn[disabled] {
+  color: rgba(0, 0, 0, 0.3)!important;
+  background-color: #F7F7F7!important;
+}
+.code_btn::after {
+  border: 0!important;
 }
 </style>

@@ -37,6 +37,27 @@ const user = {
         return axios.post(url, data);
     },
 
+    // 注册时发送验证
+    sendCode: (data=null) => {
+        let url = '/sage/message/sendSms';
+        return axios.post(url, data);
+    },
+    // 忘记密码时发送验证
+    sendCodeBack: (data=null) => {
+        let url = '/sage/message/sendSmsBack';
+        return axios.post(url, data);
+    },
+    // 忘记密码时发送验证
+    validateCodeBack: (data=null) => {
+        let url = '/sys/forgetPassword';
+        return axios.post(url, data);
+    },
+    // 更新密码
+    updatePassword: (data=null) => {
+        let url = '/sys/updatePwd';
+        return axios.post(url, data);
+    },
+
 };
 
 const exam = {

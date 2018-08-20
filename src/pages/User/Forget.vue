@@ -1,51 +1,55 @@
 <template>
-  <form :class="$style.container">
-    <img :class="$style.logo" src="../../assets/images/logo.png" alt="logo">
-    <div :class="$style['tips-container']">
-      <span :class="$style.tips">{{ tips }}</span>
-    </div>
-    <template v-if="!validate">
-      <input :class="$style.input" type="number" placeholder="手机号" v-model="phone" autofocus>
-      
-      <div :class="$style.input_wrap">
-        <input :class="$style.input" type="text" placeholder="验证码" v-model="code">
-        <XButton :class="$style.code_btn" :disabled="btnDisabled" :text="btnText" @click.native="sendCode"></XButton>
+  <div>
+    <form v-if="!showMsg" :class="$style.container">
+      <img :class="$style.logo" src="../../assets/images/logo.png" alt="logo">
+      <div :class="$style['tips-container']">
+        <span :class="$style.tips">{{ tips }}</span>
       </div>
-      <XButton
-        text="下一步" 
-        type="primary"
-        :disabled="nextDisabled"
-        @click.native="next" 
-      >
-      </XButton>
-    </template>
-    <template v-else>
-      <div :class="$style.input_wrap">
-        <input :class="$style.input" type="password" placeholder="新密码" v-model="password" autofocus>
-      </div>
-      
-      <div :class="$style.input_wrap">
-        <input :class="$style.input" type="password" placeholder="确认新密码" v-model="password2">
-      </div>
-      <XButton
-        text="确认" 
-        type="primary"
-        @click.native="submit" 
-      >
-      </XButton>
-      <XButton
-        text="返回上一步" 
-        plain
-        @click.native="prev" 
-      >
-      </XButton>
-    </template>
-  </form>
+      <template v-if="!validate">
+        <input :class="$style.input" type="number" placeholder="手机号" v-model="phone" autofocus>
+        
+        <div :class="$style.input_wrap">
+          <input :class="$style.input" type="text" placeholder="验证码" v-model="checkCode">
+          <XButton :class="$style.code_btn" :disabled="btnDisabled" :text="btnText" @click.native="sendCode"></XButton>
+        </div>
+        <XButton
+          text="下一步" 
+          type="primary"
+          :disabled="nextDisabled"
+          @click.native="next" 
+        >
+        </XButton>
+      </template>
+      <template v-else>
+        <div :class="$style.input_wrap">
+          <input :class="$style.input" type="password" placeholder="新密码" v-model="password" autofocus>
+        </div>
+        
+        <div :class="$style.input_wrap">
+          <input :class="$style.input" type="password" placeholder="确认新密码" v-model="newPassword">
+        </div>
+        <XButton
+          text="确认" 
+          type="primary"
+          @click.native="submit" 
+        >
+        </XButton>
+        <XButton
+          text="返回上一步" 
+          plain
+          @click.native="prev" 
+        >
+        </XButton>
+      </template>
+    </form>
+    <msg v-if="showMsg" title="恭喜密码重置成功！" :buttons="buttons" icon="success"></msg>
+  </div>
 </template>
 
 <script>
 import {
   XButton,
+  Msg
 } from "vux";
 import { setInterval, clearInterval } from 'timers';
 
@@ -55,12 +59,19 @@ export default {
     return {
       tips: "",
       phone: "",
-      code: "",
+      checkCode: "",
+
+      showMsg: true,
+      buttons: [{
+        type: 'primary',
+        text: '立即登录',
+        onClick: this.toLogin.bind(this)
+      }],
 
       validate: false, // 是否通过验证码验证
 
       password: '',
-      password2: '',
+      newPassword: '',
 
       btnText: '获取验证码',
       btnDisabled: false,
@@ -68,10 +79,11 @@ export default {
   },
   components: {
     XButton,
+    Msg
   },
   computed: {
     nextDisabled () {
-      if (this.phone.length === 11 && this.code.length === 6) {
+      if (this.phone.length === 11 && this.checkCode.length === 6) {
         return true;
       }
       return false;
@@ -79,22 +91,63 @@ export default {
   },
   methods: {
     sendCode () {
-      this.countDown();
-      this.$vux.toast.show({
-        text: '已发送'
-      });
-
+      let phone = this.phone;
+      if (phone === "") {
+        this.$vux.toast.show({
+          text: '请先输入手机号',
+          type: 'warn'
+        });
+        return;
+      } 
+      if (phone.length != 11) {
+        this.$vux.toast.show({
+          text: '请输入正确的手机号',
+          type: 'warn'
+        });
+        return;
+      }
+      this.$store.dispatch('sendCodeBack', { phone }).then( resp => {
+        console.log(resp)
+        if (resp.data.code == 0) {
+          this.countDown();
+          this.$vux.toast.show({
+            text: '已发送'
+          });
+        }
+      })
     },
 
     next () {
-      this.validate = true;
+      let { phone, checkCode } = this;
+      if (phone === "") {
+        this.$vux.toast.show({
+          text: '请先输入手机号',
+          type: 'warn'
+        });
+        return;
+      }
+      if (checkCode === "") {
+        this.$vux.toast.show({
+          text: '请先输入验证码',
+          type: 'warn'
+        });
+        return;
+      }
+      this.$store.dispatch('validateCodeBack', { phone, checkCode }).then( resp => {
+        if (resp.data.code == 0) {
+          // this.$vux.toast.show({
+          //   text: '验证成功'
+          // });
+          this.validate = true;
+        }
+      })
     },
     prev () {
       this.validate = false;
     },
     countDown () {
       // 发送验证码后开始倒计时
-      let count = 30;
+      let count = 120;
       const timer = setInterval( () => {
         if (count > 0) {
           this.btnDisabled = true;
@@ -109,35 +162,34 @@ export default {
     },
     submit() {
       const vm = this;
-      const { password, password2 } = vm;
+      const { phone, password, newPassword } = vm;
 
-      if (!password || !password2) {
-        vm.tips = "用户名或密码不能为空";
+      if (!password || !newPassword) {
+        this.$vux.toast.show({
+          text: '密码不能为空',
+          type: 'warn'
+        });
         return;
       }
-
-      axios
-        .post("/login", {
-          phone,
-          password
-        })
-        .then(function(resp) {
-          if (resp.data.code == 0) {
-            
-            vm.$vux.toast.show({
-              text: '登录成功'
-            })
-            vm.$store.commit('setUserInfo', resp.data.data.user);
-            vm.$store.commit('login', true);
-            
-            vm.$router.push({ path: "/home" });
-          } else {
-            vm.tips = "用户名或密码错误";
-          }
-        })
-        .catch(function(error) {
-          console.log(error);
+      if (password != newPassword) {
+        this.$vux.toast.show({
+          text: '两次密码输入不同',
+          type: 'warn'
         });
+        return;
+      }
+      this.$store.dispatch('updatePassword', { phone, password, newPassword }).then( resp => {
+        if (resp.data.code == 0) {
+          this.$vux.toast.show({
+            text: resp.data.msg
+          });
+          this.showMsg = true;
+        }
+      })
+      
+    },
+    toLogin () {
+      this.$router.push({ path: "/login" });
     }
   }
 };

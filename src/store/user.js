@@ -1,4 +1,5 @@
 import axios from "axios";
+import Vue from 'vue';
 import api from "../util/api";
 import router from '../router';
 
@@ -70,8 +71,21 @@ const actions = {
     },
 
     sendCode (context, payload) {
-        // api.
-    }
+        // 注册时发送验证
+        return api.sendCode(payload)
+    },
+    sendCodeBack (context, payload) {
+        // 忘记密码时发送验证
+        return api.sendCodeBack(payload)
+    },
+    validateCodeBack (context, payload) {
+        // 忘记密码时后台校验手机验证码
+        return api.validateCodeBack(payload)
+    },
+    updatePassword (context, payload) {
+        // 更新密码
+        return api.updatePassword(payload)
+    },
 }
 
 export default {

@@ -48,7 +48,7 @@
     </div>
 
     <span :class="$style.login_type_btn" @click="changeLoginType">{{ loginByPhone ? '身份证号登录' : '手机号登录' }}</span>
-
+    <span :class="$style.copyright">&copy;京ICP备17059190号-1</span>
   </div>
 </template>
 
@@ -197,9 +197,18 @@ export default {
 
 .login_type_btn {
   position: fixed;
-  bottom: 10px;
+  bottom: 60px;
   left: 50%;
   color: #1AAD19;
+  transform: translateX(-50%);
+}
+
+.copyright {
+  position: fixed;
+  bottom: 15px;
+  left: 50%;
+  color: #ccc;
+  width: 100%;
   transform: translateX(-50%);
 }
 </style>
