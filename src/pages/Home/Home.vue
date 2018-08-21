@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     click() {
-      let data = this.$store.state.exam.data;
+      let data = this.$store.state.exam.data || this.$storage.getItem('data');
       if (!data) {
         this.$vux.toast.show({
             type: 'warn',

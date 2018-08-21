@@ -71,7 +71,6 @@ import {
   GroupTitle,
   Toast,
   XButton,
-  Loading,
   Icon,
   Msg,
   TransferDomDirective as TransferDom
@@ -88,7 +87,6 @@ export default {
     GroupTitle,
     Popup,
     XButton,
-    Loading,
     Icon,
     Msg,
     Toast
@@ -201,10 +199,11 @@ export default {
           } else {
             input.icon = "";
             this.$store.dispatch('sendCode', { phone }).then( resp => {
-              if (resp.code == 0) {
+              if (resp.data.code == 0) {
                 this.countDown();
                 this.$vux.toast.show({
-                  text: '已发送'
+                  text: '已发送',
+                  type: 'text'
                 });
               }
             })
@@ -268,13 +267,10 @@ export default {
       const options = {
         url,
         method: "GET",
-        // headers: { "content-type": "application/x-www-form-urlencoded" }
       };
       axios(options)
         .then(resp => {
-          this.loading = false;
           if (resp.data.code == 0) {
-            this.loginOK = true;
             this.deptList = resp.data.deptList.map(item => {
               // 数字转成字符串，否则会出问题
               return {
@@ -418,7 +414,6 @@ export default {
       }
 
       const data = this._getData();
-      this.loading = true;
 
       let url = "/api/register";
       const options = {
@@ -428,9 +423,7 @@ export default {
       };
       axios(options)
         .then(resp => {
-          this.loading = false;
           if (resp.data.code == 0) {
-            this.loginOK = true;
             this.showMsg = true;
           } else {
             // this.tips = resp.data.message;

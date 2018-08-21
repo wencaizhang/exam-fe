@@ -61,7 +61,7 @@ export default {
       phone: "",
       checkCode: "",
 
-      showMsg: true,
+      showMsg: false,
       buttons: [{
         type: 'primary',
         text: '立即登录',
@@ -111,7 +111,8 @@ export default {
         if (resp.data.code == 0) {
           this.countDown();
           this.$vux.toast.show({
-            text: '已发送'
+            text: '已发送',
+            type: 'text'
           });
         }
       })

@@ -72,6 +72,7 @@ axios.interceptors.response.use( response => {
   }, error => {
     //请求错误时做些事
     Vue.$vux.loading.hide()
+    console.log(error)
     return Promise.reject(error);
   });
 
