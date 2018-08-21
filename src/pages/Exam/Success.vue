@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div :class="$style.container">
     
     <p :class="$style.msg">得分：{{ score }}</p>
     <p :class="$style.msg">用时：{{ time }}</p>
 
     <div :class="$style.btns">
-      <XButton :class="$style.btn" type="primary" text="查看答案及解析" link="/answer"></XButton>
+      <XButton :class="$style.btn" type="primary" text="查看答案及解析" link="/exam/0"></XButton>
       <XButton :class="$style.btn" type="primary" text="重新开始考试" link="/waitforexam"></XButton>
     </div>
   </div>
@@ -55,36 +55,30 @@ export default {
     data.myAnswer = JSON.stringify(data.myAnswer);
     data.trueAnswer = JSON.stringify(data.trueAnswer);
 
-    let url = '/exam/score/insertScore';
-    const options = {
-      url,
-      method: 'POST',
-      headers: { 'content-type': 'application/x-www-form-urlencoded' },
-      data: qs.stringify(data),
-    };
-    
-    axios((options))
-      .then(function(resp) {
+    this.$store.dispatch('insertScore', data)
+      .then(resp => {
         if (resp.data.code == 0) {
-          // debugger;
+          this.$vux.toast.show({
+            text: '成功交卷',
+          });
         }
-      })
-      .catch(function(error) {
-        console.log(error);
       });
   }
 }
 </script>
 
 <style module>
+.container {
+  padding-top: 30px;
+}
 .msg {
-  margin-top: 30px;
-  text-align: center;
+  margin-top: 10px;
   font-size: 26px;
+  text-indent: 50px;
 }
 
 .btns {
-  margin-top: 20px;
+  margin-top: 50px;
 }
 .btn {
   width: 80%!important;

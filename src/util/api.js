@@ -76,7 +76,7 @@ const exam = {
     },
     insertScore: (data=null) => {
         // 提交答案
-        let url = "/exam/score/insertScore";
+        let url = '/sage/exam/score/insertScore';
         return axios.post(url, data);
     },
 

@@ -1,3 +1,4 @@
+import api from "../util/api";
 
 const state = {
     loading: false,  // 请求中
@@ -256,9 +257,16 @@ const mutations = {
     }
 }
 
+const actions = {
+    insertScore (context, payload) {
+        // 提交答案
+        return api.insertScore(payload)
+    },
+}
 
 export default {
     state,
     getters,
-    mutations
+    mutations,
+    actions
 }
