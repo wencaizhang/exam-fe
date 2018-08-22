@@ -10,6 +10,9 @@
 
 export default {
     name: "app",
+    created() {
+        this.$store.commit('initState', JSON.stringify(this.$store.state));
+    },
 }
 
 </script>

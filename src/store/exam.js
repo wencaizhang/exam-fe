@@ -12,6 +12,8 @@ const state = {
     startTime: 0,
     endTime: 0,
 
+    paper: '',
+
     // ---------以上为状态类 state
     data: '',
     index: 0,  // 当前题目的索引
@@ -112,6 +114,10 @@ const mutations = {
 
     setExamData: (state, payload) => {
         state.data = payload;
+    },
+
+    setPaper: (state, payload) => {
+        state.paper = payload;
     },
 
     addDuringSeconds: (state, value) => {

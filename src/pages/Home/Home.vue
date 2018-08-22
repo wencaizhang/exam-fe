@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     click() {
-      let data = this.$store.state.exam.data || this.$storage.getItem('data');
+      let data = this.$store.state.exam.data;
       if (!data) {
         this.$vux.toast.show({
             type: 'warn',
@@ -53,7 +53,6 @@ export default {
     let data = this.$route.params.data;
     if (data) {
       this.$store.commit('setExamData', this.$route.params.data);
-      this.$storage.setItem('data', this.$route.params.data);
       this.$router.push({ name: 'home' });
     }
   }

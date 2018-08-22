@@ -14,8 +14,19 @@ const index = {
         showWarn: false,
         warnText: '',
         loadText: '',
+        initStateString: '',
     },
     mutations: {
+        initState: (state, str) => {
+            state.initStateString = str;
+        },
+        resetState (state) {
+        //   const initial = initialState()
+            const initial = JSON.parse(state.initStateString);
+            console.log(initial)
+            Object.keys(initial).forEach(key => { state[key] = initial[key] })
+        },
+
         toggleShowLoading: (state, bool) => {
             state.showWarn = false;
             state.showLoading = bool;

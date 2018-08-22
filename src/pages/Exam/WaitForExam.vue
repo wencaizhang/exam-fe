@@ -60,11 +60,9 @@ export default {
     getInfo () {
       const vm = this;
       let url = '/sage/exam/examination/info';
-      let localData = vm.$storage.getItem('data');
-      let stateData = vm.$store.state.exam.data;
 
       const data = { 
-        data: stateData || localData
+        data: this.$store.state.exam.data
       };
       const options = {
         url,
@@ -86,7 +84,8 @@ export default {
               id: resp.data.examination.id,
             };
 
-            vm.$storage.setItem('paper', data);
+            // vm.$storage.setItem('paper', data);
+            vm.$store.commit('setPaper', data);
           } else {
             this.$router.push({name: 'home'})
             return;
@@ -100,7 +99,9 @@ export default {
       const vm = this;
       let url = '/sage/exam/paperProduce/produce';
 
-      const data = vm.$storage.getItem('paper', data);
+      // const data = vm.$storage.getItem('paper', data);
+
+      const data = vm.$store.state.exam.paper;
 
       const options = {
         url,

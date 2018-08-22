@@ -6,6 +6,7 @@ import router from '../router';
 const state = {
     name: '用户名',
     userId: '',
+    token: '',
     login: false,
     userInfo: {},
 }
@@ -16,6 +17,9 @@ const getters = {
 const mutations = {
     setUserId: (state, id) => {
         state.userId = id;
+    },
+    setToken: (state, token) => {
+        state.token = token;
     },
     setUserInfo: (state, payload) => {
         state.name = payload.name;
@@ -32,9 +36,7 @@ const actions = {
         .then(function(resp) {
           if (resp.data.code == 0) {
 
-            Vue.prototype.$storage.setItem('token', resp.data.token);
-            Vue.prototype.$storage.setItem('userId', resp.data.userId);
-
+            context.commit("setToken", resp.data.token);
             context.commit("setUserId", resp.data.userId);
             context.commit("changeLoginStat", true);
             router.push({ path: "/home" });
@@ -43,24 +45,12 @@ const actions = {
         })
     },
     logout (context, payload) {
-        
-        api.logout({ userId: (context.state.userId || Vue.prototype.$storage.getItem('userId')) + '' })
-        .then(function(resp) {
-          if (resp.data.code == 0) {
-
-            axios.defaults.headers.token = '';
-            Vue.prototype.$storage.clear();
-
-            context.commit("changeLoginStat", false);
-            router.push({ path: "/login" });
-
-          }
-        })
+        return api.logout({ userId: context.state.userId + '' });
     },
 
     getUserInfo (context, payload) {
 
-        api.getUserInfo({ userId: (context.state.userId || Vue.prototype.$storage.getItem('userId')) + '' })
+        api.getUserInfo({ userId: context.state.userId + '' })
         .then(function(resp) {
           if (resp.data.code == 0) {
 

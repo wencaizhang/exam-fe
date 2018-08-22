@@ -34,8 +34,7 @@ import { XButton, Group, CellBox } from "vux";
 export default {
   data() {
     return {
-      // avatar: 'http://5b0988e595225.cdn.sohucs.com/images/20171216/a72351d45dee4e6fa270985fb5394f1e.jpeg'
-      avatar: 'http://dwz.cn/f2Tyb1OM',
+      avatar: 'http://dwz.cn/mJZWSqdL',
     };
   },
   components: {
@@ -53,7 +52,12 @@ export default {
   },
   methods: {
     logout() {
-      this.$store.dispatch('logout');
+      this.$store.dispatch('logout').then(resp => {
+        if (resp.data.code == 0) {
+          this.$store.commit('resetState')
+          this.$router.push({ path: "/login" });
+        }
+      });
     },
     okHandler (resp) {
       const vm = this;
