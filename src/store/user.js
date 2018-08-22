@@ -33,7 +33,7 @@ const mutations = {
 const actions = {
     login (context, payload) {
         api.login(payload)
-        .then(function(resp) {
+        .then(resp => {
           if (resp.data.code == 0) {
 
             context.commit("setToken", resp.data.token);
@@ -51,7 +51,7 @@ const actions = {
     getUserInfo (context, payload) {
 
         api.getUserInfo({ userId: context.state.userId + '' })
-        .then(function(resp) {
+        .then(resp => {
           if (resp.data.code == 0) {
 
             context.commit("setUserInfo", resp.data.data);

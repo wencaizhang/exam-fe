@@ -71,7 +71,7 @@ export default {
       };
       
       axios((options))
-        .then(function(resp) {
+        .then(resp => {
           if (resp.data.code == 0) {
             vm.countExamNumber = resp.data.countExamNumber;
             vm.examination = resp.data.examination;
@@ -90,9 +90,6 @@ export default {
             this.$router.push({name: 'home'})
             return;
           }
-        })
-        .catch(function(error) {
-          console.log(error);
         });
     },
     getIds () {
@@ -110,7 +107,7 @@ export default {
       };
       
       axios((options))
-        .then(function(resp) {
+        .then(resp => {
           if (resp.data.code == 0) {
             const data = JSON.parse(resp.data.paperDuce.details);
 
@@ -128,9 +125,6 @@ export default {
           } else {
             alert(resp.data.msg);
           }
-        })
-        .catch(function(error) {
-          console.log(error);
         });
     },
   },

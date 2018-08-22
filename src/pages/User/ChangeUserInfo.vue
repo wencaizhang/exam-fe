@@ -81,7 +81,7 @@ export default {
       };
 
       axios(options)
-        .then(function(resp) {
+        .then(resp => {
           vm.loading = false;
           if (resp.data.code == 0) {
             vm.loginOK = true;
@@ -94,9 +94,6 @@ export default {
           } else {
             vm.tips = "用户名或密码错误";
           }
-        })
-        .catch(function(error) {
-          console.log(error);
         });
     }
   }

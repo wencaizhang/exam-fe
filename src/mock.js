@@ -1,6 +1,6 @@
 const Mock = require('mockjs');
 
-const login = function (data) {
+const login = (data) => {
     const json = JSON.parse(data.body);
     return {
         code: 0,

@@ -78,7 +78,7 @@ export default {
       };
       
       axios((options))
-        .then(function(resp) {
+        .then(resp => {
           if (resp.data.code == 0) {
             vm.loading = false;
             const data = {}
@@ -90,9 +90,6 @@ export default {
             vm.$store.commit('changeId', list[0].id);
             vm.$store.commit('toggleShowQuestion', true);
           }
-        })
-        .catch(function(error) {
-          console.log(error);
         });
     },
     getIndexByRoute () {
@@ -101,7 +98,7 @@ export default {
     }
   },
   watch: {
-    '$route': function (to, from) {
+    '$route': (to, from) => {
       if (to.name == 'exam' && from.name == 'exam') {
 
       }

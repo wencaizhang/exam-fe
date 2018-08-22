@@ -34,7 +34,7 @@ export default {
   },
   methods: {},
   // watch: {
-  //   '$route': function (newV) {
+  //   '$route': (newV) => {
   //     console.log(newV)
       
   //   }
