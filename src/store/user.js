@@ -27,10 +27,11 @@ const mutations = {
     },
     changeLoginStat: (state, bool) => {
         state.login = bool;
-    }
+    },
 }
 
 const actions = {
+
     login (context, payload) {
         api.login(payload)
         .then(resp => {

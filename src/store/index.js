@@ -20,12 +20,6 @@ const index = {
         initState: (state, str) => {
             state.initStateString = str;
         },
-        resetState (state) {
-        //   const initial = initialState()
-            const initial = JSON.parse(state.initStateString);
-            console.log(initial)
-            Object.keys(initial).forEach(key => { state[key] = initial[key] })
-        },
 
         toggleShowLoading: (state, bool) => {
             state.showWarn = false;
@@ -41,8 +35,30 @@ const index = {
         setLoadText: (state, text) => {
             state.loadText = text;
         },
+    },
+    actions: {
+        resetState (context) {
+            const initial = JSON.parse(context.rootState.index.initStateString);
+            Object.keys(initial).forEach(key => { 
+                context.commit('reset' + key, initial[key])
+            })
+        },
     }
 }
+
+const modules = {
+    index,
+    exam,
+    user
+}
+
+Object.keys(modules).forEach( key => {
+    // 为每个 module 创建一个重置为处置初始状态的 mutations
+	modules[key]['mutations'][ 'reset' + key ] = (state, initState) => {
+        Object.assign( state, initState );
+    }
+
+})
 
 export default new vuex.Store({
     
@@ -68,9 +84,10 @@ export default new vuex.Store({
             logger: console, // 自定义 console 实现，默认为 `console`
         })
     ],
-    modules: {
-        index,
-        exam,
-        user
-    }
+    // modules: {
+    //     index,
+    //     exam,
+    //     user
+    // }
+    modules,
 })
