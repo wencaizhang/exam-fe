@@ -40,7 +40,6 @@ axios.interceptors.request.use(config => {
 
     // 这个接口用于请求题目，频繁出现 loading 太乱，跳过这个接口
     if (config.url !== '/sage/exam/equestionmanagement/getByIds') {
-        // store.commit('toggleShowLoading', true);
         Vue.$vux.loading.show({
             text: 'Loading'
         })

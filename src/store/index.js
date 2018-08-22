@@ -10,30 +10,11 @@ import user from './user'
 
 const index = {
     state: {
-        showLoading: false,
-        showWarn: false,
-        warnText: '',
-        loadText: '',
         initStateString: '',
     },
     mutations: {
         initState: (state, str) => {
             state.initStateString = str;
-        },
-
-        toggleShowLoading: (state, bool) => {
-            state.showWarn = false;
-            state.showLoading = bool;
-        },
-        toggleShowWarn: (state, bool) => {
-            state.showLoading = false;
-            state.showWarn = bool;
-        },
-        setWarnText: (state, text) => {
-            state.warnText = text;
-        },
-        setLoadText: (state, text) => {
-            state.loadText = text;
         },
     },
     actions: {

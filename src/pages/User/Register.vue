@@ -262,7 +262,7 @@ export default {
     },
     _getDeptList() {
       // 获取所属单位列表数据
-      this.$store.commit('setLoadText', '正在请求单位列表')
+      // this.$store.commit('setLoadText', '正在请求单位列表')
       let url = "/sys/dept/list";
       const options = {
         url,
