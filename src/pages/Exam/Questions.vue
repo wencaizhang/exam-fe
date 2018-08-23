@@ -47,6 +47,7 @@ export default {
       return this.$store.state.exam.showQuestion;
     },
     question() {
+      console.log(this.$store.getters.question)
       return this.$store.getters.question || {};
     },
     disabled() {

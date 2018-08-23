@@ -129,7 +129,7 @@ export default [
         }
     },
     {
-        path: '/exam/:index',
+        path: '/exam/',
         name: 'exam',
         component: Exam,
         meta: {

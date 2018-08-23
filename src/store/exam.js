@@ -59,8 +59,8 @@ const getters = {
                 return;
             }
 
-            var answer = item.question.answerId.split(',')
-            var myAnswer = item.myAnswer || [];
+            const answer = item.question.answerId.split(',')
+            const myAnswer = item.myAnswer || [];
 
             let isRight = JSON.stringify(answer.sort()) === JSON.stringify(myAnswer.sort())
             item.isRight = isRight;
@@ -132,9 +132,7 @@ const mutations = {
     },
 
     // 在切换题目时，有一个先隐藏，后展示题目模块的步骤，暂时不完善
-    toggleShowQuestion: (state, bool) => {
-        state.showQuestion = bool;
-    },
+    toggleShowQuestion: (state) => { state.showQuestion = !state.showQuestion; },
 
     // 保存用户的答案
     setAnwser: (state, payload) => {
@@ -176,8 +174,14 @@ const mutations = {
     },
 
     // 切换上一题下一题
-    toPrev: state => --state.index,
-    toNext: state => ++state.index,
+    toPrev: state => {
+        --state.index;
+        state.id = state.idList[state.index].id
+    },
+    toNext: state => {
+        ++state.index;
+        state.id = state.idList[state.index].id
+    },
 
     // 保存 ids
     setIdList: (state, list) => {
@@ -189,15 +193,20 @@ const mutations = {
         
         payload.forEach(item => {
             
+            // 若后台数据无选项，则补充一个提示
+            item.optionList = item.optionList || [
+                {content: '本道题无选项', flag: 'X', id: '000'}
+            ]
+
             // 排序
             item.optionList.sort( (a, b) => {
-                var s = a.flag.toLowerCase();
-                var t = b.flag.toLowerCase();
+                let s = a.flag.toLowerCase();
+                let t = b.flag.toLowerCase();
                 if(s < t) return -1;
                 if(s > t) return 1;
             });
 
-            // 映射
+            // 映射，给选项补充一个 ABCD 的标识
             item.optionList = item.optionList.map(item => {
                 return {
                     key: item.flag,
@@ -238,8 +247,8 @@ const mutations = {
                 return;
             }
 
-            var answer = item.question.answerId.split(',')
-            var myAnswer = item.myAnswer || [];
+            const answer = item.question.answerId.split(',')
+            const myAnswer = item.myAnswer || [];
 
             let isRight = JSON.stringify(answer.sort()) === JSON.stringify(myAnswer.sort())
             item.isRight = isRight;

@@ -57,19 +57,15 @@ export default {
       let result = new Date(date).getTime();
       return result;
     },
-    getInfo () {
-      let url = '/sage/exam/examination/info';
+    getExamInfo () {
+      // 用户扫描二维码，打开网页
+      // url 中有本次考试的字段 data
+      // 根据这个字段，获取本次考试相关数据
+      // 这些数据用于本页面展示考试信息、获取考试题目和提交试卷
 
-      const data = { 
-        data: this.$store.state.exam.data
-      };
-      const options = {
-        url,
-        method: 'POST',
-        data,
-      };
-      
-      axios((options))
+      let url = '/sage/exam/examination/info';
+      const data = { data: this.$store.state.exam.data };
+      axios.post(url, data)
         .then(resp => {
           if (resp.data.code == 0) {
             this.countExamNumber = resp.data.countExamNumber;
@@ -83,7 +79,6 @@ export default {
               id: resp.data.examination.id,
             };
 
-            // this.$storage.setItem('paper', data);
             this.$store.commit('setPaper', data);
           } else {
             this.$router.push({name: 'home'})
@@ -92,17 +87,10 @@ export default {
         });
     },
     getIds () {
+      // 首先获取所有考试题目的 id
       let url = '/sage/exam/paperProduce/produce';
-
       const data = this.$store.state.exam.paper;
-
-      const options = {
-        url,
-        method: 'POST',
-        data,
-      };
-      
-      axios((options))
+      axios.post(url, data)
         .then(resp => {
           if (resp.data.code == 0) {
             const data = JSON.parse(resp.data.paperDuce.details);
@@ -117,13 +105,13 @@ export default {
 
             this.$store.commit('setIdList', idList);
 
-            this.$router.push( { name: 'exam', params: { index: 0 } } );
+            this.$router.push( { name: 'exam' } );
           } 
         });
     },
   },
   created() {
-    this.getInfo();
+    this.getExamInfo();
   }
 };
 </script>

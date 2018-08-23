@@ -71,9 +71,32 @@ export default {
 </script>
 
 <style>
-
+/* 所有题目 Checker 样式 */
+.checker-item {
+    text-align: center;
+    width: 10%;
+    margin: 1.2%;
+    height: 30px;
+    line-height: 30px;
+    background-color: #ddd;
+    color: #222;
+    font-size: 14px;
+    border-radius: 15px;
+}
+.vux-checker-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+.checker-item-selected {
+    background-color: #ff3b3b;
+    color: #fff;
+}
+.checker-item-disabled {
+    color: #999;
+}
 .check-item-answered {
-  border: 1px solid red;
+  border: 1px solid #1aad19;
 }
 .check-item-marked {
   border: 1px dashed red;
