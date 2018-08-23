@@ -71,7 +71,7 @@ export default {
             this.countExamNumber = resp.data.countExamNumber;
             this.examination = resp.data.examination;
 
-            this.$store.commit('saveExamInfo', resp.data);
+            this.$store.commit('setExamInfo', resp.data);
 
             const data = {
               paperDesignId: resp.data.examination.paperId,

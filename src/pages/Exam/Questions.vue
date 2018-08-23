@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showQuestion" class="question-container">
+  <div class="question-container">
     <p class="question-type">{{ getType }}</p>
     <checklist
       v-model="model"
@@ -36,18 +36,13 @@ export default {
         return this.$store.state.exam.idList[this.$store.state.exam.index]['myAnswer'] || [];
       },
       set(value) {
-        console.log("选中的 value 分别是:", value);
         this.$store.commit({
           type: "setAnwser",
           value,
         });
       }
     },
-    showQuestion () {
-      return this.$store.state.exam.showQuestion;
-    },
     question() {
-      console.log(this.$store.getters.question)
       return this.$store.getters.question || {};
     },
     disabled() {
@@ -71,7 +66,6 @@ export default {
     }
   },
   mounted () {
-    // this.$store.commit('toggleShowQuestion', true);
   }
 };
 </script>

@@ -48,11 +48,14 @@ export default {
   },
   methods: {
     onConfirm(msg) {
-      this.showModal = false;
-      this.$store.commit('togglePause', true);  // 暂停
+
+      this.$store.dispatch('clearTimer');
+      // this.$store.commit('togglePause');  // 暂停
 
       let timestamp = Date.parse( new Date());
       this.$store.commit('setEndTime', timestamp);
+
+      this.showModal = false;
 
       this.$store.commit('marking');
       this.$router.push({ path: '/success'});

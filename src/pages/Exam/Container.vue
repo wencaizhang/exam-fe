@@ -53,7 +53,6 @@ export default {
           // id 和 index 同时改变
           this.$store.commit('changeIndex', 0);
           this.$store.commit('changeId', resp.data.list[0].id);
-          this.$store.commit('toggleShowQuestion', true);
         }
       })
     },
@@ -71,7 +70,6 @@ export default {
     //     // 如果题目已经被缓存，就不需要重新请求
     //     this.$store.commit('changeIndex', index);
     //     this.$store.commit('changeId', question.id);
-    //     this.$store.commit('toggleShowQuestion', true);
 
     //     return;
     //   };
@@ -99,7 +97,6 @@ export default {
     //         // id 和 index 同时改变
     //         this.$store.commit('changeIndex', index);
     //         this.$store.commit('changeId', list[0].id);
-    //         this.$store.commit('toggleShowQuestion', true);
     //       }
     //     });
     // },

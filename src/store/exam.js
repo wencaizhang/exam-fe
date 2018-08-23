@@ -4,7 +4,6 @@ const state = {
     loading: false,  // 请求中
     isPaused: false,  // 暂停
     done: false,  // 完成
-    showQuestion: false,  // 是否显示题目
     showAll: false,  // 显示所有题目编号
     showModal: false,  // 交卷提示框
 
@@ -34,7 +33,7 @@ const getters = {
         return 0;
         // return state.idList.length -state.anwsers.filter(item => item).length
     },
-    // 当前题目
+    // 当前题目 
     question: state => {
         // 不能使用 index 获取题目
         // return state.idList[state.index]['question'] || {};
@@ -105,54 +104,64 @@ const getters = {
           }
         }
         return time || '0秒';
-
     },
+
+    // 考试总时长，秒
+    getAllTheTime: state => state.examInfo.examination.examinationTimeLong * 60,
+    // 考试剩余时长，秒
+    getRemainingTime: state => {
+        let allTheTime = state.examInfo.examination.examinationTimeLong * 60;
+        let seconds =  allTheTime - state.duringSeconds >= 0 ? allTheTime - state.duringSeconds : 0;
+        let time = '';
+        const points = [
+          { value: 60 * 60, suffix: '小时', max: 1 },
+          { value: 60, suffix: '分钟', max: 1 },
+          { value: 1, suffix: '秒', max: 1 }
+        ];
+  
+        for (let i = 0; i < points.length; i++) {
+          let mode = Math.floor(seconds / points[i].value);
+          if (mode >= 1) {
+            seconds -= points[i].value * mode
+            time += Math.max(mode, points[i].max) + points[i].suffix;
+          }
+        }
+        return time || '0秒';
+    }
 
 }
 
 const mutations = {
 
-    setExamData: (state, payload) => {
-        state.data = payload;
-    },
+    setExamData: (state, payload) => state.data = payload,
 
-    setPaper: (state, payload) => {
-        state.paper = payload;
-    },
+    setPaper: (state, payload) => state.paper = payload,
 
-    addDuringSeconds: (state, value) => {
+    setExamInfo: (state, payload) => state.examInfo = payload,
 
-        state.duringSeconds += value;
-    },
-    setStartTime: (state, timestamp) => {
-        state.startTime = timestamp;
-    },
-    setEndTime: (state, timestamp) => {
-        state.endTime = timestamp;
-    },
-
-    // 在切换题目时，有一个先隐藏，后展示题目模块的步骤，暂时不完善
-    toggleShowQuestion: (state) => { state.showQuestion = !state.showQuestion; },
+    // 设置答题开始和结束时间
+    setStartTime: (state, timestamp) => state.startTime = timestamp,
+    setEndTime:   (state, timestamp) => state.endTime   = timestamp,
+    
+    // 保存题目id
+    setIdList: (state, list) => state.idList = list,
 
     // 保存用户的答案
-    setAnwser: (state, payload) => {
-        state.idList[state.index].myAnswer = payload.value;
-    },
+    setAnwser: (state, payload) => state.idList[state.index].myAnswer = payload.value,
+
+    addDuringSeconds: (state, value) => state.duringSeconds += value,
+
+    // 重置答题所用的时间
+    resetDuringTime: state => state.duringSeconds = 0,
     
     // 展示所有题目
-    showAll: (state, bool) => {
-        state.showAll = bool
-    },
+    showAll: (state, bool) => state.showAll = bool,
 
     // 交卷时展示提示框
-    showModal: (state, bool) => {
-        state.showModal = bool
-    },
+    showModal: (state, bool) => state.showModal = bool,
 
     // 暂停和答题的状态切换
-    togglePause: (state, bool) => {
-        state.isPaused = bool
-    },
+    togglePause: state => state.isPaused = !state.isPaused,
 
     // 从所有题目中随机挑一个题目回答时，获取该题目的 index
     changeIndex: (state, value) => {
@@ -183,10 +192,7 @@ const mutations = {
         state.id = state.idList[state.index].id
     },
 
-    // 保存 ids
-    setIdList: (state, list) => {
-        state.idList = list;
-    },
+
 
     // 保存题目信息
     pushQuestion: (state, payload) => {
@@ -194,11 +200,11 @@ const mutations = {
         payload.forEach(item => {
             
             // 若后台数据无选项，则补充一个提示
-            item.optionList = item.optionList || [
+            item.optionList = item.optionList.length ? item.optionList : [
                 {content: '本道题无选项', flag: 'X', id: '000'}
             ]
 
-            // 排序
+            // 将选项按照 ABCD 进行排序
             item.optionList.sort( (a, b) => {
                 let s = a.flag.toLowerCase();
                 let t = b.flag.toLowerCase();
@@ -206,7 +212,7 @@ const mutations = {
                 if(s > t) return 1;
             });
 
-            // 映射，给选项补充一个 ABCD 的标识
+            // 映射成组件需要的数据格式，并给选项的 inlineDesc 属性补充一个 ABCD 的标识
             item.optionList = item.optionList.map(item => {
                 return {
                     key: item.flag,
@@ -215,7 +221,8 @@ const mutations = {
                 }
             });
 
-            // 保存
+            // 根据 id 将题目信息保存到 state.idList 中
+            // 给题干中增加 第x题 的字样便于识别
             state.idList.forEach((item2, index) => {
                 if (item2.id == item.id) {
                     item.score = item2.score;
@@ -256,9 +263,6 @@ const mutations = {
             state.totalScore += isRight ? item.score : 0;
         });
     },
-    saveExamInfo: (state, payload) => {
-        state.examInfo = payload;
-    },
 
     marked: state => {
         
@@ -277,6 +281,17 @@ const actions = {
         // 提交答案
         return api.insertScore(payload)
     },
+
+    createTimer ({ state, commit, dispatch }) {
+        dispatch('clearTimer')
+        commit('resetDuringTime');
+        state.timer = setInterval(() => {
+            commit('addDuringSeconds', 1);
+        }, 1000);
+    },
+    clearTimer ({ state, commit }) {
+        clearInterval(state.timer);
+    }
 }
 
 export default {

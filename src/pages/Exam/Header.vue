@@ -46,7 +46,8 @@ export default {
   },
   computed: {
     time () {
-      return this.$store.getters.getDuringTime;
+      // return this.$store.getters.getDuringTime;
+      return this.$store.getters.getRemainingTime;
     },
     buttonText () {
       return this.$store.state.exam.isPaused ? '继续' : '暂停';
@@ -57,17 +58,7 @@ export default {
       this.$store.state.exam.isPaused ? this.restart() : this.pause();
     },
     pause () {
-      this.$store.commit('togglePause', true); // 暂停
-      clearInterval(this.timer);
-    },
-    restart () {
-      this.$store.commit('togglePause', false);  // 开始
-      this.timer = setInterval(() => {
-        if (!this.$store.state.exam.isPaused || this.$store.state.exam.showModal) {
-          this.$store.commit('addDuringSeconds', 1);
-        }
-      }, 1000);
-
+      this.$store.dispatch('createTimer');
     },
     backHandler () {
       this.showModal = true;
@@ -77,7 +68,8 @@ export default {
     }
   },
   mounted () {
-    this.restart();
+    this.$store.commit('resetexam')
+    this.$store.dispatch('createTimer')
   }
 };
 </script>

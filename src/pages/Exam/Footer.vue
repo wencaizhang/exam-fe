@@ -70,14 +70,10 @@ export default {
   methods: {
     toPrev() {
       if (this.isFirst) return;
-      this.$store.commit('toggleShowQuestion', false);
-      this.$store.commit('toggleShowQuestion', true);
       this.$store.commit("toPrev");
     },
     toNext() {
       if (this.isLast) return;
-      this.$store.commit('toggleShowQuestion', false);
-      this.$store.commit('toggleShowQuestion', true);
       this.$store.commit("toNext");
     },
     finish() {
