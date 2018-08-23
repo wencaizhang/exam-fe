@@ -60,10 +60,9 @@ export default {
       });
     },
     okHandler (resp) {
-      const vm = this;
-      vm.loading = false;
+      this.loading = false;
       if (resp.data.code == 0) {
-        vm.$router.push({ name: 'login' });
+        this.$router.push({ name: 'login' });
       }
     }
   },

@@ -43,11 +43,10 @@ export default {
   },
   methods: {
     getQuestionById (index) {
-      const vm = this;
 
-      const idList = vm.$store.state.exam.idList;
+      const idList = this.$store.state.exam.idList;
       if (!idList.length) {
-        vm.$router.push({ name: 'waitforexam' })
+        this.$router.push({ name: 'waitforexam' })
         return;
       };
 
@@ -55,9 +54,9 @@ export default {
 
       if (question) {
         // 如果题目已经被缓存，就不需要重新请求
-        vm.$store.commit('changeIndex', index);
-        vm.$store.commit('changeId', question.id);
-        vm.$store.commit('toggleShowQuestion', true);
+        this.$store.commit('changeIndex', index);
+        this.$store.commit('changeId', question.id);
+        this.$store.commit('toggleShowQuestion', true);
 
         return;
       };
@@ -66,29 +65,26 @@ export default {
         ids: [ idList[index]['id'] ]
       }
 
-
       let url = '/sage/exam/equestionmanagement/getByIds';
       const options = {
         url,
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         data: data,
-        // headers: { 'content-type': 'application/x-www-form-urlencoded' },
-        // data: qs.stringify(data),
       };
       
       axios((options))
         .then(resp => {
           if (resp.data.code == 0) {
-            vm.loading = false;
+            this.loading = false;
             const data = {}
             const list = resp.data.list;
 
-            vm.$store.commit('pushQuestion', list);
+            this.$store.commit('pushQuestion', list);
             // id 和 index 同时改变
-            vm.$store.commit('changeIndex', index);
-            vm.$store.commit('changeId', list[0].id);
-            vm.$store.commit('toggleShowQuestion', true);
+            this.$store.commit('changeIndex', index);
+            this.$store.commit('changeId', list[0].id);
+            this.$store.commit('toggleShowQuestion', true);
           }
         });
     },

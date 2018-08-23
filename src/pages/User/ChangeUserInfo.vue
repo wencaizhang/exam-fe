@@ -62,14 +62,13 @@ export default {
   },
   methods: {
     reset() {
-      const vm = this;
-      const { oldPwd, newPwd, newPwd2 } = vm;
+      const { oldPwd, newPwd, newPwd2 } = this;
 
       if (!oldPwd || !newPwd || !newPwd2) {
-        vm.tips = "请填写完整";
+        this.tips = "请填写完整";
         return;
       }
-      vm.loading = true;
+      this.loading = true;
 
       let url = "/sys/login";
       const data = { username, password };
@@ -82,17 +81,17 @@ export default {
 
       axios(options)
         .then(resp => {
-          vm.loading = false;
+          this.loading = false;
           if (resp.data.code == 0) {
-            vm.loginOK = true;
+            this.loginOK = true;
 
             const userinfo = resp.data.data || {};
-            vm.$store.commit("setUserInfo", userinfo);
-            vm.$store.commit("login", true);
+            this.$store.commit("setUserInfo", userinfo);
+            this.$store.commit("login", true);
 
-            vm.$router.push({ path: "/home" });
+            this.$router.push({ path: "/home" });
           } else {
-            vm.tips = "用户名或密码错误";
+            this.tips = "用户名或密码错误";
           }
         });
     }

@@ -89,19 +89,18 @@ export default {
     },
     submitHandle () {
 
-      const vm = this;
-      const { loginByPhone, username, password } = vm;
+      const { loginByPhone, username, password } = this;
 
       if (!username) {
-        vm.tips = loginByPhone ? '手机号不能为空' : '身份证号不能为空';
+        this.tips = loginByPhone ? '手机号不能为空' : '身份证号不能为空';
         return;
       }
       if (!password) {
-        vm.tips = '密码不能为空';
+        this.tips = '密码不能为空';
         return;
       }
       if (username && password) {
-        vm.loginByAction();
+        this.loginByAction();
       } 
     },
 

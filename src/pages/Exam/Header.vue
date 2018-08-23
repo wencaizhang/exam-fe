@@ -61,9 +61,8 @@ export default {
       clearInterval(this.timer);
     },
     restart () {
-      const vm = this;
       this.$store.commit('togglePause', false);  // 开始
-      vm.timer = setInterval(() => {
+      this.timer = setInterval(() => {
         if (!this.$store.state.exam.isPaused || this.$store.state.exam.showModal) {
           this.$store.commit('addDuringSeconds', 1);
         }

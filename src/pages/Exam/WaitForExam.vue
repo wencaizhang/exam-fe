@@ -58,7 +58,6 @@ export default {
       return result;
     },
     getInfo () {
-      const vm = this;
       let url = '/sage/exam/examination/info';
 
       const data = { 
@@ -73,10 +72,10 @@ export default {
       axios((options))
         .then(resp => {
           if (resp.data.code == 0) {
-            vm.countExamNumber = resp.data.countExamNumber;
-            vm.examination = resp.data.examination;
+            this.countExamNumber = resp.data.countExamNumber;
+            this.examination = resp.data.examination;
 
-            vm.$store.commit('saveExamInfo', resp.data);
+            this.$store.commit('saveExamInfo', resp.data);
 
             const data = {
               paperDesignId: resp.data.examination.paperId,
@@ -84,8 +83,8 @@ export default {
               id: resp.data.examination.id,
             };
 
-            // vm.$storage.setItem('paper', data);
-            vm.$store.commit('setPaper', data);
+            // this.$storage.setItem('paper', data);
+            this.$store.commit('setPaper', data);
           } else {
             this.$router.push({name: 'home'})
             return;
@@ -93,12 +92,9 @@ export default {
         });
     },
     getIds () {
-      const vm = this;
       let url = '/sage/exam/paperProduce/produce';
 
-      // const data = vm.$storage.getItem('paper', data);
-
-      const data = vm.$store.state.exam.paper;
+      const data = this.$store.state.exam.paper;
 
       const options = {
         url,
@@ -119,12 +115,10 @@ export default {
               })
             });
 
-            vm.$store.commit('setIdList', idList);
+            this.$store.commit('setIdList', idList);
 
-            vm.$router.push( { name: 'exam', params: { index: 0 } } );
-          } else {
-            alert(resp.data.msg);
-          }
+            this.$router.push( { name: 'exam', params: { index: 0 } } );
+          } 
         });
     },
   },

@@ -53,17 +53,14 @@ export default {
       return this.$store.state.exam.isPaused;
     },
     max() {
-      const vm = this;
-      let { typeId='001' } = vm.question || {};
-      const filter = vm.questionTypes.filter(item => item.val === typeId)
+      let { typeId='001' } = this.question || {};
+      const filter = this.questionTypes.filter(item => item.val === typeId)
       return filter.length ? filter[0]["max"] : 10;
     },
     getType() {
-      const vm = this;
+      let { typeId='001', score=0 } = this.question || {};
 
-      let { typeId='001', score=0 } = vm.question || {};
-
-      const filter = vm.questionTypes.filter( item => item.val === typeId );
+      const filter = this.questionTypes.filter( item => item.val === typeId );
       return filter.length ? filter[0]["type"] + score + '分' : '没有题目';
     }
   },

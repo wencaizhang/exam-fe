@@ -162,8 +162,7 @@ export default {
       }, 1000)
     },
     submit() {
-      const vm = this;
-      const { phone, password, newPassword } = vm;
+      const { phone, password, newPassword } = this;
 
       if (!password || !newPassword) {
         this.$vux.toast.show({
