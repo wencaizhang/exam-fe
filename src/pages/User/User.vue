@@ -54,7 +54,7 @@ export default {
     logout() {
       this.$store.dispatch('logout').then(resp => {
         if (resp.data.code == 0) {
-          this.$store.dispatch('resetState')
+          this.$store.dispatch('resetAllState')
           this.$router.push({ path: "/login" });
         }
       });

@@ -18,7 +18,7 @@ const index = {
         },
     },
     actions: {
-        resetState (context) {
+        resetAllState (context) {
             const initial = JSON.parse(context.rootState.index.initStateString);
             Object.keys(initial).forEach(key => { 
                 context.commit('reset' + key, initial[key])

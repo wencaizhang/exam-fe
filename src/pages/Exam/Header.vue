@@ -6,7 +6,7 @@
       @on-click-back="backHandler"
     >
       {{ time }}
-      <!-- <a slot="right" @click="togglePause">{{ buttonText }}</a> -->
+      <a slot="right" @click="togglePause">{{ buttonText }}</a>
     </x-header>
     
     <div v-transfer-dom>
@@ -46,7 +46,6 @@ export default {
   },
   computed: {
     time () {
-      // return this.$store.getters.getDuringTime;
       return this.$store.getters.getRemainingTime;
     },
     buttonText () {
@@ -55,20 +54,26 @@ export default {
   },
   methods: {
     togglePause () {
-      this.$store.state.exam.isPaused ? this.restart() : this.pause();
-    },
-    pause () {
-      this.$store.dispatch('createTimer');
+      this.$store.commit('togglePause');
+      
+      if (this.$store.state.exam.isPaused) {
+        this.$store.dispatch('clearTimer') 
+        this.$vux.toast.text('已暂停')
+      } else {
+        this.$store.dispatch('createTimer');
+        this.$vux.toast.text('请继续答题')
+      }
     },
     backHandler () {
       this.showModal = true;
     },
     onConfirm () {
+      this.$store.dispatch('resetState')
+
       this.$router.push( { name: 'waitforexam' });
     }
   },
   mounted () {
-    this.$store.commit('resetexam')
     this.$store.dispatch('createTimer')
   }
 };

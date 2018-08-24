@@ -43,7 +43,7 @@ export default {
       }
     },
     question() {
-      return this.$store.getters.question || {};
+      return this.$store.getters.currQuestion || {};
     },
     disabled() {
       return this.$store.state.exam.isPaused;

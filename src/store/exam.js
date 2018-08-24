@@ -1,11 +1,11 @@
 import api from "../util/api";
 
 const state = {
-    loading: false,  // 请求中
     isPaused: false,  // 暂停
-    done: false,  // 完成
     showAll: false,  // 显示所有题目编号
+
     showModal: false,  // 交卷提示框
+    showTimeOutModal: false,  // 时间结束交卷提示框
 
     duringSeconds: 0,
     startTime: 0,
@@ -34,7 +34,7 @@ const getters = {
         // return state.idList.length -state.anwsers.filter(item => item).length
     },
     // 当前题目 
-    question: state => {
+    currQuestion: state => {
         // 不能使用 index 获取题目
         // return state.idList[state.index]['question'] || {};
 
@@ -106,27 +106,34 @@ const getters = {
         return time || '0秒';
     },
 
-    // 考试总时长，秒
-    getAllTheTime: state => state.examInfo.examination.examinationTimeLong * 60,
     // 考试剩余时长，秒
     getRemainingTime: state => {
         let allTheTime = state.examInfo.examination.examinationTimeLong * 60;
         let seconds =  allTheTime - state.duringSeconds >= 0 ? allTheTime - state.duringSeconds : 0;
-        let time = '';
-        const points = [
-          { value: 60 * 60, suffix: '小时', max: 1 },
-          { value: 60, suffix: '分钟', max: 1 },
-          { value: 1, suffix: '秒', max: 1 }
-        ];
-  
-        for (let i = 0; i < points.length; i++) {
-          let mode = Math.floor(seconds / points[i].value);
-          if (mode >= 1) {
-            seconds -= points[i].value * mode
-            time += Math.max(mode, points[i].max) + points[i].suffix;
-          }
+
+        // seconds 为 0 时，倒计时结束，强制交卷
+        if (seconds <= 0) {
+            state.isPaused = true;
+            state.showModal = false;
+            state.showTimeOutModal = true;
+            return '0秒'
+        } else {
+            let time = '';
+            const points = [
+              { value: 60 * 60, suffix: '小时', max: 1 },
+              { value: 60, suffix: '分钟', max: 1 },
+              { value: 1, suffix: '秒', max: 1 }
+            ];
+      
+            for (let i = 0; i < points.length; i++) {
+              let mode = Math.floor(seconds / points[i].value);
+              if (mode >= 1) {
+                seconds -= points[i].value * mode
+                time += Math.max(mode, points[i].max) + points[i].suffix;
+              }
+            }
+            return time || '0秒';
         }
-        return time || '0秒';
     }
 
 }
@@ -159,40 +166,21 @@ const mutations = {
 
     // 交卷时展示提示框
     showModal: (state, bool) => state.showModal = bool,
+    // 时间结束交卷提示框
+    showTimeOutModal: (state, bool) => state.showTimeOutModal = bool,
 
     // 暂停和答题的状态切换
     togglePause: state => state.isPaused = !state.isPaused,
-
-    // 从所有题目中随机挑一个题目回答时，获取该题目的 index
-    changeIndex: (state, value) => {
-        state.index = value;
-        const list = state.idList.filter(item => item.id == state.id);
-        state.marked = list.length ? list[0]['marked'] : false;
-    },
-
-    // 从所有题目中随机挑一个题目回答时，获取该题目的 index
-    changeId: (state, value) => {
-        state.id = value;
-        const list = state.idList.filter(item => item.id == state.id);
-        state.marked = list.length ? list[0]['marked'] : false;
-    },
 
     changeMarkStatus: state => {
         const list = state.idList.filter(item => item.id == state.id);
         state.marked = list.length ? list[0]['marked'] : false;
     },
 
-    // 切换上一题下一题
-    toPrev: state => {
-        --state.index;
-        state.id = state.idList[state.index].id
+    changeQuestionByIndex: (state, index) => {
+        state.index = index;
+        state.id = state.idList[index].id;
     },
-    toNext: state => {
-        ++state.index;
-        state.id = state.idList[state.index].id
-    },
-
-
 
     // 保存题目信息
     pushQuestion: (state, payload) => {
@@ -264,12 +252,11 @@ const mutations = {
         });
     },
 
+    // 标记或取消标记
     marked: state => {
-        
         const filter = state.idList.filter((item, index) => {
             return state.index == index
         });
-
         filter[0].marked = !filter[0].marked;
 
         state.markedNum = state.idList.filter( item => item.marked ).length;
@@ -284,13 +271,19 @@ const actions = {
 
     createTimer ({ state, commit, dispatch }) {
         dispatch('clearTimer')
-        commit('resetDuringTime');
         state.timer = setInterval(() => {
             commit('addDuringSeconds', 1);
         }, 1000);
     },
+
     clearTimer ({ state, commit }) {
         clearInterval(state.timer);
+    },
+
+    resetState ( context ) {
+        context.state.isPaused = false;
+        context.dispatch('clearTimer')
+        context.commit('resetDuringTime')
     }
 }
 

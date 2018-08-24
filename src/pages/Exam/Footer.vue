@@ -70,11 +70,11 @@ export default {
   methods: {
     toPrev() {
       if (this.isFirst) return;
-      this.$store.commit("toPrev");
+      this.$store.commit("changeQuestionByIndex", this.$store.state.exam.index - 1);
     },
     toNext() {
       if (this.isLast) return;
-      this.$store.commit("toNext");
+      this.$store.commit("changeQuestionByIndex", this.$store.state.exam.index + 1);
     },
     finish() {
       this.$store.commit('setAnswerNum');
