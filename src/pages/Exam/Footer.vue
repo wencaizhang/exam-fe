@@ -20,8 +20,8 @@
     </flexbox>
 
     <flexbox class="btn-group btn-group-2">
-      <flexbox-item>
-        <x-button @click.native="finish" mini plain type="primary">交卷</x-button>
+      <flexbox-item >
+        <x-button v-if="!analysis" @click.native="finish" mini plain type="primary">交卷</x-button>
       </flexbox-item>
       <flexbox-item class="text-align-center">
         <span class="question-num">{{ index + 1 }}/{{ length }}</span>
@@ -60,7 +60,10 @@ export default {
     },
     isAbleShowAll () {
       return this.$store.state.exam.isPaused;
-    }
+    },
+    analysis () {
+      return this.$store.state.exam.analysis;
+    },
   },
   components: {
     XButton,
@@ -84,6 +87,7 @@ export default {
       this.$store.commit("showAll", true);
     },
     markHandler() {
+      if (this.analysis) { return }
       this.$store.commit('marked');
       this.$store.commit('changeMarkStatus');
     },

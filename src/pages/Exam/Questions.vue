@@ -10,6 +10,10 @@
       @on-change="change"
       label-position="right"
     ></checklist>
+    <div v-if="analysis" style="padding: 30px; border: 1px solid #f2f2f2;">
+      <p>正确答案：{{ question.answerId }}</p>
+      <p>回答情况：{{ question.isRight ? '正确' : '错误' }}</p>
+    </div>
   </div>
 </template>
 
@@ -43,10 +47,14 @@ export default {
       }
     },
     question() {
+      console.log( this.$store.getters.currQuestion )
       return this.$store.getters.currQuestion || {};
     },
     disabled() {
-      return this.$store.state.exam.isPaused;
+      return this.analysis ? true : this.$store.state.exam.isPaused;
+    },
+    analysis () {
+      return this.$store.state.exam.analysis;
     },
     max() {
       let { typeId='001' } = this.question || {};

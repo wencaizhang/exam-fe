@@ -5,7 +5,7 @@
     <p :class="$style.msg">用时：{{ time }}</p>
 
     <div :class="$style.btns">
-      <XButton :class="$style.btn" type="primary" text="查看答案及解析" link="/exam/0"></XButton>
+      <XButton :class="$style.btn" type="primary" text="查看答案及解析" @click.native="analysis" ></XButton>
       <XButton :class="$style.btn" type="primary" text="重新开始考试" link="/waitforexam"></XButton>
     </div>
   </div>
@@ -31,7 +31,12 @@ export default {
       return this.$store.getters.getDuringTime;
     }
   },
-  methods: {},
+  methods: {
+    analysis () {
+      this.$store.commit('toggleAnalysis');
+      this.$router.push( { name: 'exam' });
+    }
+  },
   created () {
     const examInfo = this.$store.state.exam.examInfo;
 

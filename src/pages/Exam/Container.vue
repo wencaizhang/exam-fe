@@ -40,6 +40,8 @@ export default {
   },
   methods: {
     fetchAllQuestions () {
+      if (this.$store.state.exam.analysis) { this.loading = false; this.$store.commit("changeQuestionByIndex", 0); return; }
+
       const ids = this.$store.state.exam.idList.map(item => item.id)
       const data = { ids: ids }
 

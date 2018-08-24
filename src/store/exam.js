@@ -22,6 +22,9 @@ const state = {
     idList: [],  // 所有题目的 id 
     answerNum: 0,  // 已经完成的题目数量
     totalScore: 0,  // 总分
+
+    // --- 考试分析
+    analysis: false,
 }
 
 const getters = {
@@ -41,7 +44,6 @@ const getters = {
         const list = state.idList.filter(item => item.id == state.id);
         return list.length ? list[0]['question'] : {};
     },
-
 
     getScoreByType: state => (typeId='all') => {
         let score = 0;
@@ -172,14 +174,18 @@ const mutations = {
     // 暂停和答题的状态切换
     togglePause: state => state.isPaused = !state.isPaused,
 
+    // 答案解析和考试的状态切换
+    toggleAnalysis: state => state.analysis = !state.analysis,
+
     changeMarkStatus: state => {
         const list = state.idList.filter(item => item.id == state.id);
         state.marked = list.length ? list[0]['marked'] : false;
     },
 
     changeQuestionByIndex: (state, index) => {
-        state.index = index;
-        state.id = state.idList[index].id;
+        state.index  = index;
+        state.id     = state.idList[index].id;
+        state.marked = state.idList[index].marked;
     },
 
     // 保存题目信息
@@ -201,11 +207,18 @@ const mutations = {
             });
 
             // 映射成组件需要的数据格式，并给选项的 inlineDesc 属性补充一个 ABCD 的标识
-            item.optionList = item.optionList.map(item => {
+            item.optionList = item.optionList.map(option => {
+                // 单选题特殊处理
+                let inlineDesc;
+                if (item.typeId === '003') {
+                    inlineDesc = option.content === 'T' ? 'T：正确' : 'F：错误'
+                } else {
+                    inlineDesc = option.flag + '：' + option.content
+                }
                 return {
-                    key: item.flag,
-                    value: item.flag,
-                    inlineDesc: item.flag + '：' + item.content
+                    key: option.flag,
+                    value: option.flag,
+                    inlineDesc,
                 }
             });
 
@@ -238,15 +251,14 @@ const mutations = {
 
         state.idList.forEach(item => {
 
-            if (!item.question) {
-                return;
-            }
+            if (!item.question) { return; }
 
             const answer = item.question.answerId.split(',')
             const myAnswer = item.myAnswer || [];
 
             let isRight = JSON.stringify(answer.sort()) === JSON.stringify(myAnswer.sort())
-            item.isRight = isRight;
+            item.question.isRight = isRight;
+            item.question.myAnswer = myAnswer;
             
             state.totalScore += isRight ? item.score : 0;
         });

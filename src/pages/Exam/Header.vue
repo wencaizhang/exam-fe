@@ -6,7 +6,7 @@
       @on-click-back="backHandler"
     >
       {{ time }}
-      <a slot="right" @click="togglePause">{{ buttonText }}</a>
+      <a v-if="!analysis" slot="right" @click="togglePause">{{ buttonText }}</a>
     </x-header>
     
     <div v-transfer-dom>
@@ -46,10 +46,13 @@ export default {
   },
   computed: {
     time () {
-      return this.$store.getters.getRemainingTime;
+      return this.analysis ? '考试答案分析' : this.$store.getters.getRemainingTime;
     },
     buttonText () {
       return this.$store.state.exam.isPaused ? '继续' : '暂停';
+    },
+    analysis () {
+      return this.$store.state.exam.analysis;
     }
   },
   methods: {
@@ -65,7 +68,12 @@ export default {
       }
     },
     backHandler () {
-      this.showModal = true;
+      if (this.analysis) {
+        this.$store.commit('toggleAnalysis');
+        this.$router.push( { name: 'waitforexam' });
+      } else {
+        this.showModal = true;
+      }
     },
     onConfirm () {
       this.$store.dispatch('resetState')
@@ -74,7 +82,9 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch('createTimer')
+    if (!this.analysis) {
+      this.$store.dispatch('createTimer')
+    }
   }
 };
 </script>
