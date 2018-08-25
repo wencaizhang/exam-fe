@@ -47,8 +47,10 @@
       </p>
     </div>
 
-    <span :class="$style.login_type_btn" @click="changeLoginType">{{ loginByPhone ? '身份证号登录' : '手机号登录' }}</span>
-    <span :class="$style.copyright">&copy;京ICP备17059190号-1</span>
+    <div :class="$style.bottom_box" v-show="isOriginHei">
+      <p :class="$style.login_type_btn" @click="changeLoginType">{{ loginByPhone ? '身份证号登录' : '手机号登录' }}</p>
+      <p :class="$style.copyright">&copy;京ICP备17059190号-1</p>
+    </div>
   </div>
 </template>
 
@@ -69,6 +71,10 @@ export default {
       password: "",
 
       loginByPhone: true,
+
+        isOriginHei: true,
+        screenHeight: document.documentElement.clientHeight,        //此处也可能是其他获取方法
+        originHeight: document.documentElement.clientHeight,
     };
   },
   components: {
@@ -116,6 +122,22 @@ export default {
     inputHandler () {
       this.tips = '';
     }
+  },
+  watch: {
+    screenHeight (val) {
+      if(this.originHeight > val + 100) {        //加100为了兼容华为的返回键
+        this.isOriginHei = false;
+      }else{
+        this.isOriginHei = true;
+      }
+    }
+  },
+  mounted () {
+    window.onresize = () => {
+        return (() => {
+            this.screenHeight = document.documentElement.clientHeight;
+        })()
+    }
   }
 };
 </script>
@@ -127,9 +149,13 @@ export default {
   margin-bottom: 20px;
 }
 .container {
+  position: absolute;
+  box-sizing: border-box;
+  left: 50%;
+  transform: translateX(-50%);
   text-align: center;
-  padding: 40px;
   padding-top: 20px;
+  height: 100%;
   letter-spacing: 1px;
 }
 .other-handler {
@@ -194,20 +220,20 @@ export default {
   background-size: cover;
 }
 
-.login_type_btn {
-  position: absolute;
-  bottom: 60px;
-  left: 50%;
-  color: #1AAD19;
-  transform: translateX(-50%);
-}
-
-.copyright {
+.bottom_box {
   position: absolute;
   bottom: 15px;
   left: 50%;
-  color: #ccc;
-  width: 100%;
   transform: translateX(-50%);
+  width: 100%;
+}
+
+.login_type_btn {
+  color: #1AAD19;
+  margin-bottom: 10px;
+}
+
+.copyright {
+  color: #ccc;
 }
 </style>
