@@ -7,6 +7,7 @@
     <div :class="$style.btns">
       <XButton :class="$style.btn" type="primary" text="查看答案及解析" @click.native="analysis" ></XButton>
       <XButton :class="$style.btn" type="primary" text="重新开始考试" link="/waitforexam"></XButton>
+      <XButton :class="$style.btn" plain text="回到首页" link="/home"></XButton>
     </div>
   </div>
 </template>

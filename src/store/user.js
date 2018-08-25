@@ -77,6 +77,10 @@ const actions = {
         // 更新密码
         return api.updatePassword(payload)
     },
+    resetPassword (context, payload) {
+        // 重置密码
+        return api.resetPassword(payload)
+    },
 }
 
 export default {

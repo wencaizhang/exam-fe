@@ -20,18 +20,6 @@ const user = {
         return axios.get(url, { params: data });
     },
 
-    resetPwd: (data=null) => {
-        let url = "/student/student/password";
-        return axios.get(url, { params: data });
-    },
-    forgetPwd: (data=null) => {
-        let url = "";
-        return axios.get(url, { params: data });
-    },
-    ChangeUserInfo: (data=null) => {
-        let url = "";
-        return axios.get(url, { params: data });
-    },
     getUserInfo: (data=null) => {
         let url = "/sage/student/student/getStudentByUserId";
         return axios.post(url, data);
@@ -55,6 +43,10 @@ const user = {
     // 更新密码
     updatePassword: (data=null) => {
         let url = '/sys/updatePwd';
+        return axios.post(url, data);
+    },
+    resetPassword: (data=null) => {
+        let url = "/sage/student/student/resetPassword";
         return axios.post(url, data);
     },
 

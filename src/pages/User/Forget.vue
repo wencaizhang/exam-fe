@@ -41,6 +41,10 @@
         >
         </XButton>
       </template>
+      <p :class="$style['other-handler']">
+        <router-link :to="{ name: 'login'}" class="fl">登录</router-link>
+        <router-link :to="{ name: 'register'}" class="fr">注册</router-link>
+      </p>
     </form>
     <msg v-if="showMsg" title="恭喜密码重置成功！" :buttons="buttons" icon="success"></msg>
   </div>
@@ -186,7 +190,6 @@ export default {
           this.showMsg = true;
         }
       })
-      
     },
     toLogin () {
       this.$router.push({ path: "/login" });
@@ -253,5 +256,10 @@ export default {
 }
 .code_btn::after {
   border: 0!important;
+}
+.other-handler {
+  margin: 10px 0;
+  color: #555;
+  padding: 0 2px;
 }
 </style>
