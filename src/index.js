@@ -12,6 +12,8 @@ import store from './store'
 import  { ToastPlugin, LoadingPlugin } from 'vux'
 Vue.use(ToastPlugin)
 Vue.use(LoadingPlugin)
+import  { AlertPlugin } from 'vux'
+Vue.use(AlertPlugin)
 
 // Vue.prototype.$storage = {
 //     setItem: (key, value) => {
