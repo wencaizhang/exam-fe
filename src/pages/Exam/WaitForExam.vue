@@ -97,7 +97,7 @@ export default {
 
             const idList = []
             data.forEach(item => {
-              const list = JSON.parse(item.ids);
+              const list = item.ids.split(',');
               list.forEach((id) => {
                 idList.push( { id, score: item.score } );
               })
