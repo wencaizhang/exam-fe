@@ -97,7 +97,7 @@ const getters = {
           { value: 60, suffix: '分钟', max: 1 },
           { value: 1, suffix: '秒', max: 1 }
         ];
-  
+
         for (let i = 0; i < points.length; i++) {
           let mode = Math.floor(seconds / points[i].value);
           if (mode >= 1) {
@@ -111,6 +111,7 @@ const getters = {
     // 考试剩余时长，秒
     getRemainingTime: state => {
         let allTheTime = state.examInfo.examination.examinationTimeLong * 60;
+        // allTheTime = 60;
         let seconds =  allTheTime - state.duringSeconds >= 0 ? allTheTime - state.duringSeconds : 0;
 
         // seconds 为 0 时，倒计时结束，强制交卷

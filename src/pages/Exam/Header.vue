@@ -20,6 +20,11 @@
         <p style="text-align:center;">您即将放弃本次考试</p>
       </confirm>
     </div>
+
+    <!-- <div v-transfer-dom>
+      <alert v-model="isPaused" title="考试已暂停" @on-hide="togglePause">
+      </alert>
+    </div> -->
   </div>
   
 </template>
@@ -28,6 +33,7 @@
 import {
   Confirm,
   XHeader,
+  Alert,
   TransferDomDirective as TransferDom
 } from "vux";
 export default {
@@ -42,12 +48,21 @@ export default {
   },
   components: {
     XHeader,
-    Confirm
+    Confirm,
+    Alert
   },
   computed: {
     time () {
       return this.analysis ? '考试答案分析' : this.$store.getters.getRemainingTime;
     },
+    // isPaused: {
+    //   get() {
+    //     return this.$store.state.exam.isPaused;
+    //   },
+    //   set(value) {
+    //     this.$store.commit("togglePause", value);
+    //   }
+    // },
     buttonText () {
       return this.$store.state.exam.isPaused ? '继续' : '暂停';
     },

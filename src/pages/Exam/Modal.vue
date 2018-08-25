@@ -13,9 +13,8 @@
     </div>
     
     <div v-transfer-dom>
-      <alert v-model="showTimeOutModal" title="考试时间结束，请交卷" @on-hide="onConfirm">
-        <p style="text-align:center;">您还有 {{ num }} 道题未做</p>
-        <p style="text-align:center;">有 {{ markedNum }} 道题被标记</p>
+      <alert v-model="showTimeOutModal" title="提示" @on-hide="onConfirm">
+        <p style="text-align:center;">考试时间结束，请交卷</p>
       </alert>
     </div>
   </div>

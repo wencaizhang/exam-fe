@@ -47,7 +47,6 @@ export default {
       }
     },
     question() {
-      console.log( this.$store.getters.currQuestion )
       return this.$store.getters.currQuestion || {};
     },
     disabled() {

@@ -57,10 +57,7 @@ export default {
       examEnd:       dateFormat(this.$store.state.exam.endTime, 'YYYY-MM-DD HH:mm:ss')
     }
 
-    data.myAnswer = JSON.stringify(data.myAnswer);
-    data.trueAnswer = JSON.stringify(data.trueAnswer);
-
-    this.$store.dispatch('insertScore', data)
+    this.$store.dispatch('insertScore', { paramData: data })
       .then(resp => {
         if (resp.data.code == 0) {
           this.$vux.toast.show({
