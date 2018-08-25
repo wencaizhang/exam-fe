@@ -7,7 +7,7 @@ const common = require("./webpack.common.js");
 let localip = "http://192.168.0.113:9997";
 let remoteip = 'http://www.pq521.top:9997';
 
-let proxyip = remoteip;
+let proxyip = localip;
 
 module.exports = merge(common, {
     devtool: "inline-source-map",

@@ -2,21 +2,26 @@
     <div :class="$style.container">
         <header :class="$style.header">
             <div :class="$style.photo">
-                <img :class="$style.avatar" v-bind:src="avatar" alt="头像">
+              <img :class="$style.avatar" v-bind:src="avatar" alt="头像">
             </div>
             <div :class="$style.nick">
-                <p>{{ name }}</p>
+              <p>{{ name }}</p>
             </div>
         </header>
         <group>
             <cell-box is-link :link="{ path: '/changeuserinfo' }">
-                修改个人信息
+              修改个人信息
             </cell-box>
             <cell-box is-link :link="{ path: '/reset' }">
-                密码重置
+              密码重置
             </cell-box>
             <cell-box is-link :link="{ path: '/waitforexam' }">
-                进入考试
+              进入考试
+            </cell-box>
+        </group>
+        <group>
+            <cell-box is-link :link="{ path: '/history' }">
+              我的成绩
             </cell-box>
         </group>
         <div :class="$style.btns">
@@ -59,12 +64,9 @@ export default {
         }
       });
     },
-    okHandler (resp) {
-      this.loading = false;
-      if (resp.data.code == 0) {
-        this.$router.push({ name: 'login' });
-      }
-    }
+    // history () {
+    //   this.$router.push({ name: 'history' });
+    // }
   },
   created() {
     if (!this.$store.state.user.userInfo.saved) {

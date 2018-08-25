@@ -5,6 +5,8 @@ import Success from "../pages/Exam/Success"
 import Answer from "../pages/Exam/Answer"
 import WaitForExam from "../pages/Exam/WaitForExam"
 
+import History from "../pages/Exam/History"
+
 import Home from "../pages/Home/Home"
 import Rank from "../pages/Rank/Rank"
 import User from '../pages/User/User'
@@ -86,6 +88,16 @@ export default [
         meta: {
             title: '重置密码',
             notCheckLogin: true,
+        }
+    },
+    {
+        path: '/history',
+        name: 'history',
+        components: {
+            default: History,
+        },
+        meta: {
+            title: '我的成绩',
         }
     },
     {

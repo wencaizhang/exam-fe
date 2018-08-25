@@ -15,6 +15,11 @@ Vue.use(LoadingPlugin)
 import  { AlertPlugin } from 'vux'
 Vue.use(AlertPlugin)
 
+import VueScroller from 'vue-scroller'
+Vue.use(VueScroller)
+
+
+
 // Vue.prototype.$storage = {
 //     setItem: (key, value) => {
 //         // 需要转化成字符串之后储存
