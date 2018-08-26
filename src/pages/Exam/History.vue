@@ -41,12 +41,25 @@ export default {
       const data = { page: this.page, pageSize: this.pageSize };
       return axios.post(url, data);
     },
+    add(m){return m<10?'0'+m:m },
+    //时间戳转化成时间格式
+    timeFormat(timestamp){
+        var time = new Date(timestamp);
+        var year = time.getFullYear();
+        var month = time.getMonth()+1;
+        var date = time.getDate();
+        var hours = time.getHours();
+        var minutes = time.getMinutes();
+        var seconds = time.getSeconds();
+        return year+'-'+this.add(month)+'-'+this.add(date)+' '+this.add(hours)+':'+this.add(minutes)+':'+this.add(seconds);
+    },
     transformData(list) {
       list.forEach(item => {
         item.list = [
           {
             label: "考试时间",
-            value: dateFormat(new Date(item.examStart), "YYYY-MM-DD HH:mm:ss")
+            value: this.timeFormat(Date.parse(new Date(item.examStart))),
+            // value: dateFormat(new Date(item.examStart), "YYYY-MM-DD HH:mm:ss")
           },
           {
             label: "总成绩",
