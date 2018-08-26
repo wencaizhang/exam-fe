@@ -90,12 +90,21 @@ export default {
       this.$store.dispatch('resetState')
 
       this.$router.push( { name: 'waitforexam' });
+    },
+    visibilityStateListener () {
+      if ( !this.$store.state.exam.isPaused && document.visibilityState == 'hidden' ) {
+        this.togglePause();
+      }
     }
   },
   mounted () {
     if (!this.analysis) {
       this.$store.dispatch('createTimer')
     }
+    document.addEventListener("visibilitychange", this.visibilityStateListener);
+  },
+  beforeDestroy () {
+    document.removeEventListener('visibilitychange', this.visibilityStateListener)
   }
 };
 </script>
