@@ -57,7 +57,7 @@ export default {
   methods: {
     getClassName (item) {
       let className = '';
-      className += item.myAnswer && item.myAnswer.length ? 'check-item-answered' : '';
+      className += item.question.myAnswer && item.question.myAnswer.length ? 'check-item-answered' : '';
       className += item.marked ? ' check-item-marked' : '';
       return className;
     },

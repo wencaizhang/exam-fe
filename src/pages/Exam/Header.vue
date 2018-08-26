@@ -92,7 +92,7 @@ export default {
       this.$router.push( { name: 'waitforexam' });
     },
     visibilityStateListener () {
-      if ( !this.$store.state.exam.isPaused && document.visibilityState == 'hidden' ) {
+      if ( !this.analysis && !this.$store.state.exam.isPaused && document.visibilityState == 'hidden' ) {
         this.togglePause();
       }
     }

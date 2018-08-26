@@ -34,7 +34,7 @@ export default {
     },
     model: {
       get() {
-        return this.$store.state.exam.idList[this.$store.state.exam.index]['myAnswer'] || [];
+        return this.$store.getters.currQuestion.myAnswer || [];
       },
       set(value) {
         this.$store.commit({
