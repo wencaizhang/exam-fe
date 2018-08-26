@@ -23,18 +23,15 @@ import { Checklist } from "vux";
 export default {
   data() {
     return {
-      // model: null,
-      questionTypes: [
-        { val: '001', type: "单选题：", max: 1 },
-        { val: '002', type: "多选题：", max: 100 },
-        { val: '003', type: "判断题：", max: 1 }
-      ]
     };
   },
   components: {
     Checklist
   },
   computed: {
+    questionTypes () {
+      return this.$store.state.exam.questionTypes;
+    },
     model: {
       get() {
         return this.$store.state.exam.idList[this.$store.state.exam.index]['myAnswer'] || [];

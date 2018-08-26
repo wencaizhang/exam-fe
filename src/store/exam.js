@@ -12,6 +12,11 @@ const state = {
     endTime: 0,
 
     paper: '',
+    questionTypes: [
+      { val: '001', type: "单选题：", max: 1 },
+      { val: '002', type: "多选题：", max: 100 },
+      { val: '003', type: "判断题：", max: 1 }
+    ],
 
     // ---------以上为状态类 state
     data: '',
@@ -61,7 +66,7 @@ const getters = {
             }
 
             const answer = item.question.answerId.split(',')
-            const myAnswer = item.myAnswer || [];
+            const myAnswer = item.question.myAnswer || [];
 
             let isRight = JSON.stringify(answer.sort()) === JSON.stringify(myAnswer.sort())
             item.isRight = isRight;
@@ -84,7 +89,7 @@ const getters = {
         return state.idList.map(item => {
             return {
                 id: item.id,
-                answer: (item.myAnswer || []).join(',')
+                answer: (item.question.myAnswer || []).join(',')
             } 
         })
     },
@@ -157,7 +162,7 @@ const mutations = {
     setIdList: (state, list) => state.idList = list,
 
     // 保存用户的答案
-    setAnwser: (state, payload) => state.idList[state.index].myAnswer = payload.value,
+    setAnwser: (state, payload) => state.idList[state.index].question.myAnswer = payload.value,
 
     addDuringSeconds: (state, value) => state.duringSeconds += value,
 
@@ -240,7 +245,7 @@ const mutations = {
     // 完成的题目数量
     setAnswerNum: state => {
         const filter = state.idList.filter(item => {
-            return item.myAnswer && item.myAnswer.length;
+            return item.question.myAnswer && item.question.myAnswer.length;
         });
         state.answerNum = filter.length;
     },
@@ -254,12 +259,16 @@ const mutations = {
 
             if (!item.question) { return; }
 
-            const answer = item.question.answerId.split(',')
-            const myAnswer = item.myAnswer || [];
+            const answer = item.question.answerId.split('');
+            const myAnswer = item.question.myAnswer || [];
 
+            
             let isRight = JSON.stringify(answer.sort()) === JSON.stringify(myAnswer.sort())
             item.question.isRight = isRight;
-            item.question.myAnswer = myAnswer;
+            
+            // console.log('正确答案：', answer);
+            // console.log('我的答案：', myAnswer);
+            // console.log('是否正确：', isRight);
             
             state.totalScore += isRight ? item.score : 0;
         });
