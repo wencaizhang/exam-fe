@@ -82,6 +82,11 @@ axios.interceptors.response.use( response => {
 
 // 每次路由跳转都对登录状态进行检测
 router.beforeEach((to, from, next) => {
+
+    if (to.name == 'home2' && to.params.data) {
+        store.commit('setExamData', to.params.data);
+    }
+
     let notCheckLogin = to.matched.some( record => record.meta.notCheckLogin )
 
     // 未登录,且需要检测登录状态的路由

@@ -47,15 +47,6 @@ export default {
       this.$router.push({ path: '/waitforexam' })
     }
   },
-  computed: {
-  },
-  created () {
-    let data = this.$route.params.data;
-    if (data) {
-      this.$store.commit('setExamData', this.$route.params.data);
-      this.$router.push({ name: 'home' });
-    }
-  }
 };
 </script>
 <style module>
