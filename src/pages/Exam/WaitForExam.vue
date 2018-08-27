@@ -9,7 +9,7 @@
         </div>
       </div>
       <div :class="$style.message">
-        <h3 :class="[$style.h3]">活动信息</h3>
+        <h3 :class="[$style.h3]">活动信息<span style="font-size: 14px; font-weight: 400; color: #999;">{{ examType === '1' ? '' : '(模拟考试)'  }}</span></h3>
         <div :class="$style.examination">
           <!-- <p>姓名：{{ examination }}</p> -->
           <p><span :class="$style.text">考试单位：</span>{{ examination.deptName }}</p>
@@ -38,7 +38,8 @@ export default {
   data() {
     return {
       countExamNumber: 0,
-      examination: null
+      examination: null,
+      examType: '1',
     };
   },
   components: {
@@ -70,6 +71,7 @@ export default {
           if (resp.data.code == 0) {
             this.countExamNumber = resp.data.countExamNumber;
             this.examination = resp.data.examination;
+            this.examType = resp.data.examType;
 
             this.$store.commit('setExamInfo', resp.data);
 

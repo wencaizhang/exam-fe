@@ -67,8 +67,13 @@ const exam = {
         return axios.post(url, data);
     },
     insertScore: (data=null) => {
-        // 提交答案
+        // 真实考试 提交答案
         let url = '/sage/exam/score/insertScore';
+        return axios.post(url, data);
+    },
+    simulationscore: (data=null) => {
+        // 真实考试 提交答案
+        let url = '/sage/exam/simulationscore/save';
         return axios.post(url, data);
     },
 

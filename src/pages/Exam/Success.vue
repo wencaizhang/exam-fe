@@ -55,7 +55,8 @@ export default {
       myAnswer:      this.$store.getters.getMyAnswer,
 
       examStart:     dateFormat(this.$store.state.exam.startTime, 'YYYY-MM-DD HH:mm:ss'),
-      examEnd:       dateFormat(this.$store.state.exam.endTime, 'YYYY-MM-DD HH:mm:ss')
+      examEnd:       dateFormat(this.$store.state.exam.endTime, 'YYYY-MM-DD HH:mm:ss'),
+      timeLong:      this.$store.state.exam.duringSeconds,
     }
 
     this.$store.dispatch('insertScore', { paramData: data })
