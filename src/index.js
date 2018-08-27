@@ -80,14 +80,6 @@ axios.interceptors.response.use( response => {
     return Promise.reject(error);
   });
 
-new Vue({
-    el: '#app',
-    router,
-    store,
-    render: h => h(App)
-});
-
-
 // 每次路由跳转都对登录状态进行检测
 router.beforeEach((to, from, next) => {
     let notCheckLogin = to.matched.some( record => record.meta.notCheckLogin )
@@ -99,4 +91,11 @@ router.beforeEach((to, from, next) => {
         next();
     }
 
+});
+
+new Vue({
+    el: '#app',
+    router,
+    store,
+    render: h => h(App)
 });
