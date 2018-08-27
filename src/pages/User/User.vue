@@ -15,9 +15,20 @@
             <cell-box is-link :link="{ path: '/reset' }">
               密码重置
             </cell-box>
-            <cell-box is-link :link="{ path: '/waitforexam' }">
-              进入考试
-            </cell-box>
+        </group>
+        <group>      
+            <cell title="进入考试" is-link :link="{ path: '/waitforexam' }">
+              <div class="badge-value">
+                <span class="vertical-middle"></span>
+                <!-- <badge></badge> -->
+              </div>
+            </cell>
+            <cell title="模拟考试" is-link :link="{ path: '/waitforexam' }">
+              <div class="badge-value">
+                <span class="vertical-middle"></span>
+                <!-- <badge></badge> -->
+              </div>
+            </cell>
         </group>
         <group>
             <cell-box is-link :link="{ path: '/history' }">
@@ -34,43 +45,45 @@
 import axios from "axios";
 import util from "../../util/util.js";
 import api from "../../util/api.js";
-import { XButton, Group, CellBox } from "vux";
+import { XButton, Group, CellBox, Cell, Badge } from "vux";
 
 export default {
   data() {
     return {
-      avatar: 'http://www.qqzhi.com/uploadpic/2015-01-07/014622445.jpg',
+      avatar: "http://www.qqzhi.com/uploadpic/2015-01-07/014622445.jpg"
     };
   },
   components: {
     XButton,
     Group,
-    CellBox
+    CellBox,
+    Cell,
+    Badge
   },
   computed: {
-    name () {
+    name() {
       return this.$store.state.user.name;
     },
-    userInfo () {
+    userInfo() {
       return this.$store.state.user.userInfo;
     }
   },
   methods: {
     logout() {
-      this.$store.dispatch('logout').then(resp => {
+      this.$store.dispatch("logout").then(resp => {
         if (resp.data.code == 0) {
-          this.$store.dispatch('resetAllState')
+          this.$store.dispatch("resetAllState");
           this.$router.push({ path: "/login" });
         }
       });
-    },
+    }
     // history () {
     //   this.$router.push({ name: 'history' });
     // }
   },
   created() {
     if (!this.$store.state.user.userInfo.saved) {
-      this.$store.dispatch('getUserInfo');
+      this.$store.dispatch("getUserInfo");
     }
   }
 };
