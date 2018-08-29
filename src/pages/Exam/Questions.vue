@@ -76,6 +76,7 @@ export default {
 <style>
 .question-container {
   margin-top: 40px;
+  padding-bottom: 110px;
 }
 .question-type {
   padding-left: 15px;
