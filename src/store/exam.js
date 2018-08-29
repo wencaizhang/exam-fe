@@ -11,6 +11,7 @@ const state = {
     startTime: 0,
     endTime: 0,
 
+    examInfo: null,
     paper: '',
     questionTypes: [
       { val: '001', type: "单选题：", max: 1 },
