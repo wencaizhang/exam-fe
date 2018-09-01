@@ -9,9 +9,9 @@
             </div>
         </header>
         <group>
-            <cell-box is-link :link="{ path: '/changeuserinfo' }">
+            <!-- <cell-box is-link :link="{ path: '/changeuserinfo' }">
               修改个人信息
-            </cell-box>
+            </cell-box> -->
             <cell-box is-link :link="{ path: '/reset' }">
               密码重置
             </cell-box>
