@@ -276,11 +276,11 @@ export default {
     },
     toggleShowPwd () {
       this.showPwd = !this.showPwd;
-      this.$refs.password.focus();
+      this.$refs.password[0].focus();
     },
     toggleShowPwd2 () {
       this.showPwd2 = !this.showPwd2;
-      this.$refs.confirmPwd.focus();
+      this.$refs.confirmPwd[0].focus();
     },
     show () {
       this.showMsg = true;
