@@ -82,6 +82,7 @@ export default {
     color: #222;
     font-size: 14px;
     border-radius: 15px;
+    box-sizing: border-box;
 }
 .vux-checker-box {
     display: flex;
