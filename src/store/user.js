@@ -9,6 +9,12 @@ const state = {
     token: '',
     login: false,
     userInfo: {},
+
+    // 注册时单位选择相关数据
+    selectDept: false,
+    deptList: [],
+    fetchDeptList: false,
+    pickerResultList: [],
 }
 
 const getters = {
@@ -28,6 +34,13 @@ const mutations = {
     changeLoginStat: (state, bool) => {
         state.login = bool;
     },
+
+    toggleSelectDept: state => state.selectDept = !state.selectDept,
+    setDeptList: (state, payload) => {
+        state.deptList[0] = payload
+        state.fetchDeptList = true
+    },
+    setPickerResultList: (state, payload) => state.pickerResultList = payload,
 }
 
 const actions = {

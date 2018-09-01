@@ -1,9 +1,10 @@
 <template>
   <div>
-    <template v-if="!showMsg">
+    <SelectDept v-if="selectDept" />
+    <template v-if="!selectDept && !showMsg">
       <form :class="$style['form-box']" autocomplete="off" @submit.prevent="1">
         <div :class="$style.logoBox"><img :class="$style.logo" src="../../assets/images/logo.png" alt="logo"></div>
-        <div v-transfer-dom>
+        <!-- <div v-transfer-dom>
           <popup v-model="showPopup">
             <div :class="$style['popup-box']">
               <p :class="$style['popup-buttons']">
@@ -14,7 +15,7 @@
               <picker :data='deptList' :columns=4 v-model='danweiValue'></picker>
             </div>
           </popup>
-        </div>
+        </div> -->
         <div v-for="input in textInputs" v-bind:key="input.name" :class="$style.infoBox">
           <div :class="$style.infoInput">
             <input v-bind:readonly="input.name == 'dept'"
@@ -58,38 +59,64 @@
       </div>
       <toast v-model="showToast" type="warn">请正确填写注册信息</toast>
     </template>
-    <msg v-if="showMsg" title="恭喜您注册成功！" :buttons="buttons" icon="success"></msg>
+    <msg v-if="!selectDept && showMsg" title="恭喜您注册成功！" :buttons="buttons" icon="success"></msg>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import SelectDept from './SelectDept'
 import {
-  Picker,
-  Popup,
+  // Picker,
+  // Popup,
   Group,
   GroupTitle,
   Toast,
   XButton,
   Icon,
   Msg,
-  TransferDomDirective as TransferDom
+  // TransferDomDirective as TransferDom
 } from "vux";
+import { setTimeout } from 'timers';
 
 export default {
   name: "Register",
-  directives: {
-    TransferDom
-  },
+  // directives: {
+  //   TransferDom
+  // },
   components: {
-    Picker,
+    SelectDept,
+    // Picker,
     Group,
     GroupTitle,
-    Popup,
+    // Popup,
     XButton,
     Icon,
     Msg,
     Toast
+  },
+  created() {
+    window.onload = () => {
+      this.$store.commit('setPickerResultList', [])
+    }
+  },
+  updated () {
+    const list = this.$store.state.user.pickerResultList;
+    const deptList = this.$store.state.user.deptList[0]
+
+    if (list.length) {
+      let name = list[list.length-1][0]
+      const dept = deptList.filter(item => item.name === name)[0]
+
+      this.textInputs[0].value = name
+      this.deptId = dept.value
+      this.deptNumber = dept.deptNumber
+      this._isEmpty4Item("dept");
+    } else {
+      this.deptId = ''
+      this.deptNumber = ''
+      this.textInputs[0].value = ''
+    }
   },
   data() {
     return {
@@ -173,8 +200,10 @@ export default {
       ]
     };
   },
-  created() {
-    this._getDeptList();
+  computed: {
+    selectDept () {
+      return this.$store.state.user.selectDept
+    }
   },
   methods: {
 
@@ -259,31 +288,6 @@ export default {
     },
     toLogin () {
       this.$router.push({ path: "/login" });
-    },
-    _getDeptList() {
-      // 获取所属单位列表数据
-      // this.$store.commit('setLoadText', '正在请求单位列表')
-      let url = "/sys/dept/list";
-      const options = {
-        url,
-        method: "GET",
-      };
-      axios(options)
-        .then(resp => {
-          if (resp.data.code == 0) {
-            this.deptList = resp.data.deptList.map(item => {
-              // 数字转成字符串，否则会出问题
-              return {
-                value: item.deptId + '',
-                name: item.name,
-                parent: item.parentId + '',
-                deptNumber: item.deptNo
-              }
-            });
-          } else {
-            this.tips = "用户名或密码错误";
-          }
-        })
     },
     _getData() {
       // 获取页面表单数据
@@ -450,15 +454,16 @@ export default {
       this._isEmpty4Item("dept");
     },
     showPic(name) {
-      this.showPopup = name === "dept";
+      // this.showPopup = name === "dept";
+      name === "dept" && this.$store.commit('toggleSelectDept')
     },
-    popupCancelHandle() {
-      this.showPopup = false;
-    },
-    popupSuccessHandle() {
-      this.showPopup = false;
-      this.setCompanyName();
-    }
+    // popupCancelHandle() {
+    //   this.showPopup = false;
+    // },
+    // popupSuccessHandle() {
+    //   this.showPopup = false;
+    //   this.setCompanyName();
+    // }
   }
 };
 </script>

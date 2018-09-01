@@ -116,6 +116,9 @@ const getters = {
 
     // 考试剩余时长，秒
     getRemainingTime: state => {
+        if (!state.examInfo) {
+            return 0;
+        }
         let allTheTime = state.examInfo.examination.examinationTimeLong * 60;
         // allTheTime = 60;
         let seconds =  allTheTime - state.duringSeconds >= 0 ? allTheTime - state.duringSeconds : 0;
