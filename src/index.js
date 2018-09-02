@@ -7,18 +7,23 @@ import './assets/css/base.css'
 import router from './router/index.js'
 import store from './store'
 
+import VueScroller from 'vue-scroller'
+// import VueTouch from 'vue-touch'
+
+// var VueTouch = require('vue-touch')
+
 // require('./mock.js');
 
+import  { AlertPlugin } from 'vux'
 import  { ToastPlugin, LoadingPlugin } from 'vux'
 Vue.use(ToastPlugin)
 Vue.use(LoadingPlugin)
-import  { AlertPlugin } from 'vux'
 Vue.use(AlertPlugin)
 
-import VueScroller from 'vue-scroller'
 Vue.use(VueScroller)
 
-
+import VueTouch from 'vue-touch'
+Vue.use(VueTouch, {name: 'v-touch'})
 
 // Vue.prototype.$storage = {
 //     setItem: (key, value) => {

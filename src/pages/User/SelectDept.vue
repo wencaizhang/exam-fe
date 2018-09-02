@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios";
 import {
   Group,
   Picker,
@@ -56,7 +56,7 @@ export default {
   },
   computed: {
     deptList() {
-      return this.$store.state.user.deptList
+      return this.$store.state.user.deptList;
     }
   },
   created() {
@@ -68,15 +68,19 @@ export default {
     }
   },
   methods: {
-    resetPickerData () {
-      
+    onSwipeLeft() {
+      console.log("onSwipeLeft");
+    },
+    resetPickerData() {
       let parent;
 
       if (this.pickerResultList.length) {
-        let currVal = this.pickerResultList[this.pickerResultList.length-1][0]
-        parent = this.deptList[0].filter(
-          item => item.name === currVal
-        )[0]["value"];
+        let currVal = this.pickerResultList[
+          this.pickerResultList.length - 1
+        ][0];
+        parent = this.deptList[0].filter(item => item.name === currVal)[0][
+          "value"
+        ];
       } else {
         parent = "0";
       }
@@ -94,20 +98,19 @@ export default {
         this.pickerData[0].splice(0, 100, ...values);
       }
     },
-    nextStep () {
-      this.$store.commit('toggleSelectDept')
+    nextStep() {
+      this.$store.commit("toggleSelectDept");
     },
-    nextSelect () {
-
+    nextSelect() {
       if (this.pickerData[0].length) {
         this.showPopup = true;
         return;
       }
     },
-    reSelect () {
-      this.pickerData[0].splice(0, 100, '');
+    reSelect() {
+      this.pickerData[0].splice(0, 100, "");
       this.pickerResultList.splice(0, 100);
-      this.$store.commit('setPickerResultList', this.pickerResultList)
+      this.$store.commit("setPickerResultList", this.pickerResultList);
       this.selectAble = false;
       this.resetPickerData();
     },
@@ -121,8 +124,8 @@ export default {
       this.setCompanyName();
     },
     setCompanyName() {
-      this.pickerResultList.push(this.danweiValue)
-      this.$store.commit('setPickerResultList', this.pickerResultList)
+      this.pickerResultList.push(this.danweiValue);
+      this.$store.commit("setPickerResultList", this.pickerResultList);
       this.resetPickerData();
     },
     _getDeptList() {
@@ -131,26 +134,25 @@ export default {
       let url = "/sys/dept/list";
       const options = {
         url,
-        method: "GET",
+        method: "GET"
       };
-      axios(options)
-        .then(resp => {
-          if (resp.data.code == 0) {
-            const deptList = resp.data.deptList.map(item => {
-              // 数字转成字符串，否则会出问题
-              return {
-                value: item.deptId + '',
-                name: item.name,
-                parent: item.parentId + '',
-                deptNumber: item.deptNo
-              }
-            });
-            this.$store.commit('setDeptList', deptList)
-            this.pickerResultList = this.$store.state.user.pickerResultList;
-            this.resetPickerData();
-          }
-        })
-    },
+      axios(options).then(resp => {
+        if (resp.data.code == 0) {
+          const deptList = resp.data.deptList.map(item => {
+            // 数字转成字符串，否则会出问题
+            return {
+              value: item.deptId + "",
+              name: item.name,
+              parent: item.parentId + "",
+              deptNumber: item.deptNo
+            };
+          });
+          this.$store.commit("setDeptList", deptList);
+          this.pickerResultList = this.$store.state.user.pickerResultList;
+          this.resetPickerData();
+        }
+      });
+    }
   },
   data() {
     return {
@@ -158,7 +160,7 @@ export default {
       selectAble: false,
       danweiValue: [],
       pickerResultList: [],
-      pickerData: [['']],
+      pickerData: [[""]]
     };
   }
 };
@@ -198,7 +200,6 @@ export default {
 .vux-step-item {
   display: block;
   text-align: center;
-
 }
 .vux-step-item-tail {
   display: none;

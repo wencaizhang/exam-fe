@@ -90,7 +90,7 @@ const getters = {
         return state.idList.map(item => {
             return {
                 id: item.id,
-                answer: (item.question.myAnswer || []).join(',')
+                answer: (item.question && item.question.myAnswer || []).join(',')
             } 
         })
     },
@@ -193,6 +193,9 @@ const mutations = {
     },
 
     changeQuestionByIndex: (state, index) => {
+        if (index === state.index || index < 0 || index + 1 >= state.idList.length) {
+            return;
+        }
         state.index  = index;
         state.id     = state.idList[index].id;
         state.marked = state.idList[index].marked;

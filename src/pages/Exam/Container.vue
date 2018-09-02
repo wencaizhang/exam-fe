@@ -4,11 +4,13 @@
       <spinner :class="$style.spinner" type="bubbles" size="100px"></spinner>
     </template>
     <template v-else>
-      <Header></Header>
-      <Questions></Questions>
-      <Footer></Footer>
-      <PopupChecker></PopupChecker>
-      <Modal></Modal>
+      <v-touch v-on:swipeleft="onSwipeLeft" v-on:swiperight="onSwipeRight">
+        <Header></Header>
+        <Questions></Questions>
+        <Footer></Footer>
+        <PopupChecker></PopupChecker>
+        <Modal></Modal>
+      </v-touch>
     </template>
   </div>
 </template>
@@ -54,6 +56,14 @@ export default {
           this.$store.commit("changeQuestionByIndex", 0);
         }
       })
+    },
+    onSwipeLeft () {
+      console.log('onSwipeLeft')
+      this.$store.commit("changeQuestionByIndex", this.$store.state.exam.index + 1);
+    },
+    onSwipeRight () {
+      console.log('onSwipeRight')
+      this.$store.commit("changeQuestionByIndex", this.$store.state.exam.index - 1);
     },
   },
   created() {
