@@ -4,13 +4,13 @@
       <spinner :class="$style.spinner" type="bubbles" size="100px"></spinner>
     </template>
     <template v-else>
-      <v-touch v-on:swipeleft="onSwipeLeft" v-on:swiperight="onSwipeRight">
+      <!-- <v-touch v-on:swipeleft="onSwipeLeft" v-on:swiperight="onSwipeRight"> -->
         <Header></Header>
         <Questions></Questions>
         <Footer></Footer>
         <PopupChecker></PopupChecker>
         <Modal></Modal>
-      </v-touch>
+      <!-- </v-touch> -->
     </template>
   </div>
 </template>

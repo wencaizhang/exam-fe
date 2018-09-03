@@ -22,8 +22,8 @@ Vue.use(AlertPlugin)
 
 Vue.use(VueScroller)
 
-import VueTouch from 'vue-touch'
-Vue.use(VueTouch, {name: 'v-touch'})
+// import VueTouch from 'vue-touch'
+// Vue.use(VueTouch, {name: 'v-touch'})
 
 // Vue.prototype.$storage = {
 //     setItem: (key, value) => {
