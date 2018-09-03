@@ -28,7 +28,7 @@ export default {
   },
   computed: {
     scoreLine () {
-      return this.$store.state.exam.examInfoexamination.examinationPassScore || 0;
+      return this.$store.state.exam.examInfo.examination.examinationPassScore || 0;
     },
     score () {
       return this.$store.state.exam.totalScore;

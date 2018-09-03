@@ -200,7 +200,7 @@ const mutations = {
     },
 
     changeQuestionByIndex: (state, index) => {
-        if (index === state.index || index < 0 || index + 1 >= state.idList.length) {
+        if (index < 0 || index + 1 >= state.idList.length) {
             return;
         }
         state.index  = index;
