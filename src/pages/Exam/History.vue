@@ -109,7 +109,7 @@ export default {
         item.list = [
           {
             label: "考试时间",
-            value: this.timeFormat(Date.parse(new Date(item.examStart))),
+            value: item.examStart,
             // value: dateFormat(new Date(item.examStart), "YYYY-MM-DD HH:mm:ss")
           },
           {
@@ -209,7 +209,7 @@ export default {
 .dialog-table {
   width: 100%;
   border: 1px solid #f2f2f2;
-  font-size: 12px;
+  font-size: 14px;
 }
 .dialog-table td {
   border: 1px solid #f2f2f2;
