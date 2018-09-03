@@ -28,7 +28,6 @@ const state = {
     idList: [],  // 所有题目的 id 
     answerNum: 0,  // 已经完成的题目数量
     totalScore: 0,  // 总分
-    scoreLine: 0, // 分数线
 
     // --- 考试分析
     analysis: false,
@@ -247,12 +246,13 @@ const mutations = {
             // 给题干中增加 第x题 的字样便于识别
             state.idList.forEach((item2, index) => {
                 if (item2.id == item.id) {
-                    item.score = item2.score;
-                    item.content = `第${index + 1}题: ` + item.content;  // 测试用
-                    item2.question = item;
+                    Object.assign(item2.question, item, {
+                        score: item2.score,
+                        content: `第${index + 1}题: ` + item.content,  // 测试用
+                    });
                 }
             })
-
+            
         });
 
     },

@@ -13,16 +13,47 @@
           :on-infinite="infinite"
         >
           <group class="row" v-for="(item, index) in currList" v-bind:key="index" >
-            <cell :title="item.paperName"></cell>
+            <cell :title="item.paperName">
+              <div>
+                <span style="color: #666;" @click="getRankList(item.examinationId)">查看排名</span>
+              </div>
+            </cell>
             <cell-form-preview :list="item.list"></cell-form-preview>
           </group>
         </scroller>
+        <div v-transfer-dom>
+          <x-dialog v-model="showDialog" :hide-on-blur=true class="dialog-demo" style="padding-top: 10px;">
+            <p class="dialog-title">排行榜</p>
+            <div class="img-box" style="padding: 20px 10px;">
+              <table class="dialog-table">
+                <tr >
+                  <td>名次</td>
+                  <td>姓名</td>
+                  <td>成绩</td>
+                  <!-- <td>单位</td> -->
+                </tr>
+                <tr v-for="(item, index) in rankList" :key="index">
+                  <td>{{ index + 1 }}</td>
+                  <td>{{ item.createName }}</td>
+                  <td>{{ item.score }}</td>
+                  <!-- <td>{{ item.deptName }}</td> -->
+                </tr>
+              </table>
+            </div>
+            <div @click="showDialog=false">
+              <span class="vux-close"></span>
+            </div>
+          </x-dialog>
+        </div>
     </div>
 </template>
 <script>
 import axios from "axios";
-import { XHeader, CellFormPreview, Group, Cell, dateFormat,Tab, TabItem } from "vux";
+import { XDialog, XHeader, CellFormPreview, Group, Cell, dateFormat,Tab, TabItem, TransferDomDirective as TransferDom} from "vux";
 export default {
+  directives: {
+    TransferDom
+  },
   data() {
     return {
       list0: [],
@@ -31,9 +62,12 @@ export default {
       page1: 0,
       pageSize: 10,
       index: 0,
+      showDialog: false,
+      rankList: [],
     };
   },
   components: {
+    XDialog,
     XHeader,
     CellFormPreview,
     Group,
@@ -124,6 +158,21 @@ export default {
       if (!this['list' + this.index].length) {
         this.refresh();
       }
+    },
+    getRankList (id) {
+      let url = '/sage/exam/score/selectByExaminationId'
+      axios.post(url, { examinationId: id }).then(resp => {
+        if (resp.data.scoreList && resp.data.scoreList.length) {
+          this.rankList = resp.data.scoreList
+          this.showDialog = true
+        } else {
+          this.$vux.toast.show({
+            type: 'warn',
+            width: '10em',
+            text: '暂无数据'
+          })
+        }
+      })
     }
   }
 };
@@ -151,5 +200,18 @@ export default {
 .row {
   background: #f2f2f2;
   overflow: hidden;
+}
+.weui-dialog {
+  width: 96%;
+  padding-top: 10px;
+}
+
+.dialog-table {
+  width: 100%;
+  border: 1px solid #f2f2f2;
+  font-size: 12px;
+}
+.dialog-table td {
+  border: 1px solid #f2f2f2;
 }
 </style>

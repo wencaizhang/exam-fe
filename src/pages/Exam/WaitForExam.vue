@@ -101,7 +101,7 @@ export default {
             data.forEach(item => {
               const list = item.ids.split(',');
               list.forEach((id) => {
-                idList.push( { id, score: item.score } );
+                idList.push( { id, score: item.score, question: {} } );
               })
             });
 
