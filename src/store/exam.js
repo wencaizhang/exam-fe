@@ -11,7 +11,7 @@ const state = {
     startTime: 0,
     endTime: 0,
 
-    examInfo: null,
+    examInfo: { examination: {} },
     paper: '',
     questionTypes: [
       { val: '001', type: "单选题：", max: 1 },
@@ -28,9 +28,13 @@ const state = {
     idList: [],  // 所有题目的 id 
     answerNum: 0,  // 已经完成的题目数量
     totalScore: 0,  // 总分
+    scoreLine: 0, // 分数线
 
     // --- 考试分析
     analysis: false,
+
+    // true 为模拟测试，false 为真实考试
+    practice: false,
 }
 
 const getters = {
@@ -156,7 +160,11 @@ const mutations = {
 
     setPaper: (state, payload) => state.paper = payload,
 
-    setExamInfo: (state, payload) => state.examInfo = payload,
+    setExamInfo: (state, payload) => {
+        state.examInfo = payload
+        // 1 是真实考试，2 是模拟考试
+        state.practice = payload.examType == 2 ? true : false;
+    },
 
     // 设置答题开始和结束时间
     setStartTime: (state, timestamp) => state.startTime = timestamp,

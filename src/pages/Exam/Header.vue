@@ -6,7 +6,7 @@
       @on-click-back="backHandler"
     >
       {{ time }}
-      <a v-if="!analysis" slot="right" @click="togglePause">{{ buttonText }}</a>
+      <a v-if="pausedAble" slot="right" @click="togglePause">{{ buttonText }}</a>
     </x-header>
     
     <div v-transfer-dom>
@@ -54,7 +54,18 @@ export default {
       return this.$store.state.exam.isPaused ? '继续' : '暂停';
     },
     analysis () {
+      // 试卷解析
       return this.$store.state.exam.analysis;
+    },
+    practice () {
+      // 练习模式
+      return this.$store.state.exam.practice;
+    },
+    pausedAble () {
+      // 是否提供暂停功能
+      // 只有练习模式有暂停功能
+
+      return this.practice && !this.analysis
     }
   },
   methods: {
@@ -92,13 +103,13 @@ export default {
       this.$router.push( { name: 'waitforexam' });
     },
     visibilityStateListener () {
-      if ( !this.analysis && !this.$store.state.exam.isPaused && document.visibilityState == 'hidden' ) {
+      if ( this.pausedAble && !this.$store.state.exam.isPaused && document.visibilityState == 'hidden' ) {
         this.togglePause();
       }
     }
   },
   mounted () {
-    if (!this.analysis) {
+    if (this.pausedAble) {
       this.$store.dispatch('createTimer')
     }
     document.addEventListener("visibilitychange", this.visibilityStateListener);

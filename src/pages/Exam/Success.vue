@@ -1,6 +1,8 @@
 <template>
   <div :class="$style.container">
-    
+    <img v-if="scoreLine > score" :class="$style.image" src="../../assets/images/score_no.jpg" alt="score">
+    <img v-else :class="$style.image" src="../../assets/images/score_yes.jpg" alt="score">
+
     <p :class="$style.msg">得分：{{ score }}</p>
     <p :class="$style.msg">用时：{{ time }}</p>
 
@@ -25,6 +27,9 @@ export default {
     }
   },
   computed: {
+    scoreLine () {
+      return this.$store.state.exam.scoreLine;
+    },
     score () {
       return this.$store.state.exam.totalScore;
     },
@@ -72,19 +77,21 @@ export default {
 </script>
 
 <style module>
-.container {
-  padding-top: 30px;
-}
 .msg {
   margin-top: 10px;
-  font-size: 26px;
+  font-size: 16px;
   text-indent: 50px;
 }
 
 .btns {
-  margin-top: 50px;
+  margin-top: 30px;
 }
 .btn {
   width: 80%!important;
+}
+
+.image {
+  width: 80%;
+  margin: 0 10%;
 }
 </style>
