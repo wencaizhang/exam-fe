@@ -2,7 +2,6 @@ import Footer from "../components/Footer"
 
 import Exam from '../pages/Exam/Container'
 import Success from "../pages/Exam/Success"
-import Answer from "../pages/Exam/Answer"
 import WaitForExam from "../pages/Exam/WaitForExam"
 
 import History from "../pages/Exam/History"
@@ -125,16 +124,6 @@ export default [
         name: 'success',
         components: {
             default: Success,
-        },
-        meta: {
-            title: '试卷已成功提交'
-        }
-    },
-    {
-        path: '/answer',
-        name: 'answer',
-        components: {
-            default: Answer,
         },
         meta: {
             title: '试卷已成功提交'
