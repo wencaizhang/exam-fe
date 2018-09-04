@@ -109,7 +109,7 @@ export default {
     }
   },
   mounted () {
-    if (this.pausedAble) {
+    if (!this.analysis) {
       this.$store.dispatch('createTimer')
     }
     document.addEventListener("visibilitychange", this.visibilityStateListener);

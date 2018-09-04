@@ -41,7 +41,23 @@ export default {
     analysis () {
       this.$store.commit('toggleAnalysis');
       this.$router.push( { name: 'exam' });
-    }
+    },
+    getTrueAnswer () {
+        return this.$store.state.exam.idList.map(item => {
+            return {
+                id: item.id,
+                answer: item.question && item.question.answerId || ''
+            } 
+        })
+    },
+    getMyAnswer () {
+        return this.$store.state.exam.idList.map(item => {
+            return {
+                id: item.id,
+                answer: (item.question && item.question.myAnswer || []).join(',')
+            } 
+        })
+    },
   },
   created () {
     const examInfo = this.$store.state.exam.examInfo;
@@ -56,8 +72,8 @@ export default {
       singleScore:   this.$store.getters.getScoreByType('001'),
       doubleScore:   this.$store.getters.getScoreByType('002'),
       judgmentScore: this.$store.getters.getScoreByType('003'),
-      trueAnswer:    this.$store.getters.getTrueAnswer,
-      myAnswer:      this.$store.getters.getMyAnswer,
+      trueAnswer:    this.getTrueAnswer(),
+      myAnswer:      this.getMyAnswer(),
 
       examStart:     dateFormat(this.$store.state.exam.startTime, 'YYYY-MM-DD HH:mm:ss'),
       examEnd:       dateFormat(this.$store.state.exam.endTime, 'YYYY-MM-DD HH:mm:ss'),

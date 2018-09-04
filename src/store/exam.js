@@ -81,23 +81,6 @@ const getters = {
         return score;
     },
 
-    getTrueAnswer: state => {
-        return state.idList.map(item => {
-            return {
-                id: item.id,
-                answer: item.question && item.question.answerId || ''
-            } 
-        })
-    },
-    getMyAnswer: state => {
-        return state.idList.map(item => {
-            return {
-                id: item.id,
-                answer: (item.question && item.question.myAnswer || []).join(',')
-            } 
-        })
-    },
-
     getDuringTime: (state) => {      
         let seconds = state.duringSeconds;
         let time = '';
@@ -277,7 +260,6 @@ const mutations = {
             const answer = item.question.answerId.split('');
             const myAnswer = item.question.myAnswer || [];
 
-            
             let isRight = JSON.stringify(answer.sort()) === JSON.stringify(myAnswer.sort())
             item.question.isRight = isRight;
             
