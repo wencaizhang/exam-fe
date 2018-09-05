@@ -3,8 +3,8 @@
     <img v-if="scoreLine > score" :class="$style.image" src="../../assets/images/score_no.jpg" alt="score">
     <img v-else :class="$style.image" src="../../assets/images/score_yes.jpg" alt="score">
 
-    <p :class="$style.msg">得分：{{ score }}</p>
-    <p :class="$style.msg">用时：{{ time }}</p>
+    <p :class="$style.msg" style="color: red; font-size: 22px;">{{ score }}分</p>
+    <p :class="$style.msg">{{ time }}</p>
 
     <div :class="$style.btns">
       <XButton :class="$style.btn" type="primary" text="查看答案及解析" @click.native="analysis" ></XButton>
@@ -96,7 +96,7 @@ export default {
 .msg {
   margin-top: 10px;
   font-size: 16px;
-  text-indent: 50px;
+  text-align: center;
 }
 
 .btns {

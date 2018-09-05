@@ -13,7 +13,7 @@
           :on-infinite="infinite"
         >
           <group class="row" v-for="(item, index) in currList" v-bind:key="index" >
-            <cell :title="item.paperName">
+            <cell :title="item.paperName" @click.native="viewExamDetail(item)">
               <div>
                 <span style="color: #666;" @click="getRankList(item.examinationId)">查看排名</span>
               </div>
@@ -173,7 +173,12 @@ export default {
           })
         }
       })
-    }
+    },
+    viewExamDetail (item) {
+      console.log(item.trueAnswer)
+      console.log(JSON.parse(item.trueAnswer))
+      // console.log(JSON.parse(item.myAnswer))
+    },
   }
 };
 </script>
