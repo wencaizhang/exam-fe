@@ -120,5 +120,7 @@ export default {
 };
 </script>
 <style>
-
+#app .vux-header-title {
+  margin: 0 84px;
+}
 </style>
