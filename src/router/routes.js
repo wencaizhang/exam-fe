@@ -7,7 +7,7 @@ import WaitForExam from "../pages/Exam/WaitForExam"
 import History from "../pages/Exam/History"
 
 import Home from "../pages/Home/Home"
-import Rank from "../pages/Rank/Rank"
+import Train from "../pages/Train/Train"
 import User from '../pages/User/User'
 
 import Register from '../pages/User/Register'
@@ -52,14 +52,14 @@ export default [
         }
     },
     {
-        path: '/rank',
-        name: 'rank',
+        path: '/train',
+        name: 'train',
         components: {
-            default: Rank,
+            default: Train,
             footer: Footer
         },
         meta: {
-            title: '闯关'
+            title: '练兵'
         }
     },
     {

@@ -6,10 +6,10 @@
         <img slot="icon-active" src="../assets/images/home2.png">
         <span slot="label">首页</span>
       </tabbar-item>
-      <tabbar-item :selected="$route.name === 'rank'" link="/rank">
+      <tabbar-item :selected="$route.name === 'train'" link="/train">
         <img slot="icon"        src="../assets/images/heat-map.png">
         <img slot="icon-active" src="../assets/images/heat-map2.png">
-        <span slot="label">闯关</span>
+        <span slot="label">练兵</span>
       </tabbar-item>
       <tabbar-item :show-dot=true :selected="$route.name === 'user'" link="/user">
         <img slot="icon"        src="../assets/images/user.png">
