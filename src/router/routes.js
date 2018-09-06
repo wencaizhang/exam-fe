@@ -10,6 +10,9 @@ import Home from "../pages/Home/Home"
 import Train from "../pages/Train/Train"
 import User from '../pages/User/User'
 
+import Section from "../pages/Train/Section"
+import QuestionTypes from "../pages/Train/QuestionTypes"
+
 import Register from '../pages/User/Register'
 import Login from '../pages/User/Login'
 import Forget from '../pages/User/Forget'
@@ -60,6 +63,26 @@ export default [
         },
         meta: {
             title: '练兵'
+        }
+    },
+    {
+        path: '/section/:majorid',
+        name: 'section',
+        components: {
+            default: Section,
+        },
+        meta: {
+            title: '选择章节'
+        }
+    },
+    {
+        path: '/questiontypes/:majorid/:sectionid',
+        name: 'questiontypes',
+        components: {
+            default: QuestionTypes,
+        },
+        meta: {
+            title: '选择题型'
         }
     },
     {

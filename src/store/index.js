@@ -7,6 +7,7 @@ Vue.use(vuex);
 
 import exam from './exam'
 import user from './user'
+import section from './section'
 
 const index = {
     state: {
@@ -30,7 +31,8 @@ const index = {
 const modules = {
     index,
     exam,
-    user
+    user,
+    section,
 }
 
 Object.keys(modules).forEach( key => {

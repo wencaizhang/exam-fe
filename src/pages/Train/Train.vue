@@ -1,8 +1,13 @@
 <template>
   <div class="rank-container">
     <h1 style="font-weight: normal; text-align: center; margin: 20px 0;">练兵</h1>
-    <grid :cols="cols">
-      <grid-item class="grid-item" @click.native="gridItemClickHandler(item)" :label="item.majorName" v-for="(item,index) in list" :key="index">
+    <grid v-if="list.length" :cols="cols">
+      <grid-item class="grid-item" 
+        @click.native="gridItemClickHandler(item)" 
+        v-for="(item,index) in list" 
+        :key="index"
+        :label="item.majorName" 
+      >
       </grid-item>
     </grid>
   </div>
@@ -15,13 +20,15 @@ import { Grid, GridItem } from "vux";
 export default {
   data() {
     return {
-      cols: 3,
-      list: []
+      cols: 2,
+      list: [],
     };
   },
   components: {
     Grid,
     GridItem
+  },
+  computed: {
   },
   methods: {
     gridItemClickHandler (item) {
@@ -29,18 +36,36 @@ export default {
       let url = "/sage/section/selectByMajorId";
       let data = { majorId: item.id };
       axios.post(url, data).then(resp => {
-        console.log(resp.data.section);
-        const chapterList = resp.data.section
+
+        const list = resp.data.section
+        const data = {}
+        data[item.id] = list
+
+        this.$store.commit('setChapterList', data)
+
+        if (list.length) {
+          this.$router.push({ name: 'section', params: { majorid: item.id }})
+        } else {
+          this.$vux.toast.show({
+            type: 'text',
+            width: '10em',
+            text: '本专业暂无章节可供练习'
+          })
+        }
       });
     }
   },
   created() {
-    let url = "/sage/major/getList";
-    let data = { pageSize: "10", page: "1" };
-    axios.post(url, data).then(resp => {
-      console.log(resp.data.majorList);
-      this.list = resp.data.majorList.list;
-    });
+    if (!this.$store.state.train.majorList.length) {
+      let url = "/sage/major/getList";
+      let data = { pageSize: "10", page: "1" };
+      axios.post(url, data).then(resp => {
+        const list = resp.data.majorList.list;
+        this.$store.commit('setMajorList', list)
+      });
+    } else {
+      this.list = this.$store.state.train.majorList
+    }
   },
   computed: {}
 };
@@ -49,8 +74,9 @@ export default {
 .weui-grid {
   line-height: 16px;
   padding: 30px 10px;
+  height: 100px;
 }
-.weui-grid__label {
+.grid-item .weui-grid__label {
   white-space: normal;
 }
 
