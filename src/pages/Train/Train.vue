@@ -56,15 +56,16 @@ export default {
     }
   },
   created() {
-    if (!this.$store.state.train.majorList.length) {
+    if (!this.$store.state.section.majorList.length) {
       let url = "/sage/major/getList";
       let data = { pageSize: "10", page: "1" };
       axios.post(url, data).then(resp => {
         const list = resp.data.majorList.list;
+        this.list = list;
         this.$store.commit('setMajorList', list)
       });
     } else {
-      this.list = this.$store.state.train.majorList
+      this.list = this.$store.state.section.majorList
     }
   },
   computed: {}

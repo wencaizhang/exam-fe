@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <x-header >选择题型</x-header>
-    <group>
+    <group v-if="list.length">
       <cell-box 
         v-for="item in list" 
         :key="item.typeId"
@@ -10,6 +10,7 @@
         {{ item.typeName }} : 共 {{ item.totalCount }} 道
       </cell-box>
     </group>
+    <div v-else>暂无数据</div>
   </div>
 </template>
 
@@ -32,18 +33,18 @@ export default {
   computed: {},
   methods: {
     clickHandler(item) {
-      console.log(item);
       const params = this.$route.params;
       let url = "/sage/exam/equestionmanagement/questionListByMST";
       const data = {
         majorId: params.majorid + '',
         sectionId: params.sectionid + '',
         typeId: item.typeId + '',
-        pageSize: item.totalCount + '',
+        pageSize: '50',
         pageNum: "0"
       };
       axios.post(url, data).then(resp => {
-        console.log(resp.data.questionList.list);
+        const list = resp.data.questionList.list;
+        this.$store.commit('setQuestionList')
       });
     }
   },

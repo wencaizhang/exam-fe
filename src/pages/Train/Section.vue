@@ -42,7 +42,7 @@ export default {
           majorid: this.$route.params.majorid,
           sectionId: item.id,
         }
-        this.$store.commit('setQuestionList', list)
+        this.$store.commit('setQuestionTypes', list)
         this.$router.push({ name: 'questiontypes', params: { majorid: list.majorid, sectionid: list.sectionId }})
       });
     },
