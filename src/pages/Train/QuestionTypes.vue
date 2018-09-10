@@ -44,8 +44,14 @@ export default {
       };
       axios.post(url, data).then(resp => {
         const list = resp.data.questionList.list;
-        this.$store.commit('setQuestionList')
+        this.$store.commit('setQuestionList', list)
+        this.$store.commit("changeQuestionIndex", 0);
+
+        this.startTrain();
       });
+    },
+    startTrain () {
+      this.$router.push( { name: 'trainquestion' } )
     }
   },
   created() {

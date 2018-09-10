@@ -12,6 +12,7 @@ import User from '../pages/User/User'
 
 import Section from "../pages/Train/Section"
 import QuestionTypes from "../pages/Train/QuestionTypes"
+import TrainQuestion from "../pages/Train/Question"
 
 import Register from '../pages/User/Register'
 import Login from '../pages/User/Login'
@@ -80,6 +81,16 @@ export default [
         name: 'questiontypes',
         components: {
             default: QuestionTypes,
+        },
+        meta: {
+            title: '选择题型'
+        }
+    },
+    {
+        path: '/trainquestion',
+        name: 'trainquestion',
+        components: {
+            default: TrainQuestion,
         },
         meta: {
             title: '选择题型'

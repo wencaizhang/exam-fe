@@ -5,8 +5,9 @@ import router from '../router';
 
 const state = {
     majorList: [], // 专业列表
-    chapterList: { },  // 章节列表
-    questionList: []
+    chapterList: {},  // 章节列表
+    questionList: [],  // 题目列表
+    questionIndex: 0,  // 当前题目的序号
 }
 
 const getters = {
@@ -35,7 +36,26 @@ const mutations = {
     
     // 保存题目
     setQuestionList: (state, list) => {
-        state.questionList = list;
+        list.forEach((item, index) => {
+            // 将选项按照 ABCD 进行排序
+            item.optionList.sort( (a, b) => {
+                let s = a.flag.toLowerCase();
+                let t = b.flag.toLowerCase();
+                if(s < t) return -1;
+                if(s > t) return 1;
+            });
+            item.content = index + 1 + '. ' + item.content;
+            state.questionList[index] = item
+        })
+    },
+    
+    // 保存题目
+    setTrainQuestionAnwser: (state, value) => {
+        state.questionList[ state.questionIndex ].myAnswer = value
+    },
+
+    changeQuestionIndex: (state, index) => {
+        state.questionIndex = index;
     }
 }
 
