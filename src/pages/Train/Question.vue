@@ -22,7 +22,7 @@
           <flexbox justify="space-between" class="flexboxWrap">
             <flexbox-item class="flexboxItem" :class="isFirst ? 'disabled' : ''" @click.native="toPrev">上一题</flexbox-item>
             <flexbox-item class="flexboxItem" >答题卡</flexbox-item>
-            <flexbox-item class="flexboxItem" >收藏</flexbox-item>
+            <flexbox-item class="flexboxItem" @click.native="collectHandler">{{ collectText }}</flexbox-item>
             <flexbox-item class="flexboxItem" :class="isLast ? 'disabled' : ''" @click.native="toNext">下一题</flexbox-item>
           </flexbox>
         </footer>
@@ -107,7 +107,10 @@ export default {
       let length = Object.keys(this.$store.state.section.questionList).length
       let index = this.$store.state.section.questionIndex
       return index + 1 + '/' + length
-    }
+    },
+    collectText () {
+      return this.$store.getters.isCollection ? '已收藏' : '收藏';
+    },
   },
   methods: {
     toPrev() {
@@ -125,10 +128,13 @@ export default {
     showAll() {
       this.$store.commit("showAll", true);
     },
-    markHandler() {
-      if (this.analysis) { return }
-      this.$store.commit('marked');
-      this.$store.commit('changeMarkStatus');
+    collectHandler() {
+      this.$store.dispatch('collectHandler')
+      .then(resp => {
+        if (resp.data.code == 0) {
+          this.$store.commit('toggleCollectStatus')
+        }
+      })
     },
   },
   mounted() {}

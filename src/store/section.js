@@ -8,10 +8,16 @@ const state = {
     chapterList: {},  // 章节列表
     questionList: [],  // 题目列表
     questionIndex: 0,  // 当前题目的序号
+    trainInfo: {
+        majorId: '',
+        sectionId: '',        
+    }
 }
 
 const getters = {
-
+    isCollection: state => {
+        return state.questionList[state.questionIndex].isCollection
+    },
 }
 
 const mutations = {
@@ -56,11 +62,34 @@ const mutations = {
 
     changeQuestionIndex: (state, index) => {
         state.questionIndex = index;
+    },
+    setTrainInfo: (state, payload) => {
+        Object.assign(state.trainInfo, payload)
+    },
+    toggleCollectStatus: state => {
+        state.questionList[ state.questionIndex ].isCollection = state.questionList[ state.questionIndex ].isCollection ? 0 : 1
     }
+
 }
 
 const actions = {
-
+    collectHandler: ({state}) => {
+        const question = state.questionList[state.questionIndex]
+        
+        if (question.isCollection) {
+            let url = '/sage/collection/delete'
+            const data = { id: question.id }
+            return axios.post(url, data)
+        } else {
+            let url = '/sage/collection/insertCollection'
+            const data = {
+                "paramData": {
+                    "questionId": question.id,
+                }
+            }
+            return axios.post(url, data)
+        }
+    }
 }
 
 export default {

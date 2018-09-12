@@ -51,6 +51,14 @@ export default {
       });
     },
     startTrain () {
+      const params = this.$route.params;
+      let majorId = params.majorid + ''
+      let sectionId = params.sectionid + ''
+
+      this.$store.commit('setTrainInfo', {
+        majorId: params.majorid + '',
+        sectionId: params.sectionid + '',
+      })
       this.$router.push( { name: 'trainquestion' } )
     }
   },
