@@ -1,7 +1,7 @@
 <template>
   <div :class="$style.container">
 
-    <img :class="$style.logo" src="../../assets/images/logo.png" alt="logo">
+    <!-- <img :class="$style.logo" src="../../assets/images/logo.png" alt="logo"> -->
     <!-- <p style="text-align: left;">{{ loginByPhone ? ' 手机号登录' : ' 身份证号登录' }}
       <span :class="$style.tips">{{ tips }}</span>
     </p> -->
