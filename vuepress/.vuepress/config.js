@@ -2,6 +2,7 @@ module.exports = {
   title: 'vue开发记录',
   description: 'Just playing around',
   dest: './docs/',
+  base: '/exam-system-fe/',
   themeConfig: {
     nav: [
       { text: 'vue文档', link: 'https://cn.vuejs.org/v2/guide/' },
