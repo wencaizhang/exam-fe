@@ -7,7 +7,9 @@
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --host 0.0.0.0 --content-base ./src/ --open --inline --hot --compress --config ./webpack/webpack.dev.js",
-    "build": "webpack --progress --hide-modules --config ./webpack/webpack.prod.js"
+    "build": "webpack --progress --hide-modules --config ./webpack/webpack.prod.js",
+    "dev:docs": "vuepress dev ./vuepress",
+    "build:docs": "vuepress build ./vuepress"
   },
   "dependencies": {
     "axios": "^0.17.1",
@@ -17,6 +19,7 @@
     "vue-scroller": "^2.2.4",
     "vue-touch": "^2.0.0-beta.4",
     "vue-wechat-title": "^2.0.4",
+    "vuepress": "^0.14.2",
     "vuex": "^3.0.1",
     "vuex-persistedstate": "^2.5.4"
   },
