@@ -11,13 +11,12 @@ const state = {
     trainInfo: {
         majorId: '',
         sectionId: '',        
-    }
+    },
+
+    isCollection: 0, // 当前题目是否被收藏
 }
 
 const getters = {
-    isCollection: state => {
-        return state.questionList[state.questionIndex].isCollection
-    },
 }
 
 const mutations = {
@@ -62,13 +61,15 @@ const mutations = {
 
     changeQuestionIndex: (state, index) => {
         state.questionIndex = index;
+        state.isCollection = state.questionList[state.questionIndex].isCollection
     },
     setTrainInfo: (state, payload) => {
         Object.assign(state.trainInfo, payload)
     },
     toggleCollectStatus: state => {
         state.questionList[ state.questionIndex ].isCollection = state.questionList[ state.questionIndex ].isCollection ? 0 : 1
-    }
+        state.isCollection = state.questionList[state.questionIndex].isCollection
+    },
 
 }
 
@@ -78,7 +79,7 @@ const actions = {
         
         if (question.isCollection) {
             let url = '/sage/collection/delete'
-            const data = { id: question.id }
+            const data = { questionId: question.id }
             return axios.post(url, data)
         } else {
             let url = '/sage/collection/insertCollection'

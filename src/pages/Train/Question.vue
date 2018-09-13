@@ -109,7 +109,7 @@ export default {
       return index + 1 + '/' + length
     },
     collectText () {
-      return this.$store.getters.isCollection ? '已收藏' : '收藏';
+      return this.$store.state.section.isCollection ? '已收藏' : '收藏';
     },
   },
   methods: {
