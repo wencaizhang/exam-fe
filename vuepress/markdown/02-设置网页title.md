@@ -1,6 +1,7 @@
-## 设置 title
 
-使用 `vue-wechat-title` 插件进行设置
+# 动态设置网页 title
+
+单页面应用的一个问题就是网页 title 无法随着路由而变化，这里我们使用 `vue-wechat-title` 解决这个问题。
 
 #### 安装：
 

@@ -67,4 +67,4 @@ git pull
 └── package.json
 ```
 
-实践的过程中会做一些记录，[地址在此](https://awesome-fe.github.io/exam-system-fe/)
+实践的过程中会做一些记录，[地址在此](https://wencaizhang.github.io/exam-fe/)
