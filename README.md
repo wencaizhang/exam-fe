@@ -1,8 +1,8 @@
-# vue_cli_raas
+# A exam system
 
 > A Vue.js project
 
-主要技术：vue + vux + vuex + axios
+主要技术：vue + vux + vue-router + vuex + axios
 
 ## 依赖
 
