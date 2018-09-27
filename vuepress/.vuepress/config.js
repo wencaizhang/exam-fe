@@ -27,6 +27,7 @@ module.exports = {
       ['./markdown/10-webpack打包优化.md', 'webpack打包优化' ],
       ['./markdown/11-键盘弹起优化.md', '键盘弹起优化' ],
       ['./markdown/12-vscode自定义代码段.md', 'vscode自定义代码段' ],
+      ['./markdown/13-header-and-footer组件化.md', 'header-and-footer组件化' ],
     ],
   },
 }
