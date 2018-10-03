@@ -14,6 +14,8 @@ const state = {
     },
 
     isCollection: 0, // 当前题目是否被收藏
+
+    answerCardVisible: false,
 }
 
 const getters = {
@@ -70,6 +72,9 @@ const mutations = {
         state.questionList[ state.questionIndex ].isCollection = state.questionList[ state.questionIndex ].isCollection ? 0 : 1
         state.isCollection = state.questionList[state.questionIndex].isCollection
     },
+    toggleAnswerCardVisible: (state, bool) => { state.answerCardVisible = bool != undefined ? bool : !state.answerCardVisible},
+
+
 
 }
 

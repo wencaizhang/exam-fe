@@ -21,11 +21,13 @@
         <footer class="footer">
           <flexbox justify="space-between" class="flexboxWrap">
             <flexbox-item class="flexboxItem" :class="isFirst ? 'disabled' : ''" @click.native="toPrev">上一题</flexbox-item>
-            <flexbox-item class="flexboxItem" >答题卡</flexbox-item>
+            <flexbox-item class="flexboxItem" @click.native="showAnswerCard">答题卡</flexbox-item>
             <flexbox-item class="flexboxItem" @click.native="collectHandler">{{ collectText }}</flexbox-item>
             <flexbox-item class="flexboxItem" :class="isLast ? 'disabled' : ''" @click.native="toNext">下一题</flexbox-item>
           </flexbox>
         </footer>
+
+        <Checker />
     </section>
 </template>
 
@@ -33,6 +35,7 @@
 import { Checklist, XHeader, Flexbox, FlexboxItem } from "vux";
 
 import Type from '../../components/QuestionType'
+import Checker from './Checker'
 
 export default {
   data() {
@@ -43,7 +46,8 @@ export default {
     XHeader,
     Type,
     Flexbox,
-    FlexboxItem
+    FlexboxItem,
+    Checker
   },
   computed: {
     model: {
@@ -125,8 +129,9 @@ export default {
       this.$store.commit('setAnswerNum');
       this.$store.commit("showModal", true);
     },
-    showAll() {
-      this.$store.commit("showAll", true);
+    showAnswerCard() {
+      console.log('click')
+      this.$store.commit("toggleAnswerCardVisible");
     },
     collectHandler() {
       this.$store.dispatch('collectHandler')

@@ -35,36 +35,37 @@ export default {
     Popup
   },
   data() {
-    return {};
+    return {
+    };
   },
   computed: {
     showAll: {
       get() {
-        return this.$store.state.section.showAll;
+        return this.$store.state.section.answerCardVisible;
       },
       set(value) {
-        this.$store.commit("showAll", value);
+        this.$store.commit("toggleAnswerCardVisible", value);
       }
     },
     index() {
-      return this.$store.state.exam.index;
+      return this.$store.state.section.questionIndex
     },
     list() {
-      return this.$store.state.exam.idList;
+      return this.$store.state.section.questionList
     },
 
   },
   methods: {
     getClassName (item) {
       let className = '';
-      className += item.question.myAnswer && item.question.myAnswer.length ? 'check-item-answered' : '';
-      className += item.marked ? ' check-item-marked' : '';
+      className += item.myAnswer && item.myAnswer.length ? 'check-item-answered' : '';
+      className += item.isCollection ? ' check-item-marked' : '';
       return className;
     },
     change(value) {
-      this.$store.commit("showAll", false);
+      this.$store.commit("toggleAnswerCardVisible", false);
 
-      this.$store.commit("changeQuestionByIndex", value);
+      this.$store.commit("changeQuestionIndex", value);
     }
   }
 };
