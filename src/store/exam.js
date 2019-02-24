@@ -214,7 +214,7 @@ const mutations = {
                 // 单选题特殊处理
                 let inlineDesc;
                 if (item.typeId === '003') {
-                    inlineDesc = option.content === 'T' ? 'A：正确' : 'B：错误'
+                    inlineDesc = option.content === '正确' ? 'A：正确' : 'B：错误'
                 } else {
                     inlineDesc = option.flag + '：' + option.content
                 }

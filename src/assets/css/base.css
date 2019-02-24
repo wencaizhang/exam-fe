@@ -171,3 +171,10 @@ input:focus {
 .red {
     color: #f02345 !important;
 }
+
+
+
+/* 自定义样式 */
+.vux-popup-dialog {
+    max-height: 80%;
+}

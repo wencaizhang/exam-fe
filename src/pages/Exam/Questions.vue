@@ -1,6 +1,9 @@
 <template>
   <div class="question-container">
-    <p class="question-type">{{ getType }}</p>
+    <p class="question-type">
+      <span>{{ getType }}</span>
+      <span @click="showAnwser = !showAnwser">{{ showAnwser ? '显示' : '隐藏' }}正确答案 <span v-show="showAnwser">：{{ answer }}</span></span>
+    </p>
     <checklist
       v-model="model"
       :title="question.content" 
@@ -23,6 +26,7 @@ import { Checklist } from "vux";
 export default {
   data() {
     return {
+      showAnwser: false,
     };
   },
   components: {
@@ -31,6 +35,9 @@ export default {
   computed: {
     questionTypes () {
       return this.$store.state.exam.questionTypes;
+    },
+    answer () {
+      return this.$store.getters.currQuestion.anwserId;
     },
     model: {
       get() {
@@ -81,6 +88,8 @@ export default {
 .question-type {
   padding-left: 15px;
   padding-right: 15px;
+  display: flex;
+  justify-content: space-around;
 }
 .question-container .weui-cell__bd p {
   display: none;
